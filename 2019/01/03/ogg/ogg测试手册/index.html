@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="ogg测试环境搭建">
+<meta name="keywords" content="ogg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OGG测试手册">
+<meta property="og:url" content="https://zixujing.github.io/2019/01/03/ogg/ogg测试手册/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="ogg测试环境搭建">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-15T13:11:08.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OGG测试手册">
+<meta name="twitter:description" content="ogg测试环境搭建">
+
+
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/01/03/ogg/ogg测试手册/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>OGG测试手册 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/03/ogg/ogg测试手册/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OGG测试手册
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-03 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-03T00:00:00+08:00">2019-01-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-15 21:11:08" itemprop="dateModified" datetime="2019-01-15T21:11:08+08:00">2019-01-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>ogg测试环境搭建<br><a id="more"></a><br><!-- toc --></p>
+</blockquote>
+<h1 id="源端数据库配置"><a href="#源端数据库配置" class="headerlink" title="源端数据库配置"></a>源端数据库配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">﻿sql&gt; alter database archivelog;</span><br><span class="line">sql&gt; alter database add supplemental log data;</span><br><span class="line">sql&gt; create user ogg identified by ogg;</span><br><span class="line">sql&gt; grant connect,resource to ogg;</span><br><span class="line">sql&gt; grant execute on utl_file to ogg;</span><br><span class="line">sql&gt; grant select any dictionary,select any table to ogg;</span><br><span class="line">sql&gt; grant alter any table to ogg;</span><br><span class="line">sql&gt; grant flashback any table to ogg;</span><br><span class="line">sql&gt; grant execute on DBMS_FLASHBACK to ogg;</span><br><span class="line">#直接赋dba权限即可，上面可以不用赋</span><br><span class="line">sql&gt; **grant dba to ogg;**</span><br></pre></td></tr></table></figure>
+<h1 id="源端ogg配置"><a href="#源端ogg配置" class="headerlink" title="源端ogg配置"></a>源端ogg配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">ogg&gt; dblogin userid ogg password ogg</span><br><span class="line">ogg&gt;  add trandata smartecap_numone_xj.*</span><br><span class="line">ogg&gt;  create subdirs</span><br><span class="line">ogg&gt;  edit params mgr</span><br><span class="line">PORT 7809</span><br><span class="line">ogg&gt; add trandata smartecap_numone_xj.*</span><br><span class="line">ogg&gt; info trandata smartecap_numone_xj.*</span><br><span class="line">#也可以同步schema信息</span><br><span class="line">ogg&gt; add extract exts,tranlog ,begin now</span><br><span class="line">ogg&gt; info all</span><br><span class="line">ogg&gt; add exttrail ./dirdat/st,extract exts,megabytes 100</span><br><span class="line">ogg&gt; edit params exts</span><br><span class="line"></span><br><span class="line">EXTRACT exts</span><br><span class="line">SETENV (NLS_LANG = &quot;AMERICAN_AMERICA.UTF8&quot;)</span><br><span class="line">SETENV (ORACLE_HOME = &quot;/home/oracle/app/oracle/product/11.2.0/dbhome_1&quot;)</span><br><span class="line">USERID ogg, PASSWORD ogg</span><br><span class="line">REPORTCOUNT EVERY 1 MINUTES, RATE</span><br><span class="line">DISCARDFILE ./dirrpt/exts.dsc,APPEND,MEGABYTES 1024</span><br><span class="line">DBOPTIONS  ALLOWUNUSEDCOLUMN</span><br><span class="line">WARNLONGTRANS 2h,CHECKINTERVAL 350s</span><br><span class="line">EXTTRAIL ./dirdat/st</span><br><span class="line">FETCHOPTIONS NOUSESNAPSHOT</span><br><span class="line">TRANLOGOPTIONS  CONVERTUCS2CLOBS</span><br><span class="line">IGNOREDELETES</span><br><span class="line">TABLE smartecap_numone_xj.*;</span><br><span class="line"></span><br><span class="line">ogg&gt;  add extract dpend,exttrailsource ./dirdat/st</span><br><span class="line">ogg&gt;  add rmttrail /home/oracle/app/oracle/ogg/dirdat/st ,extract dpend</span><br><span class="line">ogg&gt;  edit params dpend</span><br><span class="line">EXTRACT dpend</span><br><span class="line">SETENV (NLS_LANG = AMERICAN_AMERICA.UTF8)</span><br><span class="line">USERID ogg, PASSWORD ogg</span><br><span class="line">PASSTHRU</span><br><span class="line">RMTHOST 192.168.106.213, MGRPORT 7809, compress</span><br><span class="line">RMTTRAIL /home/oracle/app/oracle/ogg/dirdat/st</span><br><span class="line">TABLE smartecap_numone_xj.*;</span><br></pre></td></tr></table></figure>
+<h1 id="EXTRACT进程参数配置说明："><a href="#EXTRACT进程参数配置说明：" class="headerlink" title="EXTRACT进程参数配置说明："></a>EXTRACT进程参数配置说明：</h1><ol>
+<li>SETENV：配置系统环境变量</li>
+<li>USERID/ PASSWORD：指定OGG连接数据库的用户名和密码，这里使用3.4部分中创建的数据库用户OGG;</li>
+<li>COMMENT：注释行，也可以用–来代替;</li>
+<li>TABLE：定义需复制的表，后面需以;结尾</li>
+<li>TABLEEXCLUDE：定义需要排除的表，如果在TABLE参数中使用了通配符，可以使用该参数指定排除掉得表。</li>
+<li>GETUPDATEAFTERS|IGNOREUPDATEAFTERS：是否在队列中写入后影像，缺省复制</li>
+<li>GETUPDATEBEFORES| IGNOREUPDATEBEFORES：是否在队列中写入前影像，缺省不复制</li>
+<li>GETUPDATES|IGNOREUPDATES：是否复制UPDATE操作，缺省复制</li>
+<li>GETDELETES|IGNOREDELETES：是否复制DELETE操作，缺省复制</li>
+<li>GETINSERTS|IGNOREINSERTS：是否复制INSERT操作，缺省复制</li>
+<li>GETTRUNCATES|IGNORETRUNDATES：是否复制TRUNCATE操作，缺省不复制；</li>
+<li>RMTHOST：指定目标系统及其GoldengateManager进程的端口号，还用于定义是否使用压缩进行传输，本例中的compress为压缩传输；</li>
+<li>RMTTRAIL：指定写入到目标断的哪个队列；</li>
+<li>EXTTRAIL：指定写入到本地的哪个队列；</li>
+<li>SQLEXEC：在extract进程运行时首先运行一个SQL语句；</li>
+<li>PASSTHRU：禁止extract进程与数据库交互，适用于Data Pump传输进程；</li>
+<li>REPORT：定义自动定时报告；</li>
+<li>STATOPTIONS：定义每次使用stat时统计数字是否需要重置；</li>
+<li>REPORTCOUNT：报告已经处理的记录条数统计数字；</li>
+<li>TLTRACE：打开对于数据库日志的跟踪日志；</li>
+<li>DISCARDFILE：定义discardfile文件位置，如果处理中油记录出错会写入到此文件中；</li>
+<li>DBOPTIONS：指定对于某种特定数据库所需要的特殊参数；</li>
+<li>TRANLOGOPTIONS：指定在解析数据库日志时所需要的特殊参数，例如：对于裸设备，可能需要加入以下参数 rawdeviceoggset 0</li>
+<li>WARNLONGTRANS：指定对于超过一定时间的长交易可以在gsserr.log里面写入警告信息，本处配置为每隔3分钟检查一次场交易，对于超过2小时的进行警告；</li>
+</ol>
+<h1 id="目标端配置"><a href="#目标端配置" class="headerlink" title="目标端配置"></a>目标端配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ogg&gt; create subdirs</span><br><span class="line">ogg&gt; dblogin userid ogg,password ogg</span><br><span class="line">#需要checkpoint时 需指定。</span><br><span class="line">ogg&gt; add checkpointtable ogg.checkpoint</span><br><span class="line">ogg&gt; add replicat repnd,exttrail ./dirdat/st,checkpointtable ogg.checkpoint</span><br><span class="line">ogg&gt; edit param repnd</span><br><span class="line">REPLICAT repnd</span><br><span class="line">SETENV (NLS_LANG = &quot;AMERICAN_AMERICA.UTF8&quot;)</span><br><span class="line">SETENV (ORACLE_HOME = &quot;/home/oracle/app/oracle/product/11.2.0/dbhome_1&quot;)</span><br><span class="line">USERID ogg, PASSWORD ogg</span><br><span class="line">HANDLECOLLISIONS</span><br><span class="line">ASSUMETARGETDEFS</span><br><span class="line">ddloptions report</span><br><span class="line">MAP smartecap_numone_xj.*, TARGET smartecap_numone.*;</span><br><span class="line">--DISCARDFILE /u01/app/oracle/ogg/discards.dsc, append, megabytes 1024</span><br><span class="line">--TABLEEXCLUDE pdbjk.new_jk.SYS_EXPORT_SCHEMA*</span><br></pre></td></tr></table></figure>
+<h1 id="ogg用户最简配置示例"><a href="#ogg用户最简配置示例" class="headerlink" title="ogg用户最简配置示例"></a>ogg用户最简配置示例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sql&gt; create user tt identified by tt;</span><br><span class="line">sql&gt; grant connect,resource,dba to tt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ogg/" rel="tag"># ogg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/03/linux/linux命令/linux+dircolors/" rel="next" title="Linux+dircolors">
+                <i class="fa fa-chevron-left"></i> Linux+dircolors
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/03/bigdata/kafka手册/" rel="prev" title="kafka手册">
+                kafka手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#源端数据库配置"><span class="nav-number">1.</span> <span class="nav-text">源端数据库配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源端ogg配置"><span class="nav-number">2.</span> <span class="nav-text">源端ogg配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EXTRACT进程参数配置说明："><span class="nav-number">3.</span> <span class="nav-text">EXTRACT进程参数配置说明：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目标端配置"><span class="nav-number">4.</span> <span class="nav-text">目标端配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ogg用户最简配置示例"><span class="nav-number">5.</span> <span class="nav-text">ogg用户最简配置示例</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

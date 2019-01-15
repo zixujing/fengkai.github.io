@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="摘要 oracle也具有cdc的功能，原理如下。">
+<meta name="keywords" content="oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oracle cdc">
+<meta property="og:url" content="https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="摘要 oracle也具有cdc的功能，原理如下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192306372-1819930635.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192327279-376093983.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192342669-1522054385.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192358513-964979174.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192417247-198841881.png">
+<meta property="og:updated_time" content="2019-01-15T13:11:08.063Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="oracle cdc">
+<meta name="twitter:description" content="摘要 oracle也具有cdc的功能，原理如下。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192306372-1819930635.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>oracle cdc | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">oracle cdc
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-08 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-08T00:00:00+08:00">2019-01-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-15 21:11:08" itemprop="dateModified" datetime="2019-01-15T21:11:08+08:00">2019-01-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><blockquote>
+<p>oracle也具有cdc的功能，原理如下。<br><a id="more"></a></p>
+</blockquote>
+<h1 id="Oracle-CDC-简介"><a href="#Oracle-CDC-简介" class="headerlink" title="Oracle CDC 简介"></a>Oracle CDC 简介</h1><p>   很多人都认为，只要是涉及到数据库数据复制和增量数据抽取，都是需要购买收费软件的。实际上，我们通过Oracle提供的CDC和LogMiner等免费工具也能实现数据库数据复制和增量数据抽取，各种数据复制软件只是使得获取增量数据更加便捷，或者是可以支持更多的扩展功能（例如：异构数据库之间的同步，ETL过程的数据清洗、装换），但实际Oracle本身是支持CDC机制，只是很少有人关注，操作起来也有些复杂，而且据传言并不稳定，常常见到论坛上爆出一些莫名其妙的问题。</p>
+<h2 id="Synchronous-Change-Data-Capture-Configuration（同步复制）"><a href="#Synchronous-Change-Data-Capture-Configuration（同步复制）" class="headerlink" title="Synchronous Change Data Capture Configuration（同步复制）"></a>Synchronous Change Data Capture Configuration（同步复制）</h2><p>   <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192306372-1819930635.png" alt=""></p>
+<p>   原理很简单，原表、目标表必须是同一个库，采用触发器的机制（设置同步CDC后，并看不到触发器，但实际运行机理还是触发器的机制）将原表内容复制到另一个目标表。这个机制就不多说了，和自己给表建触发器没什么太大差别。</p>
+<h2 id="Asynchronous-HotLog-Configuration（异步在线日志CDC）"><a href="#Asynchronous-HotLog-Configuration（异步在线日志CDC）" class="headerlink" title="Asynchronous HotLog Configuration（异步在线日志CDC）"></a>Asynchronous HotLog Configuration（异步在线日志CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192327279-376093983.png" alt=""></p>
+<p>   这个过程已经没有触发器了，而是使用Redo Log，但是使用在线日志，并不是归档日志。并且原表、目标表仍然必须是同一个库。这种模式是相对简单的，同时这种模式是在Oracle 10以上才产生的，9i是没有这个机制的。</p>
+<h2 id="Asynchronous-Distributed-HotLog-Configuration（异步分布式CDC）"><a href="#Asynchronous-Distributed-HotLog-Configuration（异步分布式CDC）" class="headerlink" title="Asynchronous Distributed HotLog Configuration（异步分布式CDC）"></a>Asynchronous Distributed HotLog Configuration（异步分布式CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192342669-1522054385.png" alt=""><br>  实际这个模式是对异步在线日志CDC的一种优化，也比较容易理解，就是加入了DB-LINK机制，使原表、目标表不在同一个数据库。实际是和异步在线日志CDC没有什么本质区别。</p>
+<h2 id="Asynchronous-Autolog-Online-Change-Data-Capture-Configuration（异步在线日志复制CDC）"><a href="#Asynchronous-Autolog-Online-Change-Data-Capture-Configuration（异步在线日志复制CDC）" class="headerlink" title="Asynchronous Autolog Online Change Data Capture Configuration（异步在线日志复制CDC）"></a>Asynchronous Autolog Online Change Data Capture Configuration（异步在线日志复制CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192358513-964979174.png" alt=""><br>  异步在线日志复制CDC模式就要高级很多了，使用Standby Redo Log（热备数据库日志），实际就是使用Oracle的热备机制，将日志写入了热备数据库，目标表就可以建立在热备库上，这对主数据库性能影响就进一步降低。</p>
+<h2 id="Asynchronous-AutoLog-Archive-Change-Data-Capture-Configuration（归档日志CDC）"><a href="#Asynchronous-AutoLog-Archive-Change-Data-Capture-Configuration（归档日志CDC）" class="headerlink" title="Asynchronous AutoLog Archive Change Data Capture Configuration（归档日志CDC）"></a>Asynchronous AutoLog Archive Change Data Capture Configuration（归档日志CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192417247-198841881.png" alt=""><br>  归档日志CDC模式是最完美的模式，但是需要有机制可以获取归档日志（并行文件系统技术），然后在目标端分析归档日志进行变化数据处理，这种模式理论上来讲，几乎可以完全不影响原数据库的性能。<br>  坦白来说，我对Oracle理解并不深，只是为了解决特定的几个问题多看了一点，在现实工作中遇到类似问题需要解决的，或对技术痴狂的同学可以研究一下，我贴上了4种模式具体的设置步骤，虽然是英文的，但是还是非常明确的。（我比较推荐使用第二种，因为设置比较简单，性能上也属于中规中矩，如果没有什么特别要求，可以采用异步在线日志CDC。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/07/linux/linux隧道/ssh隧道技术/" rel="next" title="SSH隧道">
+                <i class="fa fa-chevron-left"></i> SSH隧道
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/11/db/mysql/mysql复制搭建/" rel="prev" title="Mysql主从搭建">
+                Mysql主从搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle-CDC-简介"><span class="nav-number">2.</span> <span class="nav-text">Oracle CDC 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Synchronous-Change-Data-Capture-Configuration（同步复制）"><span class="nav-number">2.1.</span> <span class="nav-text">Synchronous Change Data Capture Configuration（同步复制）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Asynchronous-HotLog-Configuration（异步在线日志CDC）"><span class="nav-number">2.2.</span> <span class="nav-text">Asynchronous HotLog Configuration（异步在线日志CDC）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Asynchronous-Distributed-HotLog-Configuration（异步分布式CDC）"><span class="nav-number">2.3.</span> <span class="nav-text">Asynchronous Distributed HotLog Configuration（异步分布式CDC）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Asynchronous-Autolog-Online-Change-Data-Capture-Configuration（异步在线日志复制CDC）"><span class="nav-number">2.4.</span> <span class="nav-text">Asynchronous Autolog Online Change Data Capture Configuration（异步在线日志复制CDC）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Asynchronous-AutoLog-Archive-Change-Data-Capture-Configuration（归档日志CDC）"><span class="nav-number">2.5.</span> <span class="nav-text">Asynchronous AutoLog Archive Change Data Capture Configuration（归档日志CDC）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
