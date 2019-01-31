@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="ogg相关的几个命令">
+<meta name="keywords" content="ogg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ogg 几个命令">
+<meta property="og:url" content="https://zixujing.github.io/2019/01/26/ogg/ogg几个命令/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="ogg相关的几个命令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-30T16:03:43.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ogg 几个命令">
+<meta name="twitter:description" content="ogg相关的几个命令">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/01/26/ogg/ogg几个命令/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ogg 几个命令 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/26/ogg/ogg几个命令/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ogg 几个命令
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-26 16:00:00" itemprop="dateCreated datePublished" datetime="2019-01-26T16:00:00+08:00">2019-01-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-31 00:03:43" itemprop="dateModified" datetime="2019-01-31T00:03:43+08:00">2019-01-31</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>ogg相关的几个命令<br><a id="more"></a></p>
+</blockquote>
+<h2 id="查询相关"><a href="#查询相关" class="headerlink" title="查询相关"></a>查询相关</h2><ol>
+<li><p>info all</p>
+<ul>
+<li>作用：查看整体的运行情况</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 5&gt; info all</span><br><span class="line">Program     Status      Group       Lag at Chkpt  Time Since Chkpt</span><br><span class="line">MANAGER     RUNNING                                           </span><br><span class="line">EXTRACT     RUNNING     DMP2        842:45:01     00:00:09    </span><br><span class="line">EXTRACT     RUNNING     EXT1        841:19:24     00:00:04    </span><br><span class="line">EXTRACT     RUNNING     EXT2        529:12:40     00:00:00</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>view params process</p>
+<ul>
+<li>作用：查看进程的参数设置</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 6&gt; view params EXT1</span><br><span class="line">extract ext1</span><br><span class="line">userid ggate@gavinprod, password oracle</span><br><span class="line">rmthost odellprod.com, mgrport 7809</span><br><span class="line">rmttrail /opt/oracle/ggate/dirdat/lt</span><br><span class="line">ddl include mapped objname sender.*;</span><br><span class="line">table sender.*;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>info process</p>
+<ul>
+<li>作用：查看进程的信息性，包括进程的状态、Checkpoint信息、延时等</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 7&gt; info EXT1</span><br><span class="line">EXTRACT    EXT1      Last Started 2015-01-28 05:31   Status RUNNING</span><br><span class="line">Checkpoint Lag       529:05:45 (updated 00:00:02 ago)</span><br><span class="line">Log Read Checkpoint  Oracle Redo Logs</span><br><span class="line">                     2015-01-06 04:27:03  Seqno 24, RBA 18464196</span><br><span class="line">                     SCN 0.1440415 (1440415)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>info process detail</p>
+<ul>
+<li>作用：查看更加详细的信息，包括所使用的trail文件、参数文件、报告文件、警告文件的位置</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 8&gt; info EXT1 detail</span><br><span class="line">EXTRACT    EXT1      Last Started 2015-01-28 05:31   Status RUNNING</span><br><span class="line">Checkpoint Lag       431:32:57 (updated 00:00:04 ago)</span><br><span class="line">Log Read Checkpoint  Oracle Redo Logs</span><br><span class="line">                     2015-01-10 06:00:18  Seqno 31, RBA 40079092</span><br><span class="line">                     SCN 0.1553661 (1553661)</span><br><span class="line">  Target Extract Trails:</span><br><span class="line">  Remote Trail Name                                Seqno        RBA     Max MB</span><br><span class="line">  /opt/oracle/ggate/dirdat/lt                          1       1105        100</span><br><span class="line">  Extract Source                          Begin             End             </span><br><span class="line">  /opt/oracle/flash_recovery_area/GAVINPROD/archivelog/2015_01_10/o1_mf_1_31_bc2d3p27_.arc  2014-12-24 04:12  2015-01-10 06:00</span><br><span class="line">  /opt/oracle/oradata/gavinprod/redo01.log  2014-12-24 00:23  2014-12-24 04:12</span><br><span class="line">  Not Available                           * Initialized *   2014-12-24 00:23</span><br><span class="line">Current directory    /opt/oracle/ggate</span><br><span class="line">Report file          /opt/oracle/ggate/dirrpt/EXT1.rpt</span><br><span class="line">Parameter file       /opt/oracle/ggate/dirprm/ext1.prm</span><br><span class="line">Checkpoint file      /opt/oracle/ggate/dirchk/EXT1.cpe</span><br><span class="line">Process file         /opt/oracle/ggate/dirpcs/EXT1.pce</span><br><span class="line">Stdout file          /opt/oracle/ggate/dirout/EXT1.out</span><br><span class="line">Error log            /opt/oracle/ggate/ggserr.log</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>info process showch</p>
+<ul>
+<li>作用：查看详细的关于checkpoint的细心你想，用于查询GoldenGate进行处理过的事物记录<br>Extract进程的Recovery checkpoing，他标识源数据最早的未被处理事物，可以查到该事物的redo log位于哪个日志文件以及该日志文件的序列号，所有序列号比它大得日志文件都需保留</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 9&gt; info EXT1 showch</span><br><span class="line">EXTRACT    EXT1      Last Started 2015-01-28 05:31   Status RUNNING</span><br><span class="line">Checkpoint Lag       00:00:00 (updated 00:00:06 ago)</span><br><span class="line">Log Read Checkpoint  Oracle Redo Logs</span><br><span class="line">                     2015-01-28 05:33:32  Seqno 42, RBA 2548736</span><br><span class="line">                     SCN 0.1750257 (1750257)</span><br><span class="line">Current Checkpoint Detail:</span><br><span class="line">Read Checkpoint #1</span><br><span class="line">  Oracle Redo Log</span><br><span class="line">  Startup Checkpoint (starting position in the data source):</span><br><span class="line">    Thread #: 1</span><br><span class="line">    Sequence #: 19</span><br><span class="line">    RBA: 37158416</span><br><span class="line">    Timestamp: 2014-12-24 04:12:21.000000</span><br><span class="line">    SCN: 0.1341390 (1341390)</span><br><span class="line">    Redo File: /opt/oracle/oradata/gavinprod/redo01.log</span><br><span class="line">  Recovery Checkpoint (position of oldest unprocessed transaction in the data source):</span><br><span class="line">    Thread #: 1</span><br><span class="line">    Sequence #: 42</span><br><span class="line">    RBA: 2504208</span><br><span class="line">    Timestamp: 2015-01-28 05:33:32.000000</span><br><span class="line">    SCN: 0.1750256 (1750256)</span><br><span class="line">    Redo File: /opt/oracle/oradata/gavinprod/redo03.log</span><br><span class="line">  Current Checkpoint (position of last record read in the data source):</span><br><span class="line">    Thread #: 1</span><br><span class="line">    Sequence #: 42</span><br><span class="line">    RBA: 2548736</span><br><span class="line">    Timestamp: 2015-01-28 05:33:32.000000</span><br><span class="line">    SCN: 0.1750257 (1750257)</span><br><span class="line">    Redo File: /opt/oracle/oradata/gavinprod/redo03.log</span><br><span class="line">Write Checkpoint #1</span><br><span class="line">  GGS Log Trail</span><br><span class="line">  Current Checkpoint (current write position):</span><br><span class="line">    Sequence #: 1</span><br><span class="line">    RBA: 1105</span><br><span class="line">    Timestamp: 2015-01-28 05:33:46.462178</span><br><span class="line">    Extract Trail: /opt/oracle/ggate/dirdat/lt</span><br><span class="line">CSN state information:</span><br><span class="line">  CRC: A4-7E-18-EE</span><br><span class="line">  Latest CSN: 1749736</span><br><span class="line">  Latest TXN: 7.29.894</span><br><span class="line">  Latest CSN of finished TXNs: 1749736</span><br><span class="line">  Completed TXNs: 7.29.894</span><br><span class="line">Header:</span><br><span class="line">  Version = 2</span><br><span class="line">  Record Source = A</span><br><span class="line">  Type = 10</span><br><span class="line">  # Input Checkpoints = 1</span><br><span class="line">  # Output Checkpoints = 1</span><br><span class="line">File Information:</span><br><span class="line">  Block Size = 2048</span><br><span class="line">  Max Blocks = 100</span><br><span class="line">  Record Length = 2048</span><br><span class="line">  Current Offset = 0</span><br><span class="line">Configuration:</span><br><span class="line">  Data Source = 3</span><br><span class="line">  Transaction Integrity = 1</span><br><span class="line">  Task Type = 0</span><br><span class="line">Status:</span><br><span class="line">  Start Time = 2015-01-28 05:31:39</span><br><span class="line">  Last Update Time = 2015-01-28 05:33:46</span><br><span class="line">  Stop Status = A</span><br><span class="line">  Last Result = 400</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>lag process</p>
+<ul>
+<li>作用：查看详细的延时信息</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 10&gt; lag EXT1</span><br><span class="line">Sending GETLAG request to EXTRACT EXT1 ...</span><br><span class="line">Last record lag: 23 seconds.</span><br><span class="line">At EOF, no more records to process.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>stats</p>
+<ul>
+<li>作用：查看进程处理的记录数</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 13&gt; stats EXT1, total</span><br><span class="line">Sending STATS request to EXTRACT EXT1 ...</span><br><span class="line">Start of Statistics at 2015-01-28 05:37:59.</span><br><span class="line">DDL replication statistics (for all trails):</span><br><span class="line">*** Total statistics since extract started     ***</span><br><span class="line">        Operations                                      2899.00</span><br><span class="line">        Mapped operations                                  0.00</span><br><span class="line">        Unmapped operations                             2809.00</span><br><span class="line">        Other operations                                  90.00</span><br><span class="line">        Excluded operations                             2899.00</span><br><span class="line">Output to /opt/oracle/ggate/dirdat/lt:</span><br><span class="line">Extracting from GGATE.GGS_MARKER to GGATE.GGS_MARKER:</span><br><span class="line">*** Total statistics since 2015-01-28 05:31:45 ***</span><br><span class="line">        No database operations have been performed.</span><br><span class="line">End of Statistics.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>view report process</p>
+<ul>
+<li>作用：查看对应的报告文件</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 11&gt; view report EXT1</span><br><span class="line">/***********************************************************************</span><br><span class="line">                 Oracle GoldenGate Capture for Oracle</span><br><span class="line">    Version 11.2.1.0.1 OGGCORE_11.2.1.0.1_PLATFORMS_120423.0230_FBO</span><br><span class="line">   Linux, x64, 64bit (optimized), Oracle 11g on Apr 23 2012 08:42:16</span><br><span class="line">Copyright (C) 1995, 2012, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line">                    Starting at 2015-01-28 05:31:33</span><br><span class="line">/***********************************************************************</span><br><span class="line">Operating System Version:</span><br><span class="line">Linux</span><br><span class="line">Version #1 SMP Mon Nov 12 02:14:55 EST 2007, Release 2.6.18-53.el5</span><br><span class="line">Node: gavinprod.com</span><br><span class="line">Machine: x86_64</span><br><span class="line">                         soft limit   hard limit</span><br><span class="line">Address Space Size   :    unlimited    unlimited</span><br><span class="line">Heap Size            :    unlimited    unlimited</span><br><span class="line">File Size            :    unlimited    unlimited</span><br><span class="line">CPU Time             :    unlimited    unlimited</span><br><span class="line">Process id: 5097</span><br><span class="line">Description:</span><br><span class="line">/***********************************************************************</span><br><span class="line">**            Running with the following parameters                  **</span><br><span class="line">/***********************************************************************</span><br><span class="line">2015-01-28 05:31:33  INFO    OGG-03035  Operating system character set identified as UTF-8. Locale: en_US, LC_ALL:.</span><br><span class="line">extract ext1</span><br><span class="line">userid ggate@gavinprod, password ******</span><br><span class="line">2015-01-28 05:31:35  INFO    OGG-03500  WARNING: NLS_LANG environment variable does not match database character set, or not set.</span><br><span class="line">Using database character set value of AL32UTF8.</span><br><span class="line">rmthost odellprod.com, mgrport 7809</span><br><span class="line">rmttrail /opt/oracle/ggate/dirdat/lt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>9 view ggsevt</p>
+<ul>
+<li>作用：查看日志</li>
+<li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">GGSCI (gavinprod.com) 14&gt; view ggsevt</span><br><span class="line">2014-09-10 01:26:35  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): edit params mgr.</span><br><span class="line">2014-09-10 01:27:16  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): edit params mgr.</span><br><span class="line">2014-09-10 01:27:27  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): start manager.</span><br><span class="line">2014-09-10 01:27:28  INFO    OGG-00983  Oracle GoldenGate Manager for Oracle, mgr.prm:  Manager started (port 7809).</span><br><span class="line">2014-09-10 01:27:40  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): add extract ext1  tranlog, begin now.</span><br><span class="line">2014-09-10 01:29:24  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): add exttrail2014-09-10 02:24:03</span><br><span class="line">2014-09-10 02:24:03  INFO    OGG-00983  Oracle GoldenGate Manager for Oracle, mgr.prm:  Manager started (port 7809).</span><br><span class="line">2014-09-10 02:24:07  INFO    OGG-00987  Oracle GoldenGate Command Interpreter for Oracle:  GGSCI command (ggate): start EXT1.</span><br><span class="line">2014-09-10 02:24:07  INFO    OGG-00963  Oracle GoldenGate Manager for Oracle, mgr.prm:  Command received from GGSCI on host gavinprod.com</span><br><span class="line">2014-09-10 02:24:07  INFO    OGG-00975  Oracle GoldenGate Manager for Oracle, mgr.prm:  EXTRACT EXT1 starting.</span><br><span class="line">2014-09-10 02:24:08  INFO    OGG-00992  Oracle GoldenGate Capture for Oracle, ext1.prm:  EXTRACT EXT1 starting.</span><br><span class="line">2014-09-10 02:24:08  INFO    OGG-03035  Oracle GoldenGate Capture for Oracle, ext1.prm:  Operating system character set identified as UTF-8.</span><br><span class="line">2014-09-10 02:24:19  INFO    OGG-01635  Oracle GoldenGate Capture for Oracle, ext1.prm:  BOUNDED RECOVERY: reset to initial or altered checkpoint.</span><br><span class="line">2014-09-10 02:24:19  INFO    OGG-01815  Oracle GoldenGate Capture for Oracle, ext1.prm:  Virtual Memory Facilities for: BR</span><br><span class="line">    anon alloc: mmap(MAP_ANON)  anon free: munmap</span><br><span class="line">    file alloc: mmap(MAP_SHARED)  file free: munmap</span><br><span class="line">    target directories:</span><br><span class="line">    /opt/oracle/ggate/BR/EXT1.</span><br><span class="line">2014-09-10 02:24:19  INFO    OGG-01815  Oracle GoldenGate Capture for Oracle, ext1.prm:  Virtual Memory Facilities for: COM</span><br><span class="line">    anon alloc: mmap(MAP_ANON)  anon free: munmap</span><br><span class="line">    file alloc: mmap(MAP_SHARED)  file free: munmap</span><br><span class="line">    target directories:</span><br><span class="line">    /opt/oracle/ggate/dirtmp.</span><br><span class="line">2014-09-10 02:24:20  WARNING OGG-01423  Oracle GoldenGate Capture for Oracle, ext1.prm:  No valid default archive log destination directory found</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="extract相关"><a href="#extract相关" class="headerlink" title="extract相关"></a>extract相关</h2><ol>
+<li><p>修改rba,checkpoint</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter EXT_ALO,extseqno 17,extrba 9194144,thread 1</span><br><span class="line">alter EXT_ALO,extseqno 10,extrba 5740032,thread 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改recovery checkpoint</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter EXT_ALO,ioextseqno 17,ioextrba 9193488,thread 1</span><br><span class="line">alter  EXT_ALO,ioextseqno 10,ioextrba 5739536,thread 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>info extract cust_ext, detail</p>
+<blockquote>
+<p>抽取进程的详细信息</p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li>info extract ext*, showch  <blockquote>
+<p>抽取进程的检查点信息,注意checkpoint和recovery checkpoint</p>
+</blockquote>
+</li>
+</ol>
+<ol start="5">
+<li><p>INFO TRANDATA user_name.table_names</p>
+<blockquote>
+<p>表的补充日志</p>
+</blockquote>
+</li>
+<li><p>常用添加extract命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; add extract ext1, tranlog, begin now</span><br><span class="line">ggsci&gt; add extract ext1, tranlog, begin now, threads 4</span><br><span class="line">ggsci&gt; add extract ext1, tranlog, begin now, passive</span><br><span class="line">ggsci&gt; add extract ext1, extseqno 111, begin now</span><br><span class="line">ggsci&gt; add extract ext1, extrba 567890, begin 2012-02-02 12:00:00</span><br><span class="line">ggsci&gt; add extract ext1, sourceistable</span><br><span class="line">ggsci&gt; add extract ext1, exttrailsource /oracle/gg11/dirdat/hr   --data pump</span><br><span class="line">ggsci&gt; add extract ext1, vam                        -- VAM - Vendor Access Module</span><br><span class="line">ggsci&gt; add extract ext1, vamtrailsource /ogg/dirdat/vt</span><br><span class="line">ggsci&gt; add extract ext1, rmthost host123, mgrport 7810, rmtname fin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>status</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; STATUS MANAGER    -- To determine whether or not the Manager process is running</span><br><span class="line">ggsci&gt; STATUS EXTRACT group_name [, TASKS | ALLPROCESSES]   -- To determine whether or not Extract is running</span><br><span class="line">ggsci&gt; status extract extr_hr</span><br><span class="line">ggsci&gt; status extract ext*, tasks</span><br><span class="line">ggsci&gt; status extract *ext*, allprocesses</span><br><span class="line">ggsci&gt; STATUS REPLICAT group_name [, TASKS | ALLPROCESSES]  -- To determine whether or not Replicat is running</span><br><span class="line">ggsci&gt; status replicat emp_rep</span><br><span class="line">ggsci&gt; status replicat cust_rep, allprocesses</span><br><span class="line">ggsci&gt; STATUS ER group_wildcard_specification   -- To check the status of multiple Extract and Replicat groups as a unit</span><br><span class="line">ggsci&gt; status er *EX*</span><br><span class="line">Reading Program Database management system Vacuum Pump The Word Find email address free</span><br><span class="line">ggsci&gt; STATS EXTRACT group_name [, statistic] [, TABLE table] [, TOTALSONLY table_specification] [, REPORTFETCH | NOREPORTFETCH] [, REPORTRATE HR|MIN|SEC] [, ... ]  -- To display statistics for one or more Extract group</span><br><span class="line">ggsci&gt; stats ext_hr</span><br><span class="line">ggsci&gt; stats extract ext</span><br><span class="line">ggsci&gt; stats extract ext2 reportrate sec</span><br><span class="line">ggsci&gt; stats extract fin, total, daily</span><br><span class="line">ggsci&gt; stats extract fin, total, hourly, table acct, reportrate min, reset, reportfetch</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>send</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; SEND MANAGER [CHILDSTATUS [DEBUG]] [GETPORTINFO [DETAIL]] [GETPURGEOLDEXTRACTS]   -- To retrieve the status of the active Manager process or to retrieve dynamic port information as configured in the Manager parameter file</span><br><span class="line">ggsci&gt; send manager childstatus</span><br><span class="line">ggsci&gt; send manager childstatus debug</span><br><span class="line">ggsci&gt; send manager getportinfo</span><br><span class="line">ggsci&gt; send manager getportinfo detail</span><br><span class="line">ggsci&gt; send manager getpurgeoldextracts</span><br><span class="line">ggsci&gt; SEND EXTRACT group_name,</span><br><span class="line">	&#123; CACHEMGR &#123;CACHESTATS | CACHEQUEUES | CACHEPOOL&#125; | FORCESTOP | FORCETRANS id [THREAD n] [FORCE] | GETLAG | GETTCPSTATS | LOGEND | REPORT | ROLLOVER | SHOWTRANS [id] [THREAD n] [COUNT n] [DURATION duration_unit] [TABULAR] [FILE file_name [DETAIL]] | SKIPTRANS id [THREAD n] [FORCE] | STATUS | STOP | TLTRACE &#123;DEBUG | OFF | level&#125; [SIZELIMIT size] [DDLINCLUDE | DDL[ONLY]] [FILE] file_name | TRACE[2] &#123;tracefile | OFF&#125; | TRACEINIT | TRANLOGOPTIONS &#123;PURGEORPHANEDTRANSACTIONS | NOPURGEORPHANEDTRANSACTIONS&#125; | TRANLOGOPTIONS TRANSCLEANUPFREQUENCY minutes | VAMMESSAGE &quot;Teradata_command&quot; | VAMMESSAGE &#123;ARSTATS | INCLUDELIST [filter] | EXCLUDELIST [filter]&#125; | VAMMESSAGE OPENTRANS</span><br><span class="line">	&#125;     -- To communicate with a running Extract process</span><br><span class="line">	Teradata_command = &#123;&quot;control:terminate&quot; | &quot;control:suspend&quot; | &quot;control:resume&quot; | &quot;control:copy database.table&quot;</span><br><span class="line">ggsci&gt; send extract exthr status</span><br><span class="line">ggsci&gt; send extract extr, getlag</span><br><span class="line">ggsci&gt; send extract group_name tltrace file file_name ddlinclude</span><br><span class="line">ggsci&gt; send extract fin, rollover</span><br><span class="line">ggsci&gt; send extract fin  stop</span><br><span class="line">ggsci&gt; send extract fin, vammessage control:suspend</span><br><span class="line">ggsci&gt; send extract fin, tranlogoptions transcleanupfrequency 15</span><br><span class="line">ggsci&gt; send extract fin, showtrans count 10</span><br><span class="line">ggsci&gt; send extract fin, skiptrans 5.17.27634 thread 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>alter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; ALTER EXTRACT group_name [, ADD_EXTRACT_attribute] [, THREAD number] [, ETROLLOVER]  -- To change the attributes of an Extract group, To increment a trail to the next file in the sequence</span><br><span class="line">ggsci&gt; alter extract fin, begin 2012-02-16</span><br><span class="line">ggsci&gt; alter extract fin, etrollover</span><br><span class="line">ggsci&gt; alter extract fin, extseqno 26, extrba 338</span><br><span class="line">ggsci&gt; alter extract accounts, thread 4, begin 2012-03-09</span><br><span class="line">ggsci&gt; alter extract sales, lsn 1234:123:1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; LAG EXTRACT group_name    -- To determine a true lag time between Extract and the datasource</span><br><span class="line">ggsci&gt; lag extract ext*</span><br><span class="line">ggsci&gt; lag extract *</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="replicat相关"><a href="#replicat相关" class="headerlink" title="replicat相关"></a>replicat相关</h2><ol>
+<li>send rep2, NOHANDLECOLLISIONS<blockquote>
+<p>send 命令动态取消HANDLECOLLISIONS</p>
+</blockquote>
+</li>
+</ol>
+<ol start="2">
+<li><p>info replicat fin, showch</p>
+<blockquote>
+<p>复制进程的检查点信息</p>
+</blockquote>
+</li>
+<li><p>info replicat emp_rep, detail</p>
+<blockquote>
+<p>复制进程的相应信息</p>
+</blockquote>
+</li>
+<li><p>info checkpointtable gg_owner.chkpt_table</p>
+<blockquote>
+<p>检查点表信息</p>
+</blockquote>
+</li>
+<li><p>常用添加replicat进程命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; add replicat repl, exttrail C:\OGG10G\dirdat\lt</span><br><span class="line">ggsci&gt; add replicat repl, exttrail /oracle/gg11/dirdat/lt, checkpointtable gg_owner.checkpoint</span><br><span class="line">ggsci&gt; add replicat initload, specialrun</span><br><span class="line">ggsci&gt; add replicat repl, exttrail /oracle/gg11/dirdat/lt, nodbcheckpoint</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>stats</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; STATS REPLICAT group_name [, statistic] [, TABLE table] [, TOTALSONLY table_specification] [, REPORTDETAIL | NOREPORTDETAIL] [, REPORTRATE HR|MIN|SEC] [, ... ]   -- To display statistics for one or more Replicat groups</span><br><span class="line">ggsci&gt; stats rep_hr</span><br><span class="line">ggsci&gt; stats replicat fin, total, table acct, reportrate hr, reset, noreportdetail</span><br><span class="line">ggsci&gt; STATS ER group_wildcard_specification   -- To get statistics on multiple Extract and Replicat groups as a unit</span><br><span class="line">ggsci&gt; stats er ext*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>send</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; SEND REPLICAT group_name,</span><br><span class="line">&#123; FORCESTOP | GETLAG | HANDLECOLLISIONS [table_specification] | NOHANDLECOLLISIONS [table_specification] | REPORT [HANDLECOLLISIONS [table_specification]] | STATUS | STOP | TRACE[2] [DDLINCLUDE | DDL[ONLY]] [FILE] file_name | TRACE[2] OFF | TRACEINIT</span><br><span class="line">&#125;    -- To communicate with a starting or running Replicat process</span><br><span class="line">ggsci&gt; send replicat fin, handlecollisions</span><br><span class="line">ggsci&gt; send replicat fin, report handlecollisions fin_*</span><br><span class="line">ggsci&gt; send replicat fin, getlag</span><br><span class="line">ggsci&gt; SEND ER group_wildcard_specification   -- To send instructions to multiple Extract and Replicat groups as a unit</span><br><span class="line">ggsci&gt; send er *ext</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; LAG REPLICAT group_name   -- To determine a true lag time between Replicat and the trail</span><br><span class="line">ggsci&gt; lag replicat myrepl</span><br><span class="line">ggsci&gt; lag replicat *</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="trail相关"><a href="#trail相关" class="headerlink" title="trail相关"></a>trail相关</h2><ol>
+<li><p>INFO EXTTRAIL trail_name</p>
+</li>
+<li><p>info exttrail e:\ogg\dirdat\ex</p>
+<blockquote>
+<p>本地trail文件信息</p>
+</blockquote>
+</li>
+<li><p>INFO RMTTRAIL trail_name</p>
+</li>
+<li><p>info rmttrail d:\ogg\dirdat\ex</p>
+<blockquote>
+<p>远程trail文件信息</p>
+</blockquote>
+</li>
+<li><p>常用添加trail 命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; ADD EXTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n] [, SEQNO n]   -- To create a trail for online processing on local system</span><br><span class="line">ggsci&gt; add exttrail /oracle/gg11/dirdat/lt, extract s_extr</span><br><span class="line">ggsci&gt; add exttrail C:\OGG10G\dirdat\et, extract emp_ext</span><br><span class="line">ggsci&gt; add exttrail c:\ogg\dirdat\fi, extract fin, megabytes 30</span><br><span class="line">ggsci&gt; ADD RMTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n] [, SEQNO n]   -- To create a trail for online processing on remote system</span><br><span class="line">ggsci&gt; add rmttrail C:\OGG10G\dirdat\hr, extract extr</span><br><span class="line">ggsci&gt; add rmttrail /u01/app/oracle/ogg/dirdat/ms, extract msextr</span><br><span class="line">ggsci&gt; add rmttrail /u01/app/oracle/ogg/dirdat/my, extract mysql, megabytes 50</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>alter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ggsci&gt; ALTER EXTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n]   -- To change the attributes of a trail (on the local system)</span><br><span class="line">ggsci&gt; alter exttrail c:\ogg\dirdat\aa, extract fin, megabytes 30</span><br><span class="line">ggsci&gt; ALTER RMTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n]   -- To change the attributes of a trail (on a remote system)</span><br><span class="line">ggsci&gt; alter rmttrail c:\ogg\dirdat\et, extract fin, megabytes 25</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ogg/" rel="tag"># ogg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/26/ogg/ogg安装搭建文档/" rel="next" title="ogg安装和搭建文档">
+                <i class="fa fa-chevron-left"></i> ogg安装和搭建文档
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/29/db/oracle/ORACLE-数据生成器-Data-Generator/" rel="prev" title="ORACLE 数据生成器 Data Generator">
+                ORACLE 数据生成器 Data Generator <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#查询相关"><span class="nav-number">1.</span> <span class="nav-text">查询相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extract相关"><span class="nav-number">2.</span> <span class="nav-text">extract相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#replicat相关"><span class="nav-number">3.</span> <span class="nav-text">replicat相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trail相关"><span class="nav-number">4.</span> <span class="nav-text">trail相关</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

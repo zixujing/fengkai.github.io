@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="mysql 安装相关的内容">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql安装手册">
+<meta property="og:url" content="https://zixujing.github.io/2019/01/26/db/mysql/mysql安装相关内容/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="mysql 安装相关的内容">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/91fdb214232ced7ed657aa473462337c.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/2bb12b141f9ac28ff39b1248f537e1ff.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/10648641329e44faf01eb00e182c6646.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/c35978840d79c90476c7e0fbaafb3170.png">
+<meta property="og:updated_time" content="2019-01-30T16:03:43.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql安装手册">
+<meta name="twitter:description" content="mysql 安装相关的内容">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/91fdb214232ced7ed657aa473462337c.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/01/26/db/mysql/mysql安装相关内容/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Mysql安装手册 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/26/db/mysql/mysql安装相关内容/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mysql安装手册
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-26 02:00:00" itemprop="dateCreated datePublished" datetime="2019-01-26T02:00:00+08:00">2019-01-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-31 00:03:43" itemprop="dateModified" datetime="2019-01-31T00:03:43+08:00">2019-01-31</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>mysql 安装相关的内容</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="软件准备"><a href="#软件准备" class="headerlink" title="软件准备"></a>软件准备</h2><p>选择绿色安装。数据库版本是5.7.22。</p>
+<h2 id="主机系统环境"><a href="#主机系统环境" class="headerlink" title="主机系统环境"></a>主机系统环境</h2><p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/91fdb214232ced7ed657aa473462337c.png" alt=""></p>
+<h2 id="创建用户和组"><a href="#创建用户和组" class="headerlink" title="创建用户和组"></a>创建用户和组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&gt; groupadd mysql</span><br><span class="line">$&gt; useradd -r -g mysql mysql</span><br></pre></td></tr></table></figure>
+<h2 id="数据库软件准备"><a href="#数据库软件准备" class="headerlink" title="数据库软件准备"></a>数据库软件准备</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$&gt; tar -xzvf mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz</span><br><span class="line">$&gt; mv mysql-5.7.22-linux-glibc2.12-x86_64 /usr/local/mysql</span><br><span class="line">$&gt; chown mysql:mysql -R /usr/local/mysql</span><br><span class="line">#数据目录创建，建议新挂一个磁盘到/opt下，然后在opt下创建data目录专门存储mysql数据</span><br><span class="line">$&gt;mkdir /opt/data</span><br><span class="line">$&gt;chown -R mysql:mysql /opt/data</span><br></pre></td></tr></table></figure>
+<h2 id="设置PATH路径"><a href="#设置PATH路径" class="headerlink" title="设置PATH路径"></a>设置PATH路径</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&gt;vi ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<p>设置如下图：</p>
+<p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/2bb12b141f9ac28ff39b1248f537e1ff.png" alt=""></p>
+<p>保存后source生效<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&gt; source ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
+<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&gt; cd /usr/local/mysql/bin</span><br><span class="line">$&gt; ./mysqld --initialize --user=mysql --basedir=/usr/local/mysql/ --datadir=/opt/data/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>记住初始密码（ZBy%#Uh45%gj），如下图<br><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/10648641329e44faf01eb00e182c6646.png" alt=""></p>
+</blockquote>
+<h2 id="配置数据库"><a href="#配置数据库" class="headerlink" title="配置数据库"></a>配置数据库</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&gt;vi /etc/my.cnf</span></span><br><span class="line"><span class="meta">#</span><span class="bash">配置如下</span></span><br><span class="line">[mysqld]</span><br><span class="line">basedir = /usr/local/mysql/</span><br><span class="line">datadir = /opt/data/</span><br><span class="line">character-set-server = utf8</span><br><span class="line">pid-file=/opt/data/mysqld.pid</span><br><span class="line">back_log=1024</span><br><span class="line">wait_timeout=1800</span><br><span class="line">max_connections=3200</span><br><span class="line">max_user_connections=800</span><br><span class="line">innodb_thread_concurrency=4</span><br><span class="line">skip-name-resolve #在5.7.18安装是使用此参数会有问题，不能</span><br><span class="line">innodb_buffer_pool_size=100M</span><br><span class="line">innodb_log_buffer_size=20M</span><br><span class="line">read_buffer_size=10M</span><br><span class="line">sort_buffer_size=10M</span><br><span class="line">read_rnd_buffer_size=10M</span><br><span class="line">server-id=100</span><br><span class="line">log-bin = master</span><br><span class="line">max_allowed_packet=20M </span><br><span class="line">lower_case_table_names=1</span><br><span class="line">[mysql]</span><br><span class="line">default-character-set=utf8</span><br></pre></td></tr></table></figure>
+<h2 id="配置解释"><a href="#配置解释" class="headerlink" title="配置解释"></a>配置解释</h2><ol>
+<li><p>back_log=1024</p>
+<blockquote>
+<p>back_log的值指出在mysql暂时停止回答新请求之前的短时间内多少个请求可以被存在堆栈中。也就是说，如果mysql的连接数据达到max_connections时，新来的请求将会被存在堆栈中，以等待某一连接释放资源，该堆栈的数量即back_log，如果等待连接的数量超过back_log，将不被授予连接资源。</p>
+</blockquote>
+</li>
+<li><p>wait_timeout=1800</p>
+<blockquote>
+<p>mysql连接闲置超过此设定值的时间后将会被强行关闭，单位是秒。</p>
+</blockquote>
+</li>
+<li><p>max_connections=3200</p>
+<blockquote>
+<p>指mysql的最大连接数，如果服务器的并发连接请求量比较大，建议调高此值，以增加并行连接数量，当然这是建立在机器能支撑的情况下，因为如果连接数越多，介于mysql会为每个连接提供连接缓冲区，就会开销越多的内存，所以要适当调整该值，不能盲目提高设值。</p>
+</blockquote>
+</li>
+<li><p>max_user_connections=800</p>
+<blockquote>
+<p>指每个数据库用户的最大连接。针对某一个账号的所有客户端并行连接到mysql服务的最大并行连接数。简单说是指同一个账号能够同时连接到mysql服务的最大连接数。设置为0表示不限制。</p>
+</blockquote>
+</li>
+<li><p>innodb_thread_concurrency=CPU核数*2</p>
+<blockquote>
+<p>此值应设为CPU核数的2倍。</p>
+</blockquote>
+</li>
+<li><p>skip-name-resolve</p>
+<blockquote>
+<p>禁止mysql对外部连接进行DNS解析，使用这一选项可以消除mysql进行DNS解析的时间。</p>
+</blockquote>
+</li>
+<li><p>innodb_buffer_pool_size&lt;=服务器内存*0.7</p>
+<blockquote>
+<p>用于缓存索引和数据的内存大小。</p>
+</blockquote>
+</li>
+<li><p>innodb_log_buffer_size=20M</p>
+<blockquote>
+<p>InnoDB存储引擎的事务日志所使用的缓冲区。</p>
+</blockquote>
+</li>
+<li><p>read_buffer_size=10M</p>
+<blockquote>
+<p>  这个值代表读入缓冲区大小。对表进行顺序扫描的请求将分配一个读入缓冲区。</p>
+</blockquote>
+</li>
+<li><p>sort_buffer_size=10M</p>
+<blockquote>
+<p>执行排序使用的缓冲大小。</p>
+</blockquote>
+</li>
+<li><p>read_rnd_buffer_size=10M</p>
+<blockquote>
+<p>随机读缓冲区大小。当按任意顺序读取行时(例如，按照排序顺序)，将分配一个随机读缓存区。进行排序查询时，mysql会首先扫描一遍该缓冲，以避免磁盘搜索，提高查询速度，如果需要排序大量数据，可适当调高该值。</p>
+</blockquote>
+</li>
+<li><p>binlog=日志名字</p>
+<blockquote>
+<p>mysql的二进制日志是mysql最重要的日志，它记录了所有的DDL和DML语句，以事件形式记录，还包含语句所执行的消耗的时间，mysql的二进制日志是事务安全型的。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="启动mysql"><a href="#启动mysql" class="headerlink" title="启动mysql"></a>启动mysql</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&gt;cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld</span><br><span class="line">$&gt;service mysqld start</span><br></pre></td></tr></table></figure>
+<h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&gt;mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>图中划红线的是修改密码部分，旧密码是初始化数据库时生成的随机密码。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/ora_mysql_install/c35978840d79c90476c7e0fbaafb3170.png" alt=""></p>
+<h2 id="centos7配置开机启动"><a href="#centos7配置开机启动" class="headerlink" title="centos7配置开机启动"></a>centos7配置开机启动</h2><h2 id="配置文件创建"><a href="#配置文件创建" class="headerlink" title="配置文件创建"></a>配置文件创建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# touch /usr/lib/systemd/system/mysqld.service</span><br><span class="line">[root@localhost ~]# cd /usr/lib/systemd/system</span><br><span class="line">#编辑上一步创建的mysqld.service文件，加入如下内容:</span><br><span class="line">[root@localhost system]# vi mysqld.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=MySQL Server</span><br><span class="line">Documentation=man:mysqld(8)</span><br><span class="line">Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html</span><br><span class="line">After=network.target</span><br><span class="line">After=syslog.target</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=mysql</span><br><span class="line">Group=mysql</span><br><span class="line">ExecStart=/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf</span><br><span class="line">LimitNOFILE = 5000</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>备注:ExecStart=/usr/local/mysql/bin/mysqld(此处请对应修改为mysql程序所在的路径)</p>
+</blockquote>
+<h2 id="启动mysql-1"><a href="#启动mysql-1" class="headerlink" title="启动mysql"></a>启动mysql</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost system]# systemctl enable mysqld</span><br><span class="line">[root@localhost system]# systemctl start mysqld</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/26/db/oracle/oracle安装文档_centos7.5_11.2.0.4/" rel="next" title="Oracle安装文档">
+                <i class="fa fa-chevron-left"></i> Oracle安装文档
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/26/ogg/ogg安装搭建文档/" rel="prev" title="ogg安装和搭建文档">
+                ogg安装和搭建文档 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#软件准备"><span class="nav-number">1.</span> <span class="nav-text">软件准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主机系统环境"><span class="nav-number">2.</span> <span class="nav-text">主机系统环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建用户和组"><span class="nav-number">3.</span> <span class="nav-text">创建用户和组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库软件准备"><span class="nav-number">4.</span> <span class="nav-text">数据库软件准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置PATH路径"><span class="nav-number">5.</span> <span class="nav-text">设置PATH路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化数据库"><span class="nav-number">6.</span> <span class="nav-text">初始化数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置数据库"><span class="nav-number">7.</span> <span class="nav-text">配置数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置解释"><span class="nav-number">8.</span> <span class="nav-text">配置解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动mysql"><span class="nav-number">9.</span> <span class="nav-text">启动mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改密码"><span class="nav-number">10.</span> <span class="nav-text">修改密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#centos7配置开机启动"><span class="nav-number">11.</span> <span class="nav-text">centos7配置开机启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件创建"><span class="nav-number">12.</span> <span class="nav-text">配置文件创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动mysql-1"><span class="nav-number">13.</span> <span class="nav-text">启动mysql</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

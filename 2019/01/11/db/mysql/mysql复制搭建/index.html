@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="冯凯&#39;blog">
 <meta property="og:description" content="mysql复制搭建过程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-15T13:11:08.060Z">
+<meta property="og:updated_time" content="2019-01-30T16:03:43.355Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql主从搭建">
 <meta name="twitter:description" content="mysql复制搭建过程">
@@ -402,7 +402,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-15 21:11:08" itemprop="dateModified" datetime="2019-01-15T21:11:08+08:00">2019-01-15</time>
+                <time title="修改时间：2019-01-31 00:03:43" itemprop="dateModified" datetime="2019-01-31T00:03:43+08:00">2019-01-31</time>
               
             
           </span>
@@ -456,7 +456,7 @@
         <blockquote>
 <p>mysql复制搭建过程<br><a id="more"></a></p>
 </blockquote>
-<h2 id="关键配置参数"><a href="#关键配置参数" class="headerlink" title="关键配置参数"></a>关键配置参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---master----</span><br><span class="line">server-id=1</span><br><span class="line">log-bin=master-bin</span><br><span class="line">---slaver----</span><br><span class="line">server-id=2</span><br><span class="line">log-bin=slavera-bin</span><br></pre></td></tr></table></figure>
+<h2 id="关键配置参数"><a href="#关键配置参数" class="headerlink" title="关键配置参数"></a>关键配置参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---master----</span><br><span class="line">server-id=1</span><br><span class="line">log-bin=master-bin</span><br><span class="line">---slaver----</span><br><span class="line">server-id=2</span><br><span class="line">log-bin=slavera-bin</span><br><span class="line">log-slave-updates</span><br></pre></td></tr></table></figure>
 <h2 id="备份master"><a href="#备份master" class="headerlink" title="备份master"></a>备份master</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --user=root --password=root --slaver-info</span><br><span class="line">--database=dataprocessno1_bigdata /root/bak</span><br></pre></td></tr></table></figure>
 <h2 id="打包备份"><a href="#打包备份" class="headerlink" title="打包备份"></a>打包备份</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zcvf bak.tar.gz bak</span><br></pre></td></tr></table></figure>
 <h2 id="备份拷贝到目标机器"><a href="#备份拷贝到目标机器" class="headerlink" title="备份拷贝到目标机器"></a>备份拷贝到目标机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp bak.tar.gz 192.168.106.174:/root/bak</span><br></pre></td></tr></table></figure>
@@ -481,35 +481,6 @@
     
       
     
-    
-      <div>
-        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
-  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-    <span>打赏</span>
-  </button>
-  <div id="QR" style="display: none;">
-
-    
-      <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="冯_凯 微信支付">
-        <p>微信支付</p>
-      </div>
-    
-
-    
-      <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="冯_凯 支付宝">
-        <p>支付宝</p>
-      </div>
-    
-
-    
-
-  </div>
-</div>
-
-      </div>
     
 
     
@@ -541,8 +512,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/14/db/postgresql/oracle_to_ppas/" rel="prev" title="ADAM采集器用户手册">
-                ADAM采集器用户手册 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/11/db/oracle/oracle_rac/数据库集群搭建文档/" rel="prev" title="Oracle RAC搭建过程">
+                Oracle RAC搭建过程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -617,7 +588,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -671,7 +642,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

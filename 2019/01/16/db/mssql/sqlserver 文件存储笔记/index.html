@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="sqlserver 笔记，文件存储相关">
+<meta name="keywords" content="sqlserver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlserver 文件存储笔记">
+<meta property="og:url" content="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="sqlserver 笔记，文件存储相关">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/882fba2bgab50aceb6a78&690.png">
+<meta property="og:updated_time" content="2019-01-30T16:03:43.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sqlserver 文件存储笔记">
+<meta name="twitter:description" content="sqlserver 笔记，文件存储相关">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>sqlserver 文件存储笔记 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sqlserver 文件存储笔记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-16 01:00:00" itemprop="dateCreated datePublished" datetime="2019-01-16T01:00:00+08:00">2019-01-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-31 00:03:43" itemprop="dateModified" datetime="2019-01-31T00:03:43+08:00">2019-01-31</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>sqlserver 笔记，文件存储相关<br><a id="more"></a></p>
+</blockquote>
+<h2 id="page页"><a href="#page页" class="headerlink" title="page页"></a>page页</h2><ul>
+<li>每个页面8KB，连续的8个页面称为一个区extents。</li>
+<li>统一区：8个页面均为一个对象所有。</li>
+<li>混合区： 8个页面最多可被8个对象共享。<h2 id="lockres-physloc"><a href="#lockres-physloc" class="headerlink" title="%%lockres%% %%physloc%%"></a>%%lockres%% %%physloc%%</h2></li>
+<li>lockres ： 锁</li>
+<li>physloc ： 物理位置，64位的计算方式是，如0x0001000001000000则0x0000000100000100，前4为为槽号0x0000，中间4位为文件号0x0001，最后8位0x00000100是页号。</li>
+<li>显示： 文件编号：页编号：页内位置</li>
+</ul>
+<h2 id="GAM页"><a href="#GAM页" class="headerlink" title="GAM页"></a>GAM页</h2><ul>
+<li>全局分配映射(Global Allocation Map)，包含页头和一些其它开销外，还有8 000字节或者说64 000bit位可用，每个bit位代表一个区（8个page），0表示已使用，1表示自由区。</li>
+</ul>
+<h2 id="SGAM页"><a href="#SGAM页" class="headerlink" title="SGAM页"></a>SGAM页</h2><ul>
+<li>共享全局分区，类似GAM一个bit表示一个区，不同的是，他的1表示混合区且有可用空间；0表示未使用或无可用空间。<strong>用来跟踪区的分配情况，描述哪些区是混合区并且至少有一个空闲的数据页</strong>。</li>
+</ul>
+<h2 id="系统page页"><a href="#系统page页" class="headerlink" title="系统page页"></a>系统page页</h2><ul>
+<li>个GAM页面出现在第一个GAM页面(页码为2)以后的每511230个页面中（大约4G空间后），并且下一个SGAM页面出现在第一个SGAM页面(页码为3)以后的每511 230个页面中。</li>
+<li>每一个数据库文件的页码为0的页面是文件头页面，并且每个文件仅有一页（文件头页面，页码为0）。</li>
+<li>页码0是头文件页，页码1是页面自由空间页(Page Free Space，PFS)。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>第0页</th>
+<th>第1页</th>
+<th>第2页</th>
+<th>第3页</th>
+<th>第4页</th>
+<th>第5页</th>
+<th>第6页</th>
+<th>第7页  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m_type=15</td>
+<td>m_type=11</td>
+<td>m_type=8</td>
+<td>m_type=9</td>
+<td>m_type=0</td>
+<td>m_type=0</td>
+<td>m_type=16</td>
+<td>m_type=17</td>
+</tr>
+<tr>
+<td>头文件页</td>
+<td>PFS页</td>
+<td>GAM页</td>
+<td>SGAM页</td>
+<td>保留页</td>
+<td>保留页</td>
+<td>DCM页</td>
+<td>BCM页</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>除了第9页为数据库的BOOT页以外，从第8页到第173页为SQLServer2008内部系统表的相关存储信息，然后从第174页到第279页为未分配页面。因为第一页从0开始，所以刚好280页，即和我们看到的数据库数据文件的大小完全相等。</li>
+<li>见前文的运算，数据库大小：2.18 MB (2,293,760 字节)=2,293,760b/8kb=280个页面=35个区。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>第8页</th>
+<th>第9页</th>
+<th>第10页~第173页</th>
+<th>第174~279页</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m_type=1</td>
+<td>m_type=13</td>
+<td>m_type in (1,2,10)</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Data页</td>
+<td>Boot页</td>
+<td>主要为内部系统表相关信息</td>
+<td>未分配</td>
+</tr>
+</tbody>
+</table>
+<h2 id="PFS"><a href="#PFS" class="headerlink" title="PFS"></a>PFS</h2><ul>
+<li>用来跟踪页分配级别，存储当前数据文件里所有页分配及可用空间的信息，每一个数据文件的第2个数据页都是PFS，页号为1 。该页面中，每一个字节描述后面每一个数据页是否还有空间可以写记录，也就是一个PFS页是8k，约有8k个字节可以描述后续每个页面的使用情况，也就是一个PFS页，可以描述8k个数据页的使用情况，这就意味着单个PFS页能够存储约64M数据页的可用空间情况。所以，大约每隔64Mb，就会有一个新的PFS页。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit 0-2</td>
+<td>0x00 is empty;0x01 is 1 to 50% full;0x02 is 51 to 80% full;0x03 is 81 to 95% full;0x04 is 96 to 100% full;</td>
+</tr>
+<tr>
+<td>bit 3</td>
+<td>(0x08): 该数据页是否存在鬼影记录</td>
+</tr>
+<tr>
+<td>bit 4</td>
+<td>(0x10): 是否是IAM页</td>
+</tr>
+<tr>
+<td>bit 5</td>
+<td>(0x20): 是否是混合页</td>
+</tr>
+<tr>
+<td>bit 6</td>
+<td>(0x40): 是否已分配使用</td>
+</tr>
+<tr>
+<td>Bit 7</td>
+<td>保留，未使用，无实际含义</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dbcc-ind"><a href="#dbcc-ind" class="headerlink" title="dbcc ind"></a>dbcc ind</h2><blockquote>
+<p>语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DBCC TRACEON(2588)</span><br><span class="line">DBCC HELP(&apos;ind&apos;)</span><br><span class="line">dbcc IND ( &#123; &apos;dbname&apos; | dbid &#125;, &#123; &apos;objname&apos; | objid &#125;, &#123; nonclustered indid | 1 | 0 | -1 | -2 &#125; [, partition_number] )</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>输出格式</p>
+</blockquote>
+<ul>
+<li>-2：返回所有IAM页，基于管理行内数据页，行溢出数据页及大对象数据页的IAM页</li>
+<li>-1：返回所有IAM页及数据页。</li>
+<li>0：返回管理行内数据页的IAM页，行内数据页</li>
+<li>1：返回聚集索引的数据页信息及IAM页信息（同-1）</li>
+<li>2：返回第1个非聚集索引的数据页信息及IAM页信息</li>
+<li>3：返回第2个非聚集索引的数据页信息及IAM页信息</li>
+<li>…</li>
+<li>n：返回第（n-1）个非聚集索引的数据页信息及IAM页信息（n&gt;1）</li>
+</ul>
+<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png" alt=""></center>
+
+<h2 id="dbcc-page"><a href="#dbcc-page" class="headerlink" title="dbcc page"></a>dbcc page</h2><blockquote>
+<p>语法说明</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DBCC TRACEON(2588)</span><br><span class="line">DBCC HELP(&apos;PAGE&apos;)</span><br><span class="line">dbcc PAGE ( &#123;&apos;dbname&apos; | dbid&#125;, filenum, pagenum [, printopt=&#123;0|1|2|3&#125; ])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出的格式有4种方式，不同方式，输出不一样。</p>
+</blockquote>
+<ul>
+<li>0：输出可读形式的数据页页头数据</li>
+<li>1：输出可读形式的数据页页头数据，并且还有槽位对应记录的十六进制内容</li>
+<li>2：输出可读形式的数据页页头数据，输出整个数据页页头的十六进制数据，整一页的内容都显示，包括未使用的空间。</li>
+<li>3：输出可读形式的数据页页头数据，并且包括记录中每个字段的可读形式，行溢出数据也会显示数据内容，但是大对象则不显示内容，而是说明其存储位置！所以选项3，也是输出内容最全面的。</li>
+</ul>
+<h2 id="IAM"><a href="#IAM" class="headerlink" title="IAM"></a>IAM</h2><blockquote>
+<p>Sytem_internals_allocation_units表存放第一个数据页和第一个IAM页的指针。IAM按照数据页的顺序存放数据页的指针。数据页之间并无直接链接。</p>
+</blockquote>
+<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/882fba2bgab50aceb6a78&amp;690.png" alt=""></center>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT total_pages,used_pages,data_pages,</span><br><span class="line">       first_page,root_page,first_iam_page</span><br><span class="line">  FROM sys.system_internals_allocation_units</span><br><span class="line">WHERE container_id =&apos;72057594038779904&apos;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sqlserver/" rel="tag"># sqlserver</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/15/db/mssql/sqlserver 2012内存管理/" rel="next" title="sqlserver 2012内存管理">
+                <i class="fa fa-chevron-left"></i> sqlserver 2012内存管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/16/db/oracle/oracle_expdp_impdp/" rel="prev" title="oracle 导入导出文档">
+                oracle 导入导出文档 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#page页"><span class="nav-number">1.</span> <span class="nav-text">page页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lockres-physloc"><span class="nav-number">2.</span> <span class="nav-text">%%lockres%% %%physloc%%</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GAM页"><span class="nav-number">3.</span> <span class="nav-text">GAM页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SGAM页"><span class="nav-number">4.</span> <span class="nav-text">SGAM页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统page页"><span class="nav-number">5.</span> <span class="nav-text">系统page页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PFS"><span class="nav-number">6.</span> <span class="nav-text">PFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dbcc-ind"><span class="nav-number">7.</span> <span class="nav-text">dbcc ind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dbcc-page"><span class="nav-number">8.</span> <span class="nav-text">dbcc page</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IAM"><span class="nav-number">9.</span> <span class="nav-text">IAM</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
