@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="冯凯&#39;blog">
 <meta property="og:description" content="nginx笔记">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://images0.cnblogs.com/blog/385532/201308/30193702-7287165c73e7440382207309e07fcbb5.png">
-<meta property="og:image" content="https://images0.cnblogs.com/blog/385532/201308/30193703-330b281cddc5439f99eb027ac1c9627c.png">
-<meta property="og:updated_time" content="2019-02-12T03:05:19.932Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193703-330b281cddc5439f99eb027ac1c9627c.png">
+<meta property="og:updated_time" content="2019-02-12T03:13:19.710Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx随笔">
 <meta name="twitter:description" content="nginx笔记">
-<meta name="twitter:image" content="https://images0.cnblogs.com/blog/385532/201308/30193702-7287165c73e7440382207309e07fcbb5.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png">
 
 
 
@@ -405,7 +405,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-12 11:05:19" itemprop="dateModified" datetime="2019-02-12T11:05:19+08:00">2019-02-12</time>
+                <time title="修改时间：2019-02-12 11:13:19" itemprop="dateModified" datetime="2019-02-12T11:13:19+08:00">2019-02-12</time>
               
             
           </span>
@@ -459,7 +459,7 @@
         <blockquote>
 <p>nginx笔记<br><a id="more"></a></p>
 </blockquote>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p><img src="https://images0.cnblogs.com/blog/385532/201308/30193702-7287165c73e7440382207309e07fcbb5.png" alt=""><br><img src="https://images0.cnblogs.com/blog/385532/201308/30193703-330b281cddc5439f99eb027ac1c9627c.png" alt=""></p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png" alt=""><br><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193703-330b281cddc5439f99eb027ac1c9627c.png" alt=""></p>
 <h2 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h2><h3 id="读取文件并socket传输的普通过程"><a href="#读取文件并socket传输的普通过程" class="headerlink" title="读取文件并socket传输的普通过程"></a>读取文件并socket传输的普通过程</h3><ol start="0">
 <li>read(file,tmp_buf, len);<br>write(socket,tmp_buf, len);</li>
 <li>系统调用 read()产生一个上下文切换，从 user mode 切换到 kernel mode，然后 DMA 执行拷贝，把文件数据从硬盘读到一个 kernel buffer 里。</li>
