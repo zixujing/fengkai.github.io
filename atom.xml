@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zixujing.github.io/"/>
-  <updated>2019-01-30T16:03:43.379Z</updated>
+  <updated>2019-02-12T03:05:19.932Z</updated>
   <id>https://zixujing.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>nginx随笔</title>
+    <link href="https://zixujing.github.io/2019/02/11/linux/linux%E5%B7%A5%E5%85%B7/nginx%E9%9A%8F%E7%AC%94/"/>
+    <id>https://zixujing.github.io/2019/02/11/linux/linux工具/nginx随笔/</id>
+    <published>2019-02-10T17:00:00.000Z</published>
+    <updated>2019-02-12T03:05:19.932Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>nginx笔记<br><a id="more"></a></p></blockquote><h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p><img src="https://images0.cnblogs.com/blog/385532/201308/30193702-7287165c73e7440382207309e07fcbb5.png" alt=""><br><img src="https://images0.cnblogs.com/blog/385532/201308/30193703-330b281cddc5439f99eb027ac1c9627c.png" alt=""></p><h2 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h2><h3 id="读取文件并socket传输的普通过程"><a href="#读取文件并socket传输的普通过程" class="headerlink" title="读取文件并socket传输的普通过程"></a>读取文件并socket传输的普通过程</h3><ol start="0"><li>read(file,tmp_buf, len);<br>write(socket,tmp_buf, len);</li><li>系统调用 read()产生一个上下文切换，从 user mode 切换到 kernel mode，然后 DMA 执行拷贝，把文件数据从硬盘读到一个 kernel buffer 里。</li><li>数据从 kernel buffer拷贝到 user buffer，然后系统调用 read() 返回，这时又产生一个上下文切换，从kernel mode 切换到 user mode。</li><li>系统调用write()产生一个上下文切换，从 user mode切换到 kernel mode，然后把步骤2读到 user buffer的数据拷贝到 kernel buffer，不过这次是个不同的 kernel buffer，这个 buffer和 socket相关联。</li><li>系统调用 write()返回，产生一个上下文切换，从 kernel mode 切换到 user mode ，然后 DMA 从 kernel buffer拷贝数据到协议栈。<h3 id="sendfile的协议栈传输过程"><a href="#sendfile的协议栈传输过程" class="headerlink" title="sendfile的协议栈传输过程"></a>sendfile的协议栈传输过程</h3></li><li>sendfile(socket,file, len);</li><li>系统调用sendfile()通过 DMA把硬盘数据拷贝到 kernel buffer，然后数据被 kernel直接拷贝到另外一个与 socket相关的 kernel buffer。这里没有 user mode和 kernel mode之间的切换，在 kernel中直接完成了从一个 buffer到另一个 buffer的拷贝。</li><li>DMA 把数据从 kernelbuffer 直接拷贝给协议栈，没有切换，也不需要数据从 user mode 拷贝到 kernel mode，因为数据就在 kernel 里。<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3>sendfile 是将 in_fd 的内容发送到 out_fd 。而 in_fd 不能是 socket ， 也就是只能文件句柄。 所以当 Nginx 是一个静态文件服务器的时候，开启 SENDFILE 配置项能大大提高 Nginx 的性能。 但是当 Nginx 是作为一个反向代理来使用的时候，SENDFILE 则没什么用了，因为 Nginx 是反向代理的时候。 in_fd 就不是文件句柄而是 socket，此时就不符合 sendfile 函数的参数要求了。</li></ol><h2 id="accept-mutex"><a href="#accept-mutex" class="headerlink" title="accept_mutex"></a>accept_mutex</h2><ol><li>当一个新连接到达时，如果激活了accept_mutex，那么多个Worker将以串行方式来处理，其中有一个Worker会被唤醒，其他的Worker继续保持休眠状态；如果没有激活accept_mutex，那么所有的Worker都会被唤醒，不过只有一个Worker能获取新连接，其它的Worker会重新进入休眠状态，这就是「惊群问题」。</li><li>OS may wake all processes waiting on accept() and select(), this is called thundering herd problem. This is a problem if you have a lot of workers as in Apache (hundreds and more), but this insensible if you have just several workers as nginx usually has. Therefore turning accept_mutex off is as scheduling incoming connection by OS via select/kqueue/epoll/etc (but not accept()).</li></ol><h2 id="multi-accept"><a href="#multi-accept" class="headerlink" title="multi_accept"></a>multi_accept</h2><ol><li>在Nginx获得有新连接的通知之后,接受尽可能多的连接。</li></ol><h2 id="tcp-nopush"><a href="#tcp-nopush" class="headerlink" title="tcp_nopush"></a>tcp_nopush</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;nginx笔记&lt;br&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://zixujing.github.io/categories/linux/"/>
+    
+    
+      <category term="tool" scheme="https://zixujing.github.io/tags/tool/"/>
+    
+  </entry>
   
   <entry>
     <title>zabbix安装</title>
@@ -320,6 +343,29 @@
   </entry>
   
   <entry>
+    <title>Ogg-monitor--server-and-agent12.2.1-安装</title>
+    <link href="https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-%E5%AE%89%E8%A3%85/"/>
+    <id>https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-安装/</id>
+    <published>2019-01-10T16:00:00.000Z</published>
+    <updated>2019-01-15T13:11:08.073Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>监控ogg<br><a id="more"></a></p></blockquote><blockquote><p>文档下载</p></blockquote><table><thead><tr><th>文档名</th><th>下载  </th></tr></thead><tbody><tr><td>Ogg-monitor–server-and-agent12.2.1-安装.docx</td><td><a href="https://raw.githubusercontent.com/zixujing/book1/master/Ogg-monitor--server-and-agent12.2.1-安装.docx" target="_blank" rel="noopener">点</a></td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;监控ogg&lt;br&gt;
+    
+    </summary>
+    
+      <category term="tool" scheme="https://zixujing.github.io/categories/tool/"/>
+    
+    
+      <category term="ogg" scheme="https://zixujing.github.io/tags/ogg/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MSSQL for linux 安装</title>
     <link href="https://zixujing.github.io/2019/01/11/db/mssql/mssql_for_linux/"/>
     <id>https://zixujing.github.io/2019/01/11/db/mssql/mssql_for_linux/</id>
@@ -389,29 +435,6 @@
   </entry>
   
   <entry>
-    <title>Ogg-monitor--server-and-agent12.2.1-安装</title>
-    <link href="https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-%E5%AE%89%E8%A3%85/"/>
-    <id>https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-安装/</id>
-    <published>2019-01-10T16:00:00.000Z</published>
-    <updated>2019-01-15T13:11:08.073Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>监控ogg<br><a id="more"></a></p></blockquote><blockquote><p>文档下载</p></blockquote><table><thead><tr><th>文档名</th><th>下载  </th></tr></thead><tbody><tr><td>Ogg-monitor–server-and-agent12.2.1-安装.docx</td><td><a href="https://raw.githubusercontent.com/zixujing/book1/master/Ogg-monitor--server-and-agent12.2.1-安装.docx" target="_blank" rel="noopener">点</a></td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;监控ogg&lt;br&gt;
-    
-    </summary>
-    
-      <category term="tool" scheme="https://zixujing.github.io/categories/tool/"/>
-    
-    
-      <category term="ogg" scheme="https://zixujing.github.io/tags/ogg/"/>
-    
-  </entry>
-  
-  <entry>
     <title>oracle cdc</title>
     <link href="https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/"/>
     <id>https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/</id>
@@ -454,29 +477,6 @@
     
     
       <category term="ssh" scheme="https://zixujing.github.io/tags/ssh/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>oracle dg4odbc 搭建</title>
-    <link href="https://zixujing.github.io/2019/01/06/db/oracle/dg4odbc_for_oracle/"/>
-    <id>https://zixujing.github.io/2019/01/06/db/oracle/dg4odbc_for_oracle/</id>
-    <published>2019-01-05T16:00:00.000Z</published>
-    <updated>2019-01-15T13:11:08.061Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>oracle创建dblink连接mysql。<br><a id="more"></a><br><a href="https://raw.githubusercontent.com/zixujing/book1/master/oracle dg4odbc for mysql.pdf" target="_blank" rel="noopener">pdf</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;oracle创建dblink连接mysql。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="db" scheme="https://zixujing.github.io/categories/db/"/>
-    
-    
-      <category term="oracle" scheme="https://zixujing.github.io/tags/oracle/"/>
     
   </entry>
   
