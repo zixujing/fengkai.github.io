@@ -106,7 +106,8 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193703-330b281cddc5439f99eb027ac1c9627c.png">
-<meta property="og:updated_time" content="2019-02-12T03:13:19.710Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/image013.png">
+<meta property="og:updated_time" content="2019-02-12T07:15:04.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx随笔">
 <meta name="twitter:description" content="nginx笔记">
@@ -405,7 +406,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-12 11:13:19" itemprop="dateModified" datetime="2019-02-12T11:13:19+08:00">2019-02-12</time>
+                <time title="修改时间：2019-02-12 15:15:04" itemprop="dateModified" datetime="2019-02-12T15:15:04+08:00">2019-02-12</time>
               
             
           </span>
@@ -459,7 +460,8 @@
         <blockquote>
 <p>nginx笔记<br><a id="more"></a></p>
 </blockquote>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png" alt=""><br><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193703-330b281cddc5439f99eb027ac1c9627c.png" alt=""></p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><h3 id="tcp握手"><a href="#tcp握手" class="headerlink" title="tcp握手"></a>tcp握手</h3><p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193702-7287165c73e7440382207309e07fcbb5.png" alt=""><br><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/30193703-330b281cddc5439f99eb027ac1c9627c.png" alt=""></p>
+<h3 id="tcp-cork"><a href="#tcp-cork" class="headerlink" title="tcp_cork"></a>tcp_cork</h3><p><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190212/image013.png" alt=""></p>
 <h2 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h2><h3 id="读取文件并socket传输的普通过程"><a href="#读取文件并socket传输的普通过程" class="headerlink" title="读取文件并socket传输的普通过程"></a>读取文件并socket传输的普通过程</h3><ol start="0">
 <li>read(file,tmp_buf, len);<br>write(socket,tmp_buf, len);</li>
 <li>系统调用 read()产生一个上下文切换，从 user mode 切换到 kernel mode，然后 DMA 执行拷贝，把文件数据从硬盘读到一个 kernel buffer 里。</li>
@@ -477,7 +479,16 @@
 <h2 id="multi-accept"><a href="#multi-accept" class="headerlink" title="multi_accept"></a>multi_accept</h2><ol>
 <li>在Nginx获得有新连接的通知之后,接受尽可能多的连接。</li>
 </ol>
-<h2 id="tcp-nopush"><a href="#tcp-nopush" class="headerlink" title="tcp_nopush"></a>tcp_nopush</h2>
+<h2 id="tcp-nopush"><a href="#tcp-nopush" class="headerlink" title="tcp_nopush"></a>tcp_nopush</h2><p>Enables or disables the use of the TCP_NOPUSH socket option on FreeBSD) or the TCP_CORK socket option on Linux. The options are enabled only when sendfile is used. Enabling the option allows</p>
+<ul>
+<li>sending the response header and the beginning of a file in one packet, on Linux and FreeBSD 4.*;</li>
+<li><p>sending a file in full packets.</p>
+</li>
+<li><p>在nginx中，tcp_nopush配置与tcp_nodelay“互斥”。它可以配置一次发送数据包的大小。也就是说，数据包累积到一定大小后就发送。</p>
+</li>
+<li>在nginx中tcp_nopush必须和sendfile配合使用。</li>
+</ul>
+
       
     </div>
 
@@ -720,7 +731,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络"><span class="nav-number">1.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendfile"><span class="nav-number">2.</span> <span class="nav-text">sendfile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读取文件并socket传输的普通过程"><span class="nav-number">2.1.</span> <span class="nav-text">读取文件并socket传输的普通过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sendfile的协议栈传输过程"><span class="nav-number">2.2.</span> <span class="nav-text">sendfile的协议栈传输过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适用场景"><span class="nav-number">2.3.</span> <span class="nav-text">适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#accept-mutex"><span class="nav-number">3.</span> <span class="nav-text">accept_mutex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-accept"><span class="nav-number">4.</span> <span class="nav-text">multi_accept</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp-nopush"><span class="nav-number">5.</span> <span class="nav-text">tcp_nopush</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络"><span class="nav-number">1.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tcp握手"><span class="nav-number">1.1.</span> <span class="nav-text">tcp握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcp-cork"><span class="nav-number">1.2.</span> <span class="nav-text">tcp_cork</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendfile"><span class="nav-number">2.</span> <span class="nav-text">sendfile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读取文件并socket传输的普通过程"><span class="nav-number">2.1.</span> <span class="nav-text">读取文件并socket传输的普通过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sendfile的协议栈传输过程"><span class="nav-number">2.2.</span> <span class="nav-text">sendfile的协议栈传输过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适用场景"><span class="nav-number">2.3.</span> <span class="nav-text">适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#accept-mutex"><span class="nav-number">3.</span> <span class="nav-text">accept_mutex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-accept"><span class="nav-number">4.</span> <span class="nav-text">multi_accept</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp-nopush"><span class="nav-number">5.</span> <span class="nav-text">tcp_nopush</span></a></li></ol></div>
             
 
           </div>
