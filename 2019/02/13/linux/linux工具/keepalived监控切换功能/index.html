@@ -96,21 +96,18 @@
 
 
 
-  <meta name="description" content="sqlserver 笔记，文件存储相关">
-<meta name="keywords" content="sqlserver">
+  <meta name="description" content="keepalived监控切换功能">
+<meta name="keywords" content="tool">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sqlserver 文件存储笔记">
-<meta property="og:url" content="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/index.html">
+<meta property="og:title" content="keepalived监控切换功能">
+<meta property="og:url" content="https://zixujing.github.io/2019/02/13/linux/linux工具/keepalived监控切换功能/index.html">
 <meta property="og:site_name" content="冯凯&#39;blog">
-<meta property="og:description" content="sqlserver 笔记，文件存储相关">
+<meta property="og:description" content="keepalived监控切换功能">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/882fba2bgab50aceb6a78&690.png">
-<meta property="og:updated_time" content="2019-01-30T16:03:43.349Z">
+<meta property="og:updated_time" content="2019-02-13T12:16:09.989Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sqlserver 文件存储笔记">
-<meta name="twitter:description" content="sqlserver 笔记，文件存储相关">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png">
+<meta name="twitter:title" content="keepalived监控切换功能">
+<meta name="twitter:description" content="keepalived监控切换功能">
 
 
 
@@ -119,7 +116,7 @@
 
 
 
-  <link rel="canonical" href="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/">
+  <link rel="canonical" href="https://zixujing.github.io/2019/02/13/linux/linux工具/keepalived监控切换功能/">
 
 
 
@@ -129,7 +126,7 @@
   };
 </script>
 
-  <title>sqlserver 文件存储笔记 | 冯凯'blog</title>
+  <title>keepalived监控切换功能 | 冯凯'blog</title>
   
 
 
@@ -345,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/16/db/mssql/sqlserver 文件存储笔记/">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/02/13/linux/linux工具/keepalived监控切换功能/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯_凯">
@@ -362,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">sqlserver 文件存储笔记
+          <h1 class="post-title" itemprop="name headline">keepalived监控切换功能
 
               
             
@@ -388,24 +385,12 @@
                 
               
 
-              <time title="创建时间：2019-01-16 01:00:00" itemprop="dateCreated datePublished" datetime="2019-01-16T01:00:00+08:00">2019-01-16</time>
+              <time title="创建时间：2019-02-13 03:00:00 / 修改时间：20:16:09" itemprop="dateCreated datePublished" datetime="2019-02-13T03:00:00+08:00">2019-02-13</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-01-31 00:03:43" itemprop="dateModified" datetime="2019-01-31T00:03:43+08:00">2019-01-31</time>
               
             
           </span>
@@ -422,7 +407,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
 
                 
                 
@@ -457,166 +442,13 @@
 
       
         <blockquote>
-<p>sqlserver 笔记，文件存储相关<br><a id="more"></a></p>
+<p>keepalived监控切换功能<br><a id="more"></a></p>
 </blockquote>
-<h2 id="page页"><a href="#page页" class="headerlink" title="page页"></a>page页</h2><ul>
-<li>每个页面8KB，连续的8个页面称为一个区extents。</li>
-<li>统一区：8个页面均为一个对象所有。</li>
-<li>混合区： 8个页面最多可被8个对象共享。<h2 id="lockres-physloc"><a href="#lockres-physloc" class="headerlink" title="%%lockres%% %%physloc%%"></a>%%lockres%% %%physloc%%</h2></li>
-<li>lockres ： 锁</li>
-<li>physloc ： 物理位置，64位的计算方式是，如0x0001000001000000则0x0000000100000100，前4为为槽号0x0000，中间4位为文件号0x0001，最后8位0x00000100是页号。</li>
-<li>显示： 文件编号：页编号：页内位置</li>
-</ul>
-<h2 id="GAM页"><a href="#GAM页" class="headerlink" title="GAM页"></a>GAM页</h2><ul>
-<li>全局分配映射(Global Allocation Map)，包含页头和一些其它开销外，还有8 000字节或者说64 000bit位可用，每个bit位代表一个区（8个page），0表示已使用，1表示自由区。</li>
-</ul>
-<h2 id="SGAM页"><a href="#SGAM页" class="headerlink" title="SGAM页"></a>SGAM页</h2><ul>
-<li>共享全局分区，类似GAM一个bit表示一个区，不同的是，他的1表示混合区且有可用空间；0表示未使用或无可用空间。<strong>用来跟踪区的分配情况，描述哪些区是混合区并且至少有一个空闲的数据页</strong>。</li>
-</ul>
-<h2 id="系统page页"><a href="#系统page页" class="headerlink" title="系统page页"></a>系统page页</h2><ul>
-<li>个GAM页面出现在第一个GAM页面(页码为2)以后的每511230个页面中（大约4G空间后），并且下一个SGAM页面出现在第一个SGAM页面(页码为3)以后的每511 230个页面中。</li>
-<li>每一个数据库文件的页码为0的页面是文件头页面，并且每个文件仅有一页（文件头页面，页码为0）。</li>
-<li>页码0是头文件页，页码1是页面自由空间页(Page Free Space，PFS)。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>第0页</th>
-<th>第1页</th>
-<th>第2页</th>
-<th>第3页</th>
-<th>第4页</th>
-<th>第5页</th>
-<th>第6页</th>
-<th>第7页  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>m_type=15</td>
-<td>m_type=11</td>
-<td>m_type=8</td>
-<td>m_type=9</td>
-<td>m_type=0</td>
-<td>m_type=0</td>
-<td>m_type=16</td>
-<td>m_type=17</td>
-</tr>
-<tr>
-<td>头文件页</td>
-<td>PFS页</td>
-<td>GAM页</td>
-<td>SGAM页</td>
-<td>保留页</td>
-<td>保留页</td>
-<td>DCM页</td>
-<td>BCM页</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>除了第9页为数据库的BOOT页以外，从第8页到第173页为SQLServer2008内部系统表的相关存储信息，然后从第174页到第279页为未分配页面。因为第一页从0开始，所以刚好280页，即和我们看到的数据库数据文件的大小完全相等。</li>
-<li>见前文的运算，数据库大小：2.18 MB (2,293,760 字节)=2,293,760b/8kb=280个页面=35个区。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>第8页</th>
-<th>第9页</th>
-<th>第10页~第173页</th>
-<th>第174~279页</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>m_type=1</td>
-<td>m_type=13</td>
-<td>m_type in (1,2,10)</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>Data页</td>
-<td>Boot页</td>
-<td>主要为内部系统表相关信息</td>
-<td>未分配</td>
-</tr>
-</tbody>
-</table>
-<h2 id="PFS"><a href="#PFS" class="headerlink" title="PFS"></a>PFS</h2><ul>
-<li>用来跟踪页分配级别，存储当前数据文件里所有页分配及可用空间的信息，每一个数据文件的第2个数据页都是PFS，页号为1 。该页面中，每一个字节描述后面每一个数据页是否还有空间可以写记录，也就是一个PFS页是8k，约有8k个字节可以描述后续每个页面的使用情况，也就是一个PFS页，可以描述8k个数据页的使用情况，这就意味着单个PFS页能够存储约64M数据页的可用空间情况。所以，大约每隔64Mb，就会有一个新的PFS页。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>位置</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bit 0-2</td>
-<td>0x00 is empty;0x01 is 1 to 50% full;0x02 is 51 to 80% full;0x03 is 81 to 95% full;0x04 is 96 to 100% full;</td>
-</tr>
-<tr>
-<td>bit 3</td>
-<td>(0x08): 该数据页是否存在鬼影记录</td>
-</tr>
-<tr>
-<td>bit 4</td>
-<td>(0x10): 是否是IAM页</td>
-</tr>
-<tr>
-<td>bit 5</td>
-<td>(0x20): 是否是混合页</td>
-</tr>
-<tr>
-<td>bit 6</td>
-<td>(0x40): 是否已分配使用</td>
-</tr>
-<tr>
-<td>Bit 7</td>
-<td>保留，未使用，无实际含义</td>
-</tr>
-</tbody>
-</table>
-<h2 id="dbcc-ind"><a href="#dbcc-ind" class="headerlink" title="dbcc ind"></a>dbcc ind</h2><blockquote>
-<p>语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DBCC TRACEON(2588)</span><br><span class="line">DBCC HELP(&apos;ind&apos;)</span><br><span class="line">dbcc IND ( &#123; &apos;dbname&apos; | dbid &#125;, &#123; &apos;objname&apos; | objid &#125;, &#123; nonclustered indid | 1 | 0 | -1 | -2 &#125; [, partition_number] )</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>输出格式</p>
-</blockquote>
-<ul>
-<li>-2：返回所有IAM页，基于管理行内数据页，行溢出数据页及大对象数据页的IAM页</li>
-<li>-1：返回所有IAM页及数据页。</li>
-<li>0：返回管理行内数据页的IAM页，行内数据页</li>
-<li>1：返回聚集索引的数据页信息及IAM页信息（同-1）</li>
-<li>2：返回第1个非聚集索引的数据页信息及IAM页信息</li>
-<li>3：返回第2个非聚集索引的数据页信息及IAM页信息</li>
-<li>…</li>
-<li>n：返回第（n-1）个非聚集索引的数据页信息及IAM页信息（n&gt;1）</li>
-</ul>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/608061-20170502183131101-852115051.png" alt=""></center>
-
-<h2 id="dbcc-page"><a href="#dbcc-page" class="headerlink" title="dbcc page"></a>dbcc page</h2><blockquote>
-<p>语法说明</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DBCC TRACEON(2588)</span><br><span class="line">DBCC HELP(&apos;PAGE&apos;)</span><br><span class="line">dbcc PAGE ( &#123;&apos;dbname&apos; | dbid&#125;, filenum, pagenum [, printopt=&#123;0|1|2|3&#125; ])</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出的格式有4种方式，不同方式，输出不一样。</p>
-</blockquote>
-<ul>
-<li>0：输出可读形式的数据页页头数据</li>
-<li>1：输出可读形式的数据页页头数据，并且还有槽位对应记录的十六进制内容</li>
-<li>2：输出可读形式的数据页页头数据，输出整个数据页页头的十六进制数据，整一页的内容都显示，包括未使用的空间。</li>
-<li>3：输出可读形式的数据页页头数据，并且包括记录中每个字段的可读形式，行溢出数据也会显示数据内容，但是大对象则不显示内容，而是说明其存储位置！所以选项3，也是输出内容最全面的。</li>
-</ul>
-<h2 id="IAM"><a href="#IAM" class="headerlink" title="IAM"></a>IAM</h2><blockquote>
-<p>Sytem_internals_allocation_units表存放第一个数据页和第一个IAM页的指针。IAM按照数据页的顺序存放数据页的指针。数据页之间并无直接链接。</p>
-</blockquote>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/882fba2bgab50aceb6a78&amp;690.png" alt=""></center>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT total_pages,used_pages,data_pages,</span><br><span class="line">       first_page,root_page,first_iam_page</span><br><span class="line">  FROM sys.system_internals_allocation_units</span><br><span class="line">WHERE container_id =&apos;72057594038779904&apos;</span><br></pre></td></tr></table></figure>
-
+<h2 id="配置本地yum源"><a href="#配置本地yum源" class="headerlink" title="配置本地yum源"></a>配置本地yum源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">tar -cvf all.repo.tar *</span><br><span class="line">rm -fr *.repo</span><br><span class="line">vi cdiso.repo</span><br><span class="line"></span><br><span class="line">[centos]</span><br><span class="line">name=centos</span><br><span class="line">baseurl=file:///root/c7</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">#把iso挂载到/root/c7目录下</span><br><span class="line">mkdir /root/c7</span><br><span class="line">mount -o loop CentOS-7-x86_64-DVD-1611.iso /root/c7</span><br></pre></td></tr></table></figure>
+<h2 id="基本环境"><a href="#基本环境" class="headerlink" title="基本环境"></a>基本环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install keepalived</span><br><span class="line">keepalived -v</span><br><span class="line">systemctl enable keepalived</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line"></span><br><span class="line">vi /etc/security/limits.conf</span><br><span class="line">* soft nofile 65535</span><br><span class="line">* hard nofile 65535</span><br><span class="line">* soft nproc 65535</span><br><span class="line">* hard nproc 65535</span><br></pre></td></tr></table></figure>
+<h2 id="nginx监控脚本"><a href="#nginx监控脚本" class="headerlink" title="nginx监控脚本"></a>nginx监控脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/keepalived/</span><br><span class="line">vi check_nginx.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">counter=$(ps -C nginx --no-heading | wc -l)</span><br><span class="line">if [ &quot;$&#123;counter&#125;&quot; = &quot;0&quot; ]; then</span><br><span class="line">    exit 1</span><br><span class="line">else</span><br><span class="line">    exit0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">chmod +x check_nginx.sh</span><br></pre></td></tr></table></figure>
+<h2 id="keepalived-conf-配置"><a href="#keepalived-conf-配置" class="headerlink" title="keepalived.conf 配置"></a>keepalived.conf 配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">cp keepalived.conf keepalived.conf.bak</span><br><span class="line">vi keepalived.conf</span><br><span class="line">##主节点的配置</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/etc/keepalived/check_nginx.sh&quot;</span><br><span class="line">    interval 2</span><br><span class="line">    weight -5</span><br><span class="line">    fall 1</span><br><span class="line">    rise 1</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        10.24.70.251</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">##从节点的配置</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/etc/keepalived/check_nginx.sh&quot;</span><br><span class="line">    interval 2</span><br><span class="line">    weight -5</span><br><span class="line">    fall 3</span><br><span class="line">    rise 2</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 99</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        10.24.70.251</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="启动keepalived"><a href="#启动keepalived" class="headerlink" title="启动keepalived"></a>启动keepalived</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable keepalived</span><br><span class="line">systemctl start keepalived</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -639,7 +471,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/sqlserver/" rel="tag"># sqlserver</a>
+            <a href="/tags/tool/" rel="tag"># tool</a>
           
         </div>
       
@@ -652,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/15/db/mssql/sqlserver 2012内存管理/" rel="next" title="sqlserver 2012内存管理">
-                <i class="fa fa-chevron-left"></i> sqlserver 2012内存管理
+              <a href="/2019/02/13/linux/linux工具/nginx1.14.2 安装配置文档/" rel="next" title="nginx1.14.2 安装配置文档">
+                <i class="fa fa-chevron-left"></i> nginx1.14.2 安装配置文档
               </a>
             
           </div>
@@ -661,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/16/db/oracle/oracle_expdp_impdp/" rel="prev" title="oracle 导入导出文档">
-                oracle 导入导出文档 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -863,7 +691,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#page页"><span class="nav-number">1.</span> <span class="nav-text">page页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lockres-physloc"><span class="nav-number">2.</span> <span class="nav-text">%%lockres%% %%physloc%%</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GAM页"><span class="nav-number">3.</span> <span class="nav-text">GAM页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SGAM页"><span class="nav-number">4.</span> <span class="nav-text">SGAM页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统page页"><span class="nav-number">5.</span> <span class="nav-text">系统page页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PFS"><span class="nav-number">6.</span> <span class="nav-text">PFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dbcc-ind"><span class="nav-number">7.</span> <span class="nav-text">dbcc ind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dbcc-page"><span class="nav-number">8.</span> <span class="nav-text">dbcc page</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IAM"><span class="nav-number">9.</span> <span class="nav-text">IAM</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置本地yum源"><span class="nav-number">1.</span> <span class="nav-text">配置本地yum源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本环境"><span class="nav-number">2.</span> <span class="nav-text">基本环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx监控脚本"><span class="nav-number">3.</span> <span class="nav-text">nginx监控脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keepalived-conf-配置"><span class="nav-number">4.</span> <span class="nav-text">keepalived.conf 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动keepalived"><span class="nav-number">5.</span> <span class="nav-text">启动keepalived</span></a></li></ol></div>
             
 
           </div>

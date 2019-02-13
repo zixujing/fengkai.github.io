@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zixujing.github.io/"/>
-  <updated>2019-02-13T08:13:58.006Z</updated>
+  <updated>2019-02-13T12:16:09.989Z</updated>
   <id>https://zixujing.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>keepalived监控切换功能</title>
+    <link href="https://zixujing.github.io/2019/02/13/linux/linux%E5%B7%A5%E5%85%B7/keepalived%E7%9B%91%E6%8E%A7%E5%88%87%E6%8D%A2%E5%8A%9F%E8%83%BD/"/>
+    <id>https://zixujing.github.io/2019/02/13/linux/linux工具/keepalived监控切换功能/</id>
+    <published>2019-02-12T19:00:00.000Z</published>
+    <updated>2019-02-13T12:16:09.989Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>keepalived监控切换功能<br><a id="more"></a></p></blockquote><h2 id="配置本地yum源"><a href="#配置本地yum源" class="headerlink" title="配置本地yum源"></a>配置本地yum源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">tar -cvf all.repo.tar *</span><br><span class="line">rm -fr *.repo</span><br><span class="line">vi cdiso.repo</span><br><span class="line"></span><br><span class="line">[centos]</span><br><span class="line">name=centos</span><br><span class="line">baseurl=file:///root/c7</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">#把iso挂载到/root/c7目录下</span><br><span class="line">mkdir /root/c7</span><br><span class="line">mount -o loop CentOS-7-x86_64-DVD-1611.iso /root/c7</span><br></pre></td></tr></table></figure><h2 id="基本环境"><a href="#基本环境" class="headerlink" title="基本环境"></a>基本环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install keepalived</span><br><span class="line">keepalived -v</span><br><span class="line">systemctl enable keepalived</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line"></span><br><span class="line">vi /etc/security/limits.conf</span><br><span class="line">* soft nofile 65535</span><br><span class="line">* hard nofile 65535</span><br><span class="line">* soft nproc 65535</span><br><span class="line">* hard nproc 65535</span><br></pre></td></tr></table></figure><h2 id="nginx监控脚本"><a href="#nginx监控脚本" class="headerlink" title="nginx监控脚本"></a>nginx监控脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/keepalived/</span><br><span class="line">vi check_nginx.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">counter=$(ps -C nginx --no-heading | wc -l)</span><br><span class="line">if [ &quot;$&#123;counter&#125;&quot; = &quot;0&quot; ]; then</span><br><span class="line">    exit 1</span><br><span class="line">else</span><br><span class="line">    exit0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">chmod +x check_nginx.sh</span><br></pre></td></tr></table></figure><h2 id="keepalived-conf-配置"><a href="#keepalived-conf-配置" class="headerlink" title="keepalived.conf 配置"></a>keepalived.conf 配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">cp keepalived.conf keepalived.conf.bak</span><br><span class="line">vi keepalived.conf</span><br><span class="line">##主节点的配置</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/etc/keepalived/check_nginx.sh&quot;</span><br><span class="line">    interval 2</span><br><span class="line">    weight -5</span><br><span class="line">    fall 1</span><br><span class="line">    rise 1</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        10.24.70.251</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">##从节点的配置</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/etc/keepalived/check_nginx.sh&quot;</span><br><span class="line">    interval 2</span><br><span class="line">    weight -5</span><br><span class="line">    fall 3</span><br><span class="line">    rise 2</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 99</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        10.24.70.251</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="启动keepalived"><a href="#启动keepalived" class="headerlink" title="启动keepalived"></a>启动keepalived</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable keepalived</span><br><span class="line">systemctl start keepalived</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;keepalived监控切换功能&lt;br&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://zixujing.github.io/categories/linux/"/>
+    
+    
+      <category term="tool" scheme="https://zixujing.github.io/tags/tool/"/>
+    
+  </entry>
   
   <entry>
     <title>nginx1.14.2 安装配置文档</title>
@@ -389,6 +412,29 @@
   </entry>
   
   <entry>
+    <title>Ogg-monitor--server-and-agent12.2.1-安装</title>
+    <link href="https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-%E5%AE%89%E8%A3%85/"/>
+    <id>https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-安装/</id>
+    <published>2019-01-10T16:00:00.000Z</published>
+    <updated>2019-01-15T13:11:08.073Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>监控ogg<br><a id="more"></a></p></blockquote><blockquote><p>文档下载</p></blockquote><table><thead><tr><th>文档名</th><th>下载  </th></tr></thead><tbody><tr><td>Ogg-monitor–server-and-agent12.2.1-安装.docx</td><td><a href="https://raw.githubusercontent.com/zixujing/book1/master/Ogg-monitor--server-and-agent12.2.1-安装.docx" target="_blank" rel="noopener">点</a></td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;监控ogg&lt;br&gt;
+    
+    </summary>
+    
+      <category term="tool" scheme="https://zixujing.github.io/categories/tool/"/>
+    
+    
+      <category term="ogg" scheme="https://zixujing.github.io/tags/ogg/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MSSQL for linux 安装</title>
     <link href="https://zixujing.github.io/2019/01/11/db/mssql/mssql_for_linux/"/>
     <id>https://zixujing.github.io/2019/01/11/db/mssql/mssql_for_linux/</id>
@@ -424,52 +470,6 @@
     
       &lt;blockquote&gt;
 &lt;p&gt;oracle rac环境搭建&lt;br&gt;
-    
-    </summary>
-    
-      <category term="db" scheme="https://zixujing.github.io/categories/db/"/>
-    
-    
-      <category term="oracle" scheme="https://zixujing.github.io/tags/oracle/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ogg-monitor--server-and-agent12.2.1-安装</title>
-    <link href="https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-%E5%AE%89%E8%A3%85/"/>
-    <id>https://zixujing.github.io/2019/01/11/ogg/Ogg-monitor--server-and-agent12.2.1-安装/</id>
-    <published>2019-01-10T16:00:00.000Z</published>
-    <updated>2019-01-15T13:11:08.073Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>监控ogg<br><a id="more"></a></p></blockquote><blockquote><p>文档下载</p></blockquote><table><thead><tr><th>文档名</th><th>下载  </th></tr></thead><tbody><tr><td>Ogg-monitor–server-and-agent12.2.1-安装.docx</td><td><a href="https://raw.githubusercontent.com/zixujing/book1/master/Ogg-monitor--server-and-agent12.2.1-安装.docx" target="_blank" rel="noopener">点</a></td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;监控ogg&lt;br&gt;
-    
-    </summary>
-    
-      <category term="tool" scheme="https://zixujing.github.io/categories/tool/"/>
-    
-    
-      <category term="ogg" scheme="https://zixujing.github.io/tags/ogg/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>oracle cdc</title>
-    <link href="https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/"/>
-    <id>https://zixujing.github.io/2019/01/08/db/oracle/oracle_cdc/oracle_cdc/</id>
-    <published>2019-01-07T16:00:00.000Z</published>
-    <updated>2019-01-15T13:11:08.063Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><blockquote><p>oracle也具有cdc的功能，原理如下。<br><a id="more"></a></p></blockquote><h1 id="Oracle-CDC-简介"><a href="#Oracle-CDC-简介" class="headerlink" title="Oracle CDC 简介"></a>Oracle CDC 简介</h1><p>   很多人都认为，只要是涉及到数据库数据复制和增量数据抽取，都是需要购买收费软件的。实际上，我们通过Oracle提供的CDC和LogMiner等免费工具也能实现数据库数据复制和增量数据抽取，各种数据复制软件只是使得获取增量数据更加便捷，或者是可以支持更多的扩展功能（例如：异构数据库之间的同步，ETL过程的数据清洗、装换），但实际Oracle本身是支持CDC机制，只是很少有人关注，操作起来也有些复杂，而且据传言并不稳定，常常见到论坛上爆出一些莫名其妙的问题。</p><h2 id="Synchronous-Change-Data-Capture-Configuration（同步复制）"><a href="#Synchronous-Change-Data-Capture-Configuration（同步复制）" class="headerlink" title="Synchronous Change Data Capture Configuration（同步复制）"></a>Synchronous Change Data Capture Configuration（同步复制）</h2><p>   <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192306372-1819930635.png" alt=""></p><p>   原理很简单，原表、目标表必须是同一个库，采用触发器的机制（设置同步CDC后，并看不到触发器，但实际运行机理还是触发器的机制）将原表内容复制到另一个目标表。这个机制就不多说了，和自己给表建触发器没什么太大差别。</p><h2 id="Asynchronous-HotLog-Configuration（异步在线日志CDC）"><a href="#Asynchronous-HotLog-Configuration（异步在线日志CDC）" class="headerlink" title="Asynchronous HotLog Configuration（异步在线日志CDC）"></a>Asynchronous HotLog Configuration（异步在线日志CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192327279-376093983.png" alt=""></p><p>   这个过程已经没有触发器了，而是使用Redo Log，但是使用在线日志，并不是归档日志。并且原表、目标表仍然必须是同一个库。这种模式是相对简单的，同时这种模式是在Oracle 10以上才产生的，9i是没有这个机制的。</p><h2 id="Asynchronous-Distributed-HotLog-Configuration（异步分布式CDC）"><a href="#Asynchronous-Distributed-HotLog-Configuration（异步分布式CDC）" class="headerlink" title="Asynchronous Distributed HotLog Configuration（异步分布式CDC）"></a>Asynchronous Distributed HotLog Configuration（异步分布式CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192342669-1522054385.png" alt=""><br>  实际这个模式是对异步在线日志CDC的一种优化，也比较容易理解，就是加入了DB-LINK机制，使原表、目标表不在同一个数据库。实际是和异步在线日志CDC没有什么本质区别。</p><h2 id="Asynchronous-Autolog-Online-Change-Data-Capture-Configuration（异步在线日志复制CDC）"><a href="#Asynchronous-Autolog-Online-Change-Data-Capture-Configuration（异步在线日志复制CDC）" class="headerlink" title="Asynchronous Autolog Online Change Data Capture Configuration（异步在线日志复制CDC）"></a>Asynchronous Autolog Online Change Data Capture Configuration（异步在线日志复制CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192358513-964979174.png" alt=""><br>  异步在线日志复制CDC模式就要高级很多了，使用Standby Redo Log（热备数据库日志），实际就是使用Oracle的热备机制，将日志写入了热备数据库，目标表就可以建立在热备库上，这对主数据库性能影响就进一步降低。</p><h2 id="Asynchronous-AutoLog-Archive-Change-Data-Capture-Configuration（归档日志CDC）"><a href="#Asynchronous-AutoLog-Archive-Change-Data-Capture-Configuration（归档日志CDC）" class="headerlink" title="Asynchronous AutoLog Archive Change Data Capture Configuration（归档日志CDC）"></a>Asynchronous AutoLog Archive Change Data Capture Configuration（归档日志CDC）</h2><p>  <img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/1068207-20170526192417247-198841881.png" alt=""><br>  归档日志CDC模式是最完美的模式，但是需要有机制可以获取归档日志（并行文件系统技术），然后在目标端分析归档日志进行变化数据处理，这种模式理论上来讲，几乎可以完全不影响原数据库的性能。<br>  坦白来说，我对Oracle理解并不深，只是为了解决特定的几个问题多看了一点，在现实工作中遇到类似问题需要解决的，或对技术痴狂的同学可以研究一下，我贴上了4种模式具体的设置步骤，虽然是英文的，但是还是非常明确的。（我比较推荐使用第二种，因为设置比较简单，性能上也属于中规中矩，如果没有什么特别要求，可以采用异步在线日志CDC。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;摘要&quot;&gt;&lt;a href=&quot;#摘要&quot; class=&quot;headerlink&quot; title=&quot;摘要&quot;&gt;&lt;/a&gt;摘要&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;oracle也具有cdc的功能，原理如下。&lt;br&gt;
     
     </summary>
     
