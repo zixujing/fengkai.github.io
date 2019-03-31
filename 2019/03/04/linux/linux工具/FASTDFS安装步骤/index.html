@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="冯凯&#39;blog">
 <meta property="og:description" content="FASTDFS安装步骤">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-03T16:16:22.999Z">
+<meta property="og:updated_time" content="2019-03-31T13:44:23.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FASTDFS安装步骤">
 <meta name="twitter:description" content="FASTDFS安装步骤">
@@ -385,12 +385,24 @@
                 
               
 
-              <time title="创建时间：2019-03-04 05:00:00 / 修改时间：00:16:22" itemprop="dateCreated datePublished" datetime="2019-03-04T05:00:00+08:00">2019-03-04</time>
+              <time title="创建时间：2019-03-04 05:00:00" itemprop="dateCreated datePublished" datetime="2019-03-04T05:00:00+08:00">2019-03-04</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-31 21:44:23" itemprop="dateModified" datetime="2019-03-31T21:44:23+08:00">2019-03-31</time>
               
             
           </span>
@@ -444,7 +456,8 @@
         <blockquote>
 <p>FASTDFS安装步骤<br><a id="more"></a></p>
 </blockquote>
-<h2 id="FASTDFS安装步骤"><a href="#FASTDFS安装步骤" class="headerlink" title="FASTDFS安装步骤"></a>FASTDFS安装步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">0.init</span><br><span class="line">[root@fileserver ~]# yum install gcc</span><br><span class="line">[root@fileserver ~]# yum install unzip</span><br><span class="line">1.libfastcommon</span><br><span class="line">[root@fileserver ~]# unzip libfastcommon-1.0.36.zip</span><br><span class="line">[root@fileserver ~]# cd libfastcommon-1.0.36</span><br><span class="line">[root@localhost libfastcommon-1.0.36]# ./make.sh</span><br><span class="line">[root@localhost libfastcommon-1.0.36]# ./make.sh install</span><br><span class="line">2.FastDFS</span><br><span class="line">[root@fileserver ~]# yum install perl</span><br><span class="line">[root@fileserver ~]# unzip fastdfs-5.11.zip</span><br><span class="line">[root@fileserver ~]# cd fastdfs-5.11</span><br><span class="line">[root@fileserver fastdfs-5.11]# ./make.sh</span><br><span class="line">[root@fileserver fastdfs-5.11]# ./make.sh install</span><br><span class="line">3.3配置Tracker和Storage</span><br><span class="line">[root@fileserver ~]# cd /etc/fdfs</span><br><span class="line">[root@fileserver fdfs]# cp tracker.conf.sample tracker.conf</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/tracker</span><br><span class="line">[root@fileserver fdfs]# vi tracker.conf</span><br><span class="line"></span><br><span class="line">bind_addr=10.24.70.83</span><br><span class="line">max_connections=500</span><br><span class="line">base_path=/root/filedata/tracker</span><br><span class="line"></span><br><span class="line">[root@fileserver fdfs]# cp storage.conf.sample storage.conf</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage/info</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage/data</span><br><span class="line">[root@fileserver fdfs]# vi storage.conf</span><br><span class="line">bind_addr=10.24.70.83</span><br><span class="line">base_path=/home/filedata/storage/info</span><br><span class="line">store_path0=/home/filedata/storage/data</span><br><span class="line">max_connections=500</span><br><span class="line">tracker_server=10.24.70.83:22122</span><br><span class="line">[root@fileserver etc]# chkconfig --add fdfs_trackerd</span><br><span class="line">[root@fileserver etc]# chkconfig fdfs_trackerd on</span><br><span class="line">[root@fileserver etc]# chkconfig fdfs_storaged on</span><br><span class="line">[root@fileserver etc]# service fdfs_trackerd start</span><br><span class="line">[root@fileserver etc]# service fdfs_storaged start</span><br></pre></td></tr></table></figure>
+<h2 id="FASTDFS安装步骤"><a href="#FASTDFS安装步骤" class="headerlink" title="FASTDFS安装步骤"></a>FASTDFS安装步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">0.init</span><br><span class="line">[root@fileserver ~]# yum install gcc</span><br><span class="line">[root@fileserver ~]# yum install unzip</span><br><span class="line">1.libfastcommon</span><br><span class="line">[root@fileserver ~]# unzip libfastcommon-1.0.36.zip</span><br><span class="line">[root@fileserver ~]# cd libfastcommon-1.0.36</span><br><span class="line">[root@localhost libfastcommon-1.0.36]# ./make.sh</span><br><span class="line">[root@localhost libfastcommon-1.0.36]# ./make.sh install</span><br><span class="line">2.FastDFS</span><br><span class="line">[root@fileserver ~]# yum install perl</span><br><span class="line">[root@fileserver ~]# unzip fastdfs-5.11.zip</span><br><span class="line">[root@fileserver ~]# cd fastdfs-5.11</span><br><span class="line">[root@fileserver fastdfs-5.11]# ./make.sh</span><br><span class="line">[root@fileserver fastdfs-5.11]# ./make.sh install</span><br><span class="line">3.3配置Tracker和Storage</span><br><span class="line">[root@fileserver ~]# cd /etc/fdfs</span><br><span class="line">[root@fileserver fdfs]# cp tracker.conf.sample tracker.conf</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/tracker</span><br><span class="line">[root@fileserver fdfs]# vi tracker.conf</span><br><span class="line"></span><br><span class="line">bind_addr=10.24.70.83</span><br><span class="line">max_connections=500</span><br><span class="line">base_path=/home/filedata/tracker</span><br><span class="line"></span><br><span class="line">[root@fileserver fdfs]# cp storage.conf.sample storage.conf</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage/info</span><br><span class="line">[root@fileserver fdfs]# mkdir /home/filedata/storage/data</span><br><span class="line">[root@fileserver fdfs]# vi storage.conf</span><br><span class="line">bind_addr=10.24.70.83</span><br><span class="line">base_path=/home/filedata/storage/info</span><br><span class="line">store_path0=/home/filedata/storage/data</span><br><span class="line">max_connections=500</span><br><span class="line">tracker_server=10.24.70.83:22122</span><br><span class="line">[root@fileserver etc]# chkconfig --add fdfs_trackerd</span><br><span class="line">[root@fileserver etc]# chkconfig fdfs_trackerd on</span><br><span class="line">[root@fileserver etc]# chkconfig fdfs_storaged on</span><br><span class="line">[root@fileserver etc]# service fdfs_trackerd start</span><br><span class="line">[root@fileserver etc]# service fdfs_storaged start</span><br></pre></td></tr></table></figure>
+<h2 id="上传测试"><a href="#上传测试" class="headerlink" title="上传测试"></a>上传测试</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#cd /etc/fdfs</span><br><span class="line">#cp client.conf.sample client.conf</span><br><span class="line">#vim client.conf</span><br><span class="line"># Client 的数据和日志目录</span><br><span class="line">base_path=/home/client</span><br><span class="line"># Tracker端口</span><br><span class="line">tracker_server=10.24.70.83:22122</span><br><span class="line">#/usr/bin/fdfs_upload_file /etc/fdfs/client.conf namei.jpeg</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -489,6 +502,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/25/ogg/ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]/" rel="prev" title="ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]">
+                ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次] <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -562,7 +579,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -687,7 +704,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#FASTDFS安装步骤"><span class="nav-number">1.</span> <span class="nav-text">FASTDFS安装步骤</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#FASTDFS安装步骤"><span class="nav-number">1.</span> <span class="nav-text">FASTDFS安装步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上传测试"><span class="nav-number">2.</span> <span class="nav-text">上传测试</span></a></li></ol></div>
             
 
           </div>

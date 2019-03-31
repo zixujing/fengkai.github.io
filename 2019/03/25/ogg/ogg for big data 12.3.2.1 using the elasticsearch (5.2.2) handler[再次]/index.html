@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="时间同步与tomcat自启动">
-<meta name="keywords" content="tool">
+  <meta name="description" content="elasticsearch 5.2.2是ogg for bigdata支持的最高版本elasticsearch 5.2.2 安装略">
+<meta name="keywords" content="elasticsearch,ogg">
 <meta property="og:type" content="article">
-<meta property="og:title" content="时间同步与tomcat自启动">
-<meta property="og:url" content="https://zixujing.github.io/2019/02/13/linux/linux工具/时间同步与tomcat自启动/index.html">
+<meta property="og:title" content="ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]">
+<meta property="og:url" content="https://zixujing.github.io/2019/03/25/ogg/ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]/index.html">
 <meta property="og:site_name" content="冯凯&#39;blog">
-<meta property="og:description" content="时间同步与tomcat自启动">
+<meta property="og:description" content="elasticsearch 5.2.2是ogg for bigdata支持的最高版本elasticsearch 5.2.2 安装略">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-31T13:44:23.120Z">
+<meta property="og:updated_time" content="2019-03-31T13:44:23.123Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="时间同步与tomcat自启动">
-<meta name="twitter:description" content="时间同步与tomcat自启动">
+<meta name="twitter:title" content="ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]">
+<meta name="twitter:description" content="elasticsearch 5.2.2是ogg for bigdata支持的最高版本elasticsearch 5.2.2 安装略">
 
 
 
@@ -116,7 +116,7 @@
 
 
 
-  <link rel="canonical" href="https://zixujing.github.io/2019/02/13/linux/linux工具/时间同步与tomcat自启动/">
+  <link rel="canonical" href="https://zixujing.github.io/2019/03/25/ogg/ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]/">
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>时间同步与tomcat自启动 | 冯凯'blog</title>
+  <title>ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次] | 冯凯'blog</title>
   
 
 
@@ -342,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/02/13/linux/linux工具/时间同步与tomcat自启动/">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/03/25/ogg/ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯_凯">
@@ -359,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">时间同步与tomcat自启动
+          <h1 class="post-title" itemprop="name headline">ogg for big data 12.3.2.1 using the elasticsearch (5.2.2) handler[再次]
 
               
             
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="创建时间：2019-02-13 05:00:00" itemprop="dateCreated datePublished" datetime="2019-02-13T05:00:00+08:00">2019-02-13</time>
+              <time title="创建时间：2019-03-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-25T00:00:00+08:00">2019-03-25</time>
             
 
             
@@ -419,7 +419,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a></span>
 
                 
                 
@@ -454,17 +454,30 @@
 
       
         <blockquote>
-<p>时间同步与tomcat自启动<br><a id="more"></a></p>
+<p>elasticsearch 5.2.2是ogg for bigdata支持的最高版本<br>elasticsearch 5.2.2 安装略<br><a id="more"></a></p>
 </blockquote>
-<h2 id="时间同步"><a href="#时间同步" class="headerlink" title="时间同步"></a>时间同步</h2><h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/chrony.conf</span><br><span class="line">server 10.24.70.72 iburst</span><br></pre></td></tr></table></figure>
-<h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop chronyd</span><br><span class="line">systemctl start chronyd</span><br></pre></td></tr></table></figure>
-<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chronyc sources</span><br></pre></td></tr></table></figure>
-<h2 id="tomcat自启动"><a href="#tomcat自启动" class="headerlink" title="tomcat自启动"></a>tomcat自启动</h2><h3 id="添加变量到setenv-sh（没有的话在bin目录新建一个）中-catalina-sh会调用"><a href="#添加变量到setenv-sh（没有的话在bin目录新建一个）中-catalina-sh会调用" class="headerlink" title="添加变量到setenv.sh（没有的话在bin目录新建一个）中,catalina.sh会调用"></a>添加变量到setenv.sh（没有的话在bin目录新建一个）中,catalina.sh会调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/apache-tomcat-8.5.35/bin/setenv.sh</span><br><span class="line">JAVA_HOME=/opt/jdk1.8.0_144</span><br><span class="line">PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line">CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">CATALINA_PID=&quot;$CATALINA_BASE/tomcat8_hcpt.pid&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="设置启动脚本"><a href="#设置启动脚本" class="headerlink" title="设置启动脚本"></a>设置启动脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/systemd/system/tomcat8_hcpt.service</span><br><span class="line">#/usr/lib/systemd/system/tomcat8_hcpt.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Tomcat8</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/usr/local/apache-tomcat-8.5.35/tomcat8_hcpt.pid</span><br><span class="line">ExecStart=/usr/local/apache-tomcat-8.5.35/bin/startup.sh</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">ExecStop=/bin/kill -s QUIT $MAINPID</span><br><span class="line">PrivateTmp=true</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable tomcat8_hcpt</span><br><span class="line">systemctl start tomcat8_hcpt</span><br></pre></td></tr></table></figure>
-<h2 id="centos7-tomcat9自启动"><a href="#centos7-tomcat9自启动" class="headerlink" title="centos7+tomcat9自启动"></a>centos7+tomcat9自启动</h2><h3 id="添加变量到setclasspath-sh中-catalina-sh会调用"><a href="#添加变量到setclasspath-sh中-catalina-sh会调用" class="headerlink" title="添加变量到setclasspath.sh中,catalina.sh会调用"></a>添加变量到setclasspath.sh中,catalina.sh会调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/tomcat9/bin/setclasspath.sh</span><br><span class="line"># -----------------------------------------------------------------------------</span><br><span class="line">#  Set JAVA_HOME or JRE_HOME if not already set, ensure any provided settings</span><br><span class="line">#  are valid and consistent with the selected start-up options and set up the</span><br><span class="line">#  endorsed directory.</span><br><span class="line"># -----------------------------------------------------------------------------</span><br><span class="line">export JAVA_HOME=/usr/local/jdk</span><br><span class="line">export JRE_HOME=/usr/local/jdk/jre</span><br></pre></td></tr></table></figure>
-<h3 id="设置启动脚本-1"><a href="#设置启动脚本-1" class="headerlink" title="设置启动脚本"></a>设置启动脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/systemd/system/tomcat9.service</span><br><span class="line">#/usr/lib/systemd/system/tomcat9.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Tomcat9</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line">[Service]</span><br><span class="line">Type=oneshot</span><br><span class="line">PIDFile=/usr/local/tomcat9/tomcat.pid</span><br><span class="line">ExecStart=/usr/local/tomcat9/bin/startup.sh</span><br><span class="line">ExecStop=/usr/local/tomcat9/bin/shutdown.sh</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">RemainAfterExit=yes</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable tomcat9</span><br><span class="line">systemctl start tomcat9</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>源数据配置略，因与ogg普通配置一致。以下给出关键配置其他ogg相关的请参照ogg安装文档</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dblogin userid ogg password ogg</span><br><span class="line">add trandata smartecap_data.*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>cat dirprm/elastic.prm</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REPLICAT elastic</span><br><span class="line">TARGETDB LIBFILE libggjava.so SET property=./dirprm/elastic.properties </span><br><span class="line">MAP smartecap_data.*, TARGET smartecap_data.*;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>cat dirprm/elastic.properties </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#any name of your choice</span><br><span class="line">gg.handlerlist=elasticsearch</span><br><span class="line">#type of handler to use ex Elasticsearch , kafka and so on</span><br><span class="line">gg.handler.elasticsearch.type=elasticsearch</span><br><span class="line"></span><br><span class="line">## Handler properties for Elasticsearch 5.x, 逗号分隔</span><br><span class="line">gg.handler.elasticsearch.ServerAddressList=192.168.106.213:9300</span><br><span class="line">gg.handler.elasticsearch.clientSettingsFile=client5.properties</span><br><span class="line">gg.handler.elasticsearch.version=5.x</span><br><span class="line">#gg.handler.elasticsearch.bulkWrite=true</span><br><span class="line">gg.handler.elasticsearch.upsert=true</span><br><span class="line">#Set the Classpath , Default location of 5.X JARs, classpath 中一定要有elasticsearch的客户端驱动。</span><br><span class="line">gg.classpath=./dirprm*:/home/es/elasticsearch-5.2.2/lib/*:/home/es/elasticsearch-5.2.2/modules/transport-netty3/*:/home/es/elasticsearch-5.2.2/modules/transport-netty4/*:/home/es/elasticsearch-5.2.2/modules/reindex/*</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#goldengate.userexit.writers=javawriter</span><br><span class="line">#javawriter.stats.display=TRUE</span><br><span class="line">#javawriter.stats.full=TRUE</span><br><span class="line">gg.log=log4j</span><br><span class="line">gg.log.level=INFO</span><br><span class="line">gg.report.time=30sec</span><br><span class="line">#javawriter.bootoptions=-Xmx512m -Xms32m -Djava.class.path=.:ggjava/ggjava.jar:./dirprm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>cat dirprm/client5.properties </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#集群名称</span><br><span class="line">cluster.name=oggtest</span><br><span class="line">#xpack.security.user=&lt;x-pack user name&gt;:&lt;x-pack password&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Elasticsearch 5.1.2 with X-Pack 5.1.2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">commons-codec-1.10.jar</span><br><span class="line">commons-logging-1.1.3.jar</span><br><span class="line">compiler-0.9.3.jar</span><br><span class="line">elasticsearch-5.1.2.jar</span><br><span class="line">HdrHistogram-2.1.6.jar</span><br><span class="line">hppc-0.7.1.jar</span><br><span class="line">httpasyncclient-4.1.2.jar</span><br><span class="line">httpclient-4.5.2.jar</span><br><span class="line">httpcore-4.4.5.jar</span><br><span class="line">httpcore-nio-4.4.5.jar</span><br><span class="line">jackson-core-2.8.1.jar</span><br><span class="line">jackson-dataformat-cbor-2.8.1.jar</span><br><span class="line">jackson-dataformat-smile-2.8.1.jar</span><br><span class="line">jackson-dataformat-yaml-2.8.1.jar</span><br><span class="line">jna-4.2.2.jar</span><br><span class="line">joda-time-2.9.5.jar</span><br><span class="line">jopt-simple-5.0.2.jar</span><br><span class="line">lang-mustache-client-5.1.2.jar</span><br><span class="line">lucene-analyzers-common-6.3.0.jar</span><br><span class="line">lucene-backward-codecs-6.3.0.jar</span><br><span class="line">lucene-core-6.3.0.jar</span><br><span class="line">lucene-grouping-6.3.0.jar</span><br><span class="line">lucene-highlighter-6.3.0.jar</span><br><span class="line">lucene-join-6.3.0.jar</span><br><span class="line">lucene-memory-6.3.0.jar</span><br><span class="line">lucene-misc-6.3.0.jar</span><br><span class="line">lucene-queries-6.3.0.jar</span><br><span class="line">lucene-queryparser-6.3.0.jar</span><br><span class="line">lucene-sandbox-6.3.0.jar</span><br><span class="line">lucene-spatial3d-6.3.0.jar</span><br><span class="line">lucene-spatial-6.3.0.jar</span><br><span class="line">lucene-spatial-extras-6.3.0.jar</span><br><span class="line">lucene-suggest-6.3.0.jar</span><br><span class="line">netty-3.10.6.Final.jar</span><br><span class="line">netty-buffer-4.1.6.Final.jar</span><br><span class="line">netty-codec-4.1.6.Final.jar</span><br><span class="line">netty-codec-http-4.1.6.Final.jar</span><br><span class="line">netty-common-4.1.6.Final.jar</span><br><span class="line">netty-handler-4.1.6.Final.jar</span><br><span class="line">netty-resolver-4.1.6.Final.jar</span><br><span class="line">netty-transport-4.1.6.Final.jar</span><br><span class="line">percolator-client-5.1.2.jar</span><br><span class="line">reindex-client-5.1.2.jar</span><br><span class="line">rest-5.1.2.jar</span><br><span class="line">securesm-1.1.jar</span><br><span class="line">snakeyaml-1.15.jar</span><br><span class="line">t-digest-3.0.jar</span><br><span class="line">transport-5.1.2.jar</span><br><span class="line">transport-netty3-client-5.1.2.jar</span><br><span class="line">transport-netty4-client-5.1.2.jar</span><br><span class="line">x-pack-transport-5.1.2.jar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其中dirprm中需要的esearch驱动有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lang-mustache-client-5.2.2.jar</span><br><span class="line">percolator-client-5.2.2.jar</span><br><span class="line">transport-5.2.2.jar</span><br><span class="line">x-pack-transport-5.2.2.jar</span><br></pre></td></tr></table></figure></li>
+</ol>
+
       
     </div>
 
@@ -487,7 +500,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/tool/" rel="tag"># tool</a>
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+            <a href="/tags/ogg/" rel="tag"># ogg</a>
           
         </div>
       
@@ -500,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/13/linux/linux工具/keepalived监控切换功能/" rel="next" title="keepalived监控切换功能">
-                <i class="fa fa-chevron-left"></i> keepalived监控切换功能
+              <a href="/2019/03/04/linux/linux工具/FASTDFS安装步骤/" rel="next" title="FASTDFS安装步骤">
+                <i class="fa fa-chevron-left"></i> FASTDFS安装步骤
               </a>
             
           </div>
@@ -510,8 +525,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/14/linux/linux工具/redis集群文档/" rel="prev" title="redis集群搭建文档">
-                redis集群搭建文档 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/31/db/oracle/生成awr报告/" rel="prev" title="生成awr报告">
+                生成awr报告 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -561,17 +576,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -700,23 +706,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间同步"><span class="nav-number">1.</span> <span class="nav-text">时间同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">1.1.</span> <span class="nav-text">修改配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启"><span class="nav-number">1.2.</span> <span class="nav-text">重启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看"><span class="nav-number">1.3.</span> <span class="nav-text">查看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat自启动"><span class="nav-number">2.</span> <span class="nav-text">tomcat自启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加变量到setenv-sh（没有的话在bin目录新建一个）中-catalina-sh会调用"><span class="nav-number">2.1.</span> <span class="nav-text">添加变量到setenv.sh（没有的话在bin目录新建一个）中,catalina.sh会调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置启动脚本"><span class="nav-number">2.2.</span> <span class="nav-text">设置启动脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">2.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#centos7-tomcat9自启动"><span class="nav-number">3.</span> <span class="nav-text">centos7+tomcat9自启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加变量到setclasspath-sh中-catalina-sh会调用"><span class="nav-number">3.1.</span> <span class="nav-text">添加变量到setclasspath.sh中,catalina.sh会调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置启动脚本-1"><span class="nav-number">3.2.</span> <span class="nav-text">设置启动脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-1"><span class="nav-number">3.3.</span> <span class="nav-text">启动</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
