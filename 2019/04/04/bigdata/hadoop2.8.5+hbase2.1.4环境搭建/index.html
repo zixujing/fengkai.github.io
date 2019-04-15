@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="hadoop2.8.5+hbase2.1.4环境搭建">
+<meta name="keywords" content="hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建">
+<meta property="og:url" content="https://zixujing.github.io/2019/04/04/bigdata/hadoop2.8.5+hbase2.1.4环境搭建/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="hadoop2.8.5+hbase2.1.4环境搭建">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-08T11:28:11.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建">
+<meta name="twitter:description" content="hadoop2.8.5+hbase2.1.4环境搭建">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/04/04/bigdata/hadoop2.8.5+hbase2.1.4环境搭建/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/04/04/bigdata/hadoop2.8.5+hbase2.1.4环境搭建/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-04 02:00:00" itemprop="dateCreated datePublished" datetime="2019-04-04T02:00:00+08:00">2019-04-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-08 19:28:11" itemprop="dateModified" datetime="2019-04-08T19:28:11+08:00">2019-04-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>　　</p>
+<blockquote>
+<p>hadoop2.8.5+hbase2.1.4环境搭建<br><a id="more"></a>
+　　</p>
+</blockquote>
+<h2 id="centos7-3-配置"><a href="#centos7-3-配置" class="headerlink" title="centos7.3 配置"></a>centos7.3 配置</h2><ul>
+<li><p>119设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# hostnamectl set-hostname hadoopa</span><br><span class="line">[root@hadoopa ~]# vi /etc/hosts</span><br><span class="line">192.168.11.119 hadoopa</span><br><span class="line">192.168.11.118 hadoopb</span><br><span class="line">192.168.11.117 hadoopc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>118设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# hostnamectl set-hostname hadoopb</span><br><span class="line">[root@hadoopa ~]# vi /etc/hosts</span><br><span class="line">192.168.11.119 hadoopa</span><br><span class="line">192.168.11.118 hadoopb</span><br><span class="line">192.168.11.117 hadoopc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>117设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# hostnamectl set-hostname hadoopc</span><br><span class="line">[root@hadoopa ~]# vi /etc/hosts</span><br><span class="line">192.168.11.119 hadoopa</span><br><span class="line">192.168.11.118 hadoopb</span><br><span class="line">192.168.11.117 hadoopc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="java安装"><a href="#java安装" class="headerlink" title="java安装"></a>java安装</h2><ul>
+<li>分别把117jdk拷贝到三台机器的opt目录解压即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#以下在117上执行</span><br><span class="line">[root@hadoopc opt]# scp jdk-8u201-linux-x64.tar.gz 192.168.11.118:/opt</span><br><span class="line">#以下在117 118 119上分别执行</span><br><span class="line">[root@hadoopc opt]# tar -xzvf jdk-8u201-linux-x64.tar.gz</span><br><span class="line">[root@hadoopc opt]# mv jdk1.8.0_201/ jdk1.8</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="ssh免密码配置"><a href="#ssh免密码配置" class="headerlink" title="ssh免密码配置"></a>ssh免密码配置</h2><ul>
+<li><p>117上执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# cd ~/.ssh/</span><br><span class="line">[root@hadoopc .ssh]# ssh-keygen -t rsa #生成密钥和pub公钥</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa): </span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /root/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /root/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">36:20:71:94:09:e4:1e:94:19:61:01:8c:e6:ea:e3:c4 root@hadoopc</span><br><span class="line">The key&apos;s randomart image is:</span><br><span class="line">+--[ RSA 2048]----+</span><br><span class="line">| o.oXOoo         |</span><br><span class="line">|...+ooo          |</span><br><span class="line">|o   + .          |</span><br><span class="line">| . . o .         |</span><br><span class="line">|.   .   S        |</span><br><span class="line">|o      . .       |</span><br><span class="line">|.E               |</span><br><span class="line">|.o               |</span><br><span class="line">|...              |</span><br><span class="line">+-----------------+</span><br><span class="line">[root@hadoopc .ssh]# ls</span><br><span class="line">id_rsa  id_rsa.pub  known_hosts</span><br><span class="line">[root@hadoopc .ssh]# cat id_rsa.pub &gt;&gt; authorized_keys #此时会生成authorized_keys文件，文件中存放的是你想免密码登录的pub公钥，当前命令说明当执行ssh localhost免密码，118  119免密码登录同理把在118 和 119 下生成的公钥拷贝到当前authorized_keys文件中。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>118上执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# cd ~/.ssh/</span><br><span class="line">[root@hadoopc .ssh]# ssh-keygen -t rsa</span><br><span class="line">[root@hadoopc .ssh]# cat id_rsa.pub &gt;&gt; authorized_keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>119上执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# cd ~/.ssh/</span><br><span class="line">[root@hadoopc .ssh]# ssh-keygen -t rsa</span><br><span class="line">[root@hadoopc .ssh]# cat id_rsa.pub &gt;&gt; authorized_keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分别把118和119上的pub公钥拷贝到117的authorized_keys文件中，要用scp不能直接复制</p>
+</li>
+<li>分别把117的authorized_keys文件拷贝到118和119中替换他们的authorized_keys文件</li>
+<li>ssh 登录验证一下，看是否还需要密码</li>
+</ul>
+<h2 id="安装hadoop"><a href="#安装hadoop" class="headerlink" title="安装hadoop"></a>安装hadoop</h2><p>###以下配置仅在117上执行</p>
+<h4 id="hdoop配置"><a href="#hdoop配置" class="headerlink" title="hdoop配置"></a>hdoop配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line">#仅在117上执行</span><br><span class="line">[root@hadoopa ~]# cd /opt</span><br><span class="line">[root@hadoopc opt]# ls</span><br><span class="line">hadoop-2.8.5.tar.gz  jdk1.8</span><br><span class="line">[root@hadoopc opt]# mkdir hadoop285</span><br><span class="line">[root@hadoopc opt]# tar -zxvf /opt/hadoop-2.8.5.tar.gz -C /opt/hadoop285</span><br><span class="line">[root@hadoopc opt]# cd /opt/hadoop285/hadoop-2.8.5/etc/hadoop</span><br><span class="line">[root@hadoopc hadoop]# vi hadoop-env.sh </span><br><span class="line">#export JAVA_HOME=$&#123;JAVA_HOME&#125;</span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br><span class="line">#export HADOOP_HOME=/opt/hadoop285/hadoop-2.8.5</span><br><span class="line">#export PATH=$HADOOP_HOME/bin:$JAVA_HOME/bin:$PATH</span><br><span class="line">[root@hadoopc hadoop]# vi core-site.xml </span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/opt/hadoop285/tmp&lt;/value&gt; </span><br><span class="line">    &lt;description&gt;A base for other temporary directories.&lt;/description&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;fs.default.name&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;hdfs://192.168.11.119:9000&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">　&lt;property&gt; </span><br><span class="line">　    &lt;name&gt;io.file.buffer.size&lt;/name&gt; </span><br><span class="line">　    &lt;value&gt;4096&lt;/value&gt; </span><br><span class="line">　 &lt;/property&gt; </span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@hadoopc hadoop]# vi hdfs-site.xml </span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;1&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.name.dir&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/opt/hadoop285/hdfs/name&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.data.dir&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/opt/hadoop285/hdfs/data&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@hadoopc hadoop]# cp mapred-site.xml.template mapred-site.xml</span><br><span class="line">[root@hadoopc hadoop]# vi mapred-site.xml</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;!--指定maoreduce运行框架--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">  &lt;!--历史服务的通信地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:10020&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">  &lt;!--历史服务的web ui地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:19888&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@hadoopc hadoop]# vi yarn-site.xml </span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;!--指定resourcemanager所启动的服务器主机名--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定mapreduce的shuffle--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定resourcemanager的内部通讯地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:8032&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定scheduler的内部通讯地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:8030&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定resource-tracker的内部通讯地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:8031&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定resourcemanager.admin的内部通讯地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:8033&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt; </span><br><span class="line">&lt;!--指定resourcemanager.webapp的ui监控地址--&gt; </span><br><span class="line">  &lt;property&gt; </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;192.168.11.119:8088&lt;/value&gt; </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@hadoopc hadoop]# vi slaves </span><br><span class="line">192.168.11.117</span><br><span class="line">192.168.11.118</span><br><span class="line">[root@hadoopc hadoop]# vi yarn-env.sh</span><br><span class="line"># some Java parameters</span><br><span class="line"># export JAVA_HOME=/home/y/libexec/jdk1.6.0/</span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br><span class="line">[root@hadoopc hadoop]# vi mapred-env.sh</span><br><span class="line"># export JAVA_HOME=/home/y/libexec/jdk1.6.0/</span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br></pre></td></tr></table></figure>
+<p>####存放信息相关文件创建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc hadoop285]# mkdir /opt/hadoop285/tmp</span><br><span class="line">[root@hadoopc hadoop285]# mkdir /opt/hadoop285/hdfs</span><br><span class="line">[root@hadoopc hadoop285]# mkdir /opt/hadoop285/hdfs/name</span><br><span class="line">[root@hadoopc hadoop285]# mkdir /opt/hadoop285/hdfs/data</span><br></pre></td></tr></table></figure></p>
+<h4 id="把配置好的hadoop拷贝到118和119"><a href="#把配置好的hadoop拷贝到118和119" class="headerlink" title="把配置好的hadoop拷贝到118和119"></a>把配置好的hadoop拷贝到118和119</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc hadoop]# cd /opt</span><br><span class="line">[root@hadoopc opt]# scp -r hadoop285/ 192.168.11.118:`pwd`</span><br><span class="line">[root@hadoopc opt]# scp -r hadoop285/ 192.168.11.119:`pwd`</span><br></pre></td></tr></table></figure>
+<p>##启动hdoop</p>
+<p>###只是一个记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#只是一个记录</span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br><span class="line">export HADOOP_HOME=/opt/hadoop285/hadoop-2.8.5</span><br><span class="line">export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$JAVA_HOME/bin:$PATH</span><br></pre></td></tr></table></figure></p>
+<p>###启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopa fk]# hdfs namenode -format</span><br><span class="line">[root@hadoopa fk]# start-dfs.sh</span><br><span class="line">[root@hadoopa fk]# start-yarn.sh</span><br></pre></td></tr></table></figure></p>
+<p>###打开<a href="http://192.168.11.119:50070/验证" target="_blank" rel="noopener">http://192.168.11.119:50070/验证</a></p>
+<p>　　</p>
+<h2 id="zookeeper安装版本是3-4-14"><a href="#zookeeper安装版本是3-4-14" class="headerlink" title="zookeeper安装版本是3.4.14"></a>zookeeper安装版本是3.4.14</h2><h3 id="zookeeper仅安装到117上，非集群安装"><a href="#zookeeper仅安装到117上，非集群安装" class="headerlink" title="zookeeper仅安装到117上，非集群安装"></a>zookeeper仅安装到117上，非集群安装</h3><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# pwd</span><br><span class="line">/opt</span><br><span class="line">[root@hadoopc opt]# mkdir zookeeper3414</span><br><span class="line">[root@hadoopc opt]# tar -xzvf zookeeper-3.4.14.tar.gz -C /opt/zookeeper3414/</span><br><span class="line">[root@hadoopc opt]# cd /opt/zookeeper3414/zookeeper-3.4.14/conf</span><br><span class="line">[root@hadoopc conf]# cp zoo_sample.cfg zoo.cfg</span><br><span class="line">[root@hadoopc conf]# vi zoo.cfg </span><br><span class="line">dataDir=/opt/zookeeper3414/data</span><br><span class="line">dataLogDir=/opt/zookeeper3414/logs</span><br><span class="line">[root@hadoopc conf]# mkdir /opt/zookeeper3414/data</span><br><span class="line">[root@hadoopc conf]# mkdir /opt/zookeeper3414/logs</span><br></pre></td></tr></table></figure>
+<h4 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=/opt/zookeeper3414/zookeeper-3.4.14/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>　
+　　</p>
+<h4 id="启动zookeeper"><a href="#启动zookeeper" class="headerlink" title="启动zookeeper"></a>启动zookeeper</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc conf]# zkServer.sh start</span><br><span class="line">[root@hadoopc conf]# zkServer.sh stop</span><br><span class="line">[root@hadoopc conf]# zkServer.sh restart</span><br><span class="line">[root@hadoopc conf]# zkServer.sh status</span><br><span class="line">#QuorumPeerMain是zookeeper的进程名字</span><br></pre></td></tr></table></figure>
+<p>　　
+　　
+　　</p>
+<p>##HBASE安装</p>
+<h3 id="以下仅在117上执行"><a href="#以下仅在117上执行" class="headerlink" title="以下仅在117上执行"></a>以下仅在117上执行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# mkdir hbase214</span><br><span class="line">[root@hadoopc opt]# tar -zxvf hbase-2.1.4-bin.tar.gz -C /opt/hbase214</span><br><span class="line">[root@hadoopc opt]# cd /opt/hbase214/hbase-2.1.4/conf</span><br><span class="line">[root@hadoopc conf]# vi hbase-env.sh</span><br><span class="line">export HBASE_PID_DIR=/opt/hbase214/pids</span><br><span class="line">export HBASE_MANAGES_ZK=false</span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br><span class="line">[root@hadoopc conf]# vi hbase-site.xml</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;!-- 指定hbase master机器 --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.master&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://192.168.11.119:9000&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;!-- hbase分布式集群为true --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;!-- 指定ZK集群地址,多个用逗号分开--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;192.168.11.117&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;!-- 指定独立Zookeeper安装路径 --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/opt/zookeeper3414/zookeeper-3.4.14&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;!-- 指定ZooKeeper集群端口 --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;2181&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;!--此处避免一个启动时候得错误--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.unsafe.stream.capability.enforce&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">　&lt;property&gt;</span><br><span class="line">　    &lt;name&gt;hbase.root.dir&lt;/name&gt;</span><br><span class="line">　    &lt;value&gt;hdfs://192.168.11.119:9000/hbase&lt;/value&gt;</span><br><span class="line">　  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@hadoopc conf]# vi regionservers </span><br><span class="line">192.168.11.117</span><br><span class="line">192.168.11.118</span><br><span class="line">192.168.11.119</span><br><span class="line">[root@hadoopc conf]# cd /opt/hbase214/hbase-2.1.4/lib/client-facing-thirdparty</span><br><span class="line">[root@hadoopc client-facing-thirdparty]# cp htrace-core4-4.2.0-incubating.jar ../</span><br></pre></td></tr></table></figure>
+<h3 id="标记-1"><a href="#标记-1" class="headerlink" title="标记"></a>标记</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=/opt/hbase214/hbase-2.1.4/bin:$PATH</span><br></pre></td></tr></table></figure>
+<h3 id="配置拷贝到118和119"><a href="#配置拷贝到118和119" class="headerlink" title="配置拷贝到118和119"></a>配置拷贝到118和119</h3><p>　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc opt]# cd /opt　　</span><br><span class="line">[root@hadoopc opt]# scp -r hbase214/ 192.168.11.118:`pwd`</span><br><span class="line">[root@hadoopc opt]# scp -r hbase214/ 192.168.11.119:`pwd`</span><br></pre></td></tr></table></figure></p>
+<p>　　</p>
+<h3 id="启动hbase"><a href="#启动hbase" class="headerlink" title="启动hbase"></a>启动hbase</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopa conf]# start-hbase.sh</span><br></pre></td></tr></table></figure>
+<h3 id="关于报错解决"><a href="#关于报错解决" class="headerlink" title="关于报错解决"></a>关于报错解决</h3><ul>
+<li>报错信息是：Caused by: java.lang.ClassNotFoundException: org.apache.htrace.SamplerBuilder</li>
+<li>进过百度说缺少htrace-core-3.1.0-incubating.jar包但hbase2.1.4的lib\client-facing-thirdparty目录下没有这个文件，解决方法是下载hbase2.1.3在目录lib\client-facing-thirdparty中找到文件htrace-core-3.1.0-incubating.jar拷贝到hbase2.1.4的lib目录中。</li>
+</ul>
+<p>##spark安装（2.3.3）</p>
+<h3 id="以下仅在117上执行-1"><a href="#以下仅在117上执行-1" class="headerlink" title="以下仅在117上执行"></a>以下仅在117上执行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc ~]# cd /home</span><br><span class="line">[root@hadoopc opt]# mkdir spark233</span><br><span class="line">[root@hadoopc opt]# tar -xzvf /opt/spark-2.3.3-bin-hadoop2.7.tgz -C /home/spark233/</span><br><span class="line">[root@hadoopc home]# cd spark233/spark-2.3.3-bin-hadoop2.7/</span><br><span class="line">[root@hadoopc spark-2.3.3-bin-hadoop2.7]# cd conf</span><br><span class="line">[root@hadoopc conf]# cp spark-env.sh.template spark-env.sh</span><br><span class="line">[root@hadoopc conf]# vi spark-env.sh </span><br><span class="line">export JAVA_HOME=/opt/jdk1.8</span><br><span class="line">export HADOOP_CONF_DIR=/opt/hadoop285/hadoop-2.8.5/etc/hadoop/</span><br><span class="line">export YARN_CONF_DIR=/opt/hadoop285/hadoop-2.8.5/etc/hadoop/</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line">export SPARK_HOME=/home/spark233/spark-2.3.3-bin-hadoop2.7</span><br><span class="line">[root@hadoopc conf]# cp slaves.template slaves</span><br><span class="line">[root@hadoopc conf]# vi slaves</span><br><span class="line">#localhost</span><br><span class="line">#192.168.11.117</span><br><span class="line">#不需要指定MASTER在哪里启动哪里就是Master</span><br><span class="line">192.168.11.118</span><br><span class="line">192.168.11.119</span><br><span class="line">[root@hadoopc conf]# cd ../../..</span><br><span class="line">[root@hadoopc home]# scp -r spark233/ 192.168.11.118:`pwd`</span><br><span class="line">[root@hadoopc home]# scp -r spark233/ 192.168.11.119:`pwd`</span><br></pre></td></tr></table></figure>
+<p>###标记<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export SPARK_HOME=/home/spark233/spark-2.3.3-bin-hadoop2.7</span><br><span class="line">export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin</span><br></pre></td></tr></table></figure></p>
+<p>###启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoopc sbin]# ./start-master.sh </span><br><span class="line">[root@hadoopc sbin]# ./start-all.sh</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/01/java/JVM监控和调优常用命令工具总结/" rel="next" title="JVM监控和调优常用命令工具">
+                <i class="fa fa-chevron-left"></i> JVM监控和调优常用命令工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/16/linux/linux工具/VirtualBox 操作命令随笔/" rel="prev" title="VirtualBox 操作命令随笔">
+                VirtualBox 操作命令随笔 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#centos7-3-配置"><span class="nav-number">1.</span> <span class="nav-text">centos7.3 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java安装"><span class="nav-number">2.</span> <span class="nav-text">java安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh免密码配置"><span class="nav-number">3.</span> <span class="nav-text">ssh免密码配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hadoop"><span class="nav-number">4.</span> <span class="nav-text">安装hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#hdoop配置"><span class="nav-number">4.0.1.</span> <span class="nav-text">hdoop配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把配置好的hadoop拷贝到118和119"><span class="nav-number">4.0.2.</span> <span class="nav-text">把配置好的hadoop拷贝到118和119</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#zookeeper安装版本是3-4-14"><span class="nav-number">5.</span> <span class="nav-text">zookeeper安装版本是3.4.14</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper仅安装到117上，非集群安装"><span class="nav-number">5.1.</span> <span class="nav-text">zookeeper仅安装到117上，非集群安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">5.1.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记"><span class="nav-number">5.1.2.</span> <span class="nav-text">标记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动zookeeper"><span class="nav-number">5.1.3.</span> <span class="nav-text">启动zookeeper</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以下仅在117上执行"><span class="nav-number">5.2.</span> <span class="nav-text">以下仅在117上执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-1"><span class="nav-number">5.3.</span> <span class="nav-text">标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置拷贝到118和119"><span class="nav-number">5.4.</span> <span class="nav-text">配置拷贝到118和119</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动hbase"><span class="nav-number">5.5.</span> <span class="nav-text">启动hbase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于报错解决"><span class="nav-number">5.6.</span> <span class="nav-text">关于报错解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以下仅在117上执行-1"><span class="nav-number">5.7.</span> <span class="nav-text">以下仅在117上执行</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
