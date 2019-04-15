@@ -96,25 +96,18 @@
 
 
 
-  <meta name="description" content="原文地址：https://blogs.msdn.microsoft.com/apgcdsd/2013/07/10/sql-server-2012-memory-management">
-<meta name="keywords" content="sqlserver">
+  <meta name="description" content="sqoop安装">
+<meta name="keywords" content="sqoop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sqlserver 2012内存管理">
-<meta property="og:url" content="https://zixujing.github.io/2019/01/15/db/mssql/sqlserver 2012内存管理/index.html">
+<meta property="og:title" content="sqoop安装">
+<meta property="og:url" content="https://zixujing.github.io/2019/04/11/bigdata/sqoop安装/index.html">
 <meta property="og:site_name" content="冯凯&#39;blog">
-<meta property="og:description" content="原文地址：https://blogs.msdn.microsoft.com/apgcdsd/2013/07/10/sql-server-2012-memory-management">
+<meta property="og:description" content="sqoop安装">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/6607.1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/4812.2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/5482.3.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/2577.4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/5074.5.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/7041.6.png">
-<meta property="og:updated_time" content="2019-01-15T13:20:59.977Z">
+<meta property="og:updated_time" content="2019-04-15T18:13:10.259Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sqlserver 2012内存管理">
-<meta name="twitter:description" content="原文地址：https://blogs.msdn.microsoft.com/apgcdsd/2013/07/10/sql-server-2012-memory-management">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/6607.1.png">
+<meta name="twitter:title" content="sqoop安装">
+<meta name="twitter:description" content="sqoop安装">
 
 
 
@@ -123,7 +116,7 @@
 
 
 
-  <link rel="canonical" href="https://zixujing.github.io/2019/01/15/db/mssql/sqlserver 2012内存管理/">
+  <link rel="canonical" href="https://zixujing.github.io/2019/04/11/bigdata/sqoop安装/">
 
 
 
@@ -133,7 +126,7 @@
   };
 </script>
 
-  <title>sqlserver 2012内存管理 | 冯凯'blog</title>
+  <title>sqoop安装 | 冯凯'blog</title>
   
 
 
@@ -349,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/01/15/db/mssql/sqlserver 2012内存管理/">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/04/11/bigdata/sqoop安装/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯_凯">
@@ -366,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">sqlserver 2012内存管理
+          <h1 class="post-title" itemprop="name headline">sqoop安装
 
               
             
@@ -392,12 +385,24 @@
                 
               
 
-              <time title="创建时间：2019-01-15 01:00:00 / 修改时间：21:20:59" itemprop="dateCreated datePublished" datetime="2019-01-15T01:00:00+08:00">2019-01-15</time>
+              <time title="创建时间：2019-04-11 02:00:00" itemprop="dateCreated datePublished" datetime="2019-04-11T02:00:00+08:00">2019-04-11</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-16 02:13:10" itemprop="dateModified" datetime="2019-04-16T02:13:10+08:00">2019-04-16</time>
               
             
           </span>
@@ -449,43 +454,23 @@
 
       
         <blockquote>
-<p><a href="https://blogs.msdn.microsoft.com/apgcdsd/2013/07/10/sql-server-2012-memory-management/" target="_blank" rel="noopener">原文地址：https://blogs.msdn.microsoft.com/apgcdsd/2013/07/10/sql-server-2012-memory-management</a><br><a id="more"></a></p>
+<p>sqoop安装<br><a id="more"></a></p>
 </blockquote>
-<h2 id="内存分配器的变化"><a href="#内存分配器的变化" class="headerlink" title="内存分配器的变化"></a>内存分配器的变化</h2><blockquote>
-<p>SQL Server 2012以前的版本，比如SQL Server 2008 R2等，有<strong>single page allocator</strong>和<strong>multi page allocator</strong>。 也就是说， 如果申请的内存是8k以内的，就会有单页分配器分配，而大于8kb的内存请求，使用multi page 分配器来管理。所以，如果你运行DBCC MemoryStatus，你会发现这两个分配器分配的内存情况。</p>
-</blockquote>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/6607.1.png" alt="dbcc memorystatus"></center>
-
-<blockquote>
-<p>如果你查询<strong>memory clerk</strong>，也会发现single pages 和multi pages 两列：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from sys.dm_os_memory_clerks</span><br></pre></td></tr></table></figure>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/4812.2.png" alt=""></center>
-
-<blockquote>
-<p>而2012里面就不一样了，你会发现single page 和multi page字样消失了，只剩下pages 字样：</p>
-</blockquote>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/5482.3.png" alt=""></center>
-
-<blockquote>
-<p>而下面的语句的输出也是不一样的：</p>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> sys.dm_os_memory_clerks</span><br></pre></td></tr></table></figure>
-<center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/2577.4.png" alt=""></center>
-
-<blockquote>
-<p>那么为什么会有这样的变化呢？原因就是SQL Server 2012里面不再有single page allocator 和multi page allocator，而是把它们统一起来了，叫做 any size page allocator。 下面的两张图可以看到这样的变化：</p>
-</blockquote>
-<pre><code>SQL Server 2008 R2：
-</code></pre><center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/5074.5.png" alt=""></center>
-
-<pre><code>SQL Server 2012：
-</code></pre><center><img src="https://raw.githubusercontent.com/zixujing/book1.github.io/master/image/20190115/7041.6.png" alt=""></center>
-
-
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2012/ms175019&#40;v=sql.110&#41;" target="_blank" rel="noopener">参考:https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2012/ms175019(v=sql.110)</a></li>
-</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li>解压即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop3 ~]$ tar -zxvf sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz -C /opt/sqoop147</span><br><span class="line">[hadoop@hadoop3 apps]$ cd /opt/sqoop147/sqoop-1.4.7/conf</span><br><span class="line">[hadoop@hadoop3 conf]$ mv sqoop-env-template.sh sqoop-env.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li>加入mysql驱动到sqoop的lib目录</li>
+<li><p>环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Sqoop</span><br><span class="line">export SQOOP_HOME=/usr/local/sqoop147</span><br><span class="line">export PATH=$PATH:$SQOOP_HOME/bin</span><br><span class="line"></span><br><span class="line">export HADOOP_COMMON_HOME=/opt/hadoop285/hadoop-2.8.5</span><br><span class="line">export HADOOP_MAPRED_HOME=/opt/hadoop285/hadoop-2.8.5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqoop version</span><br><span class="line">sqoop help</span><br><span class="line">sqoop list-databases --connect jdbc:mysql://192.168.11.99:3306/mysql?characterEncoding=UTF-8 --username root --password &apos;123456&apos;</span><br><span class="line">sqoop list-tables --connect jdbc:mysql://192.168.11.99:3306/xzinside_dev?characterEncoding=UTF-8 --username root --password &apos;123456&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置hbase</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_HOME=/opt/hbase214/hbase-2.1.4</span><br><span class="line">export HBASE_CLASSPATH=/opt/hbase214/hbase-2.1.4/conf</span><br></pre></td></tr></table></figure></li>
+</ol>
 
       
     </div>
@@ -509,7 +494,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/sqlserver/" rel="tag"># sqlserver</a>
+            <a href="/tags/sqoop/" rel="tag"># sqoop</a>
           
         </div>
       
@@ -522,8 +507,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/15/db/mysql/mysql内存管理/" rel="next" title="Mysql 内存管理">
-                <i class="fa fa-chevron-left"></i> Mysql 内存管理
+              <a href="/2019/04/04/bigdata/hadoop2.8.5+hbase2.1.4环境搭建/" rel="next" title="hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建">
+                <i class="fa fa-chevron-left"></i> hadoop2.8.5+hbase2.1.4+spark2.3.3环境搭建
               </a>
             
           </div>
@@ -532,8 +517,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/16/db/mssql/sqlserver 文件存储笔记/" rel="prev" title="sqlserver 文件存储笔记">
-                sqlserver 文件存储笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/16/linux/linux工具/VirtualBox 操作命令随笔/" rel="prev" title="VirtualBox 操作命令随笔">
+                VirtualBox 操作命令随笔 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -741,7 +726,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存分配器的变化"><span class="nav-number">1.</span> <span class="nav-text">内存分配器的变化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li></ol></div>
             
 
           </div>
