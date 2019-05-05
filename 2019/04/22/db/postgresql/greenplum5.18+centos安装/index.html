@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="greenplum5.18+centos安装">
+<meta name="keywords" content="postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="greenplum5.18+centos安装">
+<meta property="og:url" content="https://zixujing.github.io/2019/04/22/db/postgresql/greenplum5.18+centos安装/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="greenplum5.18+centos安装">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-05T23:03:11.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="greenplum5.18+centos安装">
+<meta name="twitter:description" content="greenplum5.18+centos安装">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/04/22/db/postgresql/greenplum5.18+centos安装/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>greenplum5.18+centos安装 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/04/22/db/postgresql/greenplum5.18+centos安装/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">greenplum5.18+centos安装
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-22 01:00:00" itemprop="dateCreated datePublished" datetime="2019-04-22T01:00:00+08:00">2019-04-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-06 07:03:11" itemprop="dateModified" datetime="2019-05-06T07:03:11+08:00">2019-05-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>greenplum5.18+centos安装<br><a id="more"></a></p>
+</blockquote>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@mdw ~]# vi /etc/hosts</span><br><span class="line">172.16.69.130 hadoopa</span><br><span class="line">172.16.69.131 hadoopb</span><br><span class="line">172.16.69.132 hadoopc</span><br><span class="line"></span><br><span class="line">[root@mdw ~]# vi /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">kernel.shmmax = 500000000</span><br><span class="line">kernel.shmmni = 4096</span><br><span class="line">kernel.shmall = 4000000000</span><br><span class="line">kernel.sem = 250 512000 100 2048</span><br><span class="line">kernel.sysrq = 1</span><br><span class="line">kernel.core_uses_pid = 1</span><br><span class="line">kernel.msgmnb = 65536</span><br><span class="line">kernel.msgmax = 65536</span><br><span class="line">kernel.msgmni = 2048</span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">net.ipv4.ip_forward = 0</span><br><span class="line">net.ipv4.conf.default.accept_source_route = 0</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 4096</span><br><span class="line">net.ipv4.conf.all.arp_filter = 1</span><br><span class="line">net.ipv4.ip_local_port_range = 1025 65535</span><br><span class="line">net.core.netdev_max_backlog = 10000</span><br><span class="line">net.core.rmem_max = 2097152</span><br><span class="line">net.core.wmem_max = 2097152</span><br><span class="line">vm.overcommit_memory = 2</span><br></pre></td></tr></table></figure>
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">groupadd -g 530 gpadmin</span><br><span class="line">useradd -g 530 -m -d /home/gpadmin -s /bin/bash gpadmin</span><br><span class="line">passwd gpadmin</span><br></pre></td></tr></table></figure>
+<h3 id="安装目录创建"><a href="#安装目录创建" class="headerlink" title="安装目录创建"></a>安装目录创建</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/gpadmin</span><br><span class="line">chown gpadmin:gpadmin /usr/local/gpadmin</span><br></pre></td></tr></table></figure>
+<h3 id="创建hostlist-在主节点"><a href="#创建hostlist-在主节点" class="headerlink" title="创建hostlist,在主节点"></a>创建hostlist,在主节点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">su - gpadmin</span><br><span class="line">mkdir -p /home/gpadmin/conf</span><br><span class="line">vi /home/gpadmin/conf/hostlist</span><br><span class="line">hadoopa</span><br><span class="line">hadoopb</span><br><span class="line">hadoopc</span><br></pre></td></tr></table></figure>
+<h3 id="创建seg-host，在主节点"><a href="#创建seg-host，在主节点" class="headerlink" title="创建seg_host，在主节点"></a>创建seg_host，在主节点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /home/gpadmin/conf/seg_host</span><br><span class="line">hadoopb</span><br><span class="line">hadoopa</span><br></pre></td></tr></table></figure>
+<h3 id="安装greenplum"><a href="#安装greenplum" class="headerlink" title="安装greenplum"></a>安装greenplum</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">chown gpadmin:gpadmin greenplum-db-5.18.0-rhel7-x86_64.bin </span><br><span class="line">chmod +x greenplum-db-5.18.0-rhel7-x86_64.bin</span><br><span class="line">./greenplum-db-5.18.0-rhel7-x86_64.bin </span><br><span class="line">...</span><br><span class="line">I HAVE READ AND AGREE TO THE TERMS OF THE ABOVE PIVOTAL SOFTWARE</span><br><span class="line">LICENSE AGREEMENT.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">********************************************************************************</span><br><span class="line">Do you accept the Pivotal Database license agreement? [yes|no]</span><br><span class="line">********************************************************************************</span><br><span class="line"></span><br><span class="line">yes</span><br><span class="line">********************************************************************************</span><br><span class="line">Provide the installation path for Greenplum Database or press ENTER to </span><br><span class="line">accept the default installation path: /usr/local/greenplum-db-5.18.0</span><br><span class="line">********************************************************************************</span><br><span class="line"></span><br><span class="line">/usr/local/gpadmin/greenplum-db-5.18.0</span><br><span class="line">********************************************************************************</span><br><span class="line">Install Greenplum Database into /usr/local/gpadmin/greenplum-db-5.18.0? [yes|no]</span><br><span class="line">********************************************************************************</span><br><span class="line"></span><br><span class="line">yes</span><br><span class="line">********************************************************************************</span><br><span class="line">/usr/local/gpadmin/greenplum-db-5.18.0 does not exist.</span><br><span class="line">Create /usr/local/gpadmin/greenplum-db-5.18.0 ? [yes|no]</span><br><span class="line">(Selecting no will exit the installer)</span><br><span class="line">********************************************************************************</span><br><span class="line"></span><br><span class="line">yes</span><br></pre></td></tr></table></figure>
+<h3 id="配置ssh免密码登录"><a href="#配置ssh免密码登录" class="headerlink" title="配置ssh免密码登录"></a>配置ssh免密码登录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">su - gpadmin</span><br><span class="line">cd conf</span><br><span class="line">source /usr/local/gpadmin/greenplum-db/greenplum_path.sh</span><br><span class="line">gpssh-exkeys -f /home/gpadmin/conf/hostlist</span><br></pre></td></tr></table></figure>
+<h3 id="在Segment节点上安装Greenplum-DB"><a href="#在Segment节点上安装Greenplum-DB" class="headerlink" title="在Segment节点上安装Greenplum DB"></a>在Segment节点上安装Greenplum DB</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su - gpadmin</span><br><span class="line">source /usr/local/gpadmin/greenplum-db/greenplum_path.sh</span><br><span class="line">gpseginstall -f /home/gpadmin/conf/hostlist</span><br></pre></td></tr></table></figure>
+<h4 id="集群检查，并安装检查修改"><a href="#集群检查，并安装检查修改" class="headerlink" title="集群检查，并安装检查修改"></a>集群检查，并安装检查修改</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">gpcheck -f /home/gpadmin/conf/hostlist -m hadoopc</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-dedupe hostnames</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-Detected platform: Generic Linux Cluster</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-generate data on servers</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-copy data files from servers</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-delete remote tmp files</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[INFO]:-Using gpcheck config file: /usr/local/gpadmin/greenplum-db/./etc/gpcheck.cnf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(None): utility will not check all settings when run as non-root user</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): on device (sr0) IO scheduler &apos;cfq&apos; does not match expected value &apos;deadline&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): /etc/sysctl.conf value for key &apos;kernel.sem&apos; has value &apos;250 512000 100 2048&apos; and expects &apos;500 1024000 200 4096&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): soft nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): hard nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): soft nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): hard nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-root has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-home has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/sda1 has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopb): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): on device (sr0) IO scheduler &apos;cfq&apos; does not match expected value &apos;deadline&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): /etc/sysctl.conf value for key &apos;kernel.sem&apos; has value &apos;250 512000 100 2048&apos; and expects &apos;500 1024000 200 4096&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): soft nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): hard nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): soft nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): hard nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-root has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-home has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/sda1 has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopc): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): on device (sr0) IO scheduler &apos;cfq&apos; does not match expected value &apos;deadline&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): /etc/sysctl.conf value for key &apos;kernel.sem&apos; has value &apos;250 512000 100 2048&apos; and expects &apos;500 1024000 200 4096&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): soft nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): hard nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): soft nproc not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): hard nofile not found in /etc/security/limits.conf</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-root has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-root is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-home has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/mapper/cl-home is missing the recommended mount option &apos;noatime&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/sda1 has 5 XFS mount options and 4 are expected</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;allocsize=16m&apos;</span><br><span class="line">20190423:17:18:03:019173 gpcheck:hadoopc:gpadmin-[ERROR]:-GPCHECK_ERROR host(hadoopa): XFS filesystem on device /dev/sda1 is missing the recommended mount option &apos;noatime&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">su - gpadmin</span><br><span class="line">cd conf</span><br><span class="line">gpssh -f hostlist</span><br><span class="line">cd</span><br><span class="line">mkdir gpdata</span><br><span class="line">cd gpdata</span><br><span class="line">mkdir gpmaster gpdatap1 gpdatap2 gpdatam1 gpdatam2</span><br><span class="line">#说明</span><br><span class="line">Master和Master Standby上创建：mkdir /data/master</span><br><span class="line">Segment上创建Primary Segment：mkdir /data/primary</span><br><span class="line">Segment上创建Mirror Segment（非必须）：mkdir /data/mirror</span><br></pre></td></tr></table></figure>
+<h3 id="初始化，只配置主节点"><a href="#初始化，只配置主节点" class="headerlink" title="初始化，只配置主节点"></a>初始化，只配置主节点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">su - gpadmin</span><br><span class="line">vi /home/gpadmin/conf/gpinitsystem_config</span><br><span class="line">################################################</span><br><span class="line">#### REQUIRED PARAMETERS</span><br><span class="line">################################################</span><br><span class="line"></span><br><span class="line">#### Name of this Greenplum system enclosed in quotes.</span><br><span class="line">ARRAY_NAME=&quot;Greenplum&quot;</span><br><span class="line">#### Naming convention for utility-generated data directories.</span><br><span class="line">SEG_PREFIX=gpseg</span><br><span class="line">#### Base number by which primary segment port numbers</span><br><span class="line">#### are calculated.</span><br><span class="line">PORT_BASE=40000</span><br><span class="line"></span><br><span class="line">#### File system location(s) where primary segment data directories</span><br><span class="line">#### will be created. The number of locations in the list dictate</span><br><span class="line">#### the number of primary segments that will get created per</span><br><span class="line">#### physical host (if multiple addresses for a host are listed in</span><br><span class="line">#### the hostfile, the number of segments will be spread evenly across</span><br><span class="line">#### the specified interface addresses).</span><br><span class="line"></span><br><span class="line">declare -a DATA_DIRECTORY=(/home/gpadmin/gpdata/gpdatap1  /home/gpadmin/gpdata/gpdatap2)</span><br><span class="line">#### OS-configured hostname or IP address of the master host.</span><br><span class="line">MASTER_HOSTNAME=hadoopc</span><br><span class="line"></span><br><span class="line">#### File system location where the master data directory</span><br><span class="line">#### will be created.</span><br><span class="line">MASTER_DIRECTORY=/home/gpadmin/gpdata/gpmaster</span><br><span class="line"></span><br><span class="line">#### Port number for the master instance.</span><br><span class="line">MASTER_PORT=5432</span><br><span class="line">#### Shell utility used to connect to remote hosts.</span><br><span class="line">TRUSTED_SHELL=/usr/bin/ssh</span><br><span class="line"></span><br><span class="line">#### Maximum log file segments between automatic WAL checkpoints.</span><br><span class="line">CHECK_POINT_SEGMENTS=8</span><br><span class="line"></span><br><span class="line">#### Default server-side character set encoding.</span><br><span class="line">ENCODING=UNICODE</span><br><span class="line"></span><br><span class="line">################################################</span><br><span class="line">#### OPTIONAL MIRROR PARAMETERS</span><br><span class="line">################################################</span><br><span class="line">#### Base number by which mirror segment port numbers</span><br><span class="line">#### are calculated.</span><br><span class="line">MIRROR_PORT_BASE=50000</span><br><span class="line"></span><br><span class="line">#### Base number by which primary file replication port</span><br><span class="line">#### numbers are calculated.</span><br><span class="line">REPLICATION_PORT_BASE=41000</span><br><span class="line"></span><br><span class="line">#### Base number by which mirror file replication port</span><br><span class="line">#### numbers are calculated.</span><br><span class="line">MIRROR_REPLICATION_PORT_BASE=51000</span><br><span class="line"></span><br><span class="line">#### File system location(s) where mirror segment data directories</span><br><span class="line">#### will be created. The number of mirror locations must equal the</span><br><span class="line">#### number of primary locations as specified in the</span><br><span class="line">#### DATA_DIRECTORY parameter.</span><br><span class="line">declare -a MIRROR_DATA_DIRECTORY=(/home/gpadmin/gpdata/gpdatam1 /home/gpadmin/gpdata/gpdatam2)</span><br><span class="line">################################################</span><br><span class="line">#### OTHER OPTIONAL PARAMETERS</span><br><span class="line">################################################</span><br><span class="line"></span><br><span class="line">#### Create a database of this name after initialization.</span><br><span class="line">DATABASE_NAME=mydb</span><br></pre></td></tr></table></figure>
+<h3 id="初始化系统"><a href="#初始化系统" class="headerlink" title="初始化系统"></a>初始化系统</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpinitsystem -c /home/gpadmin/conf/gpinitsystem_config -h /home/gpadmin/conf/seg_host</span><br></pre></td></tr></table></figure>
+<h3 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[gpadmin@hadoopc conf]$ vi pgsh</span><br><span class="line">export PGPORT=5432</span><br><span class="line">export PGDATABASE=mydb</span><br><span class="line">export MASTER_DATA_DIRECTORY=/home/gpadmin/gpdata/gpmaster/gpseg-1</span><br><span class="line">source /usr/local/gpadmin/greenplum-db/greenplum_path.sh</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/16/linux/linux工具/VirtualBox 操作命令随笔/" rel="next" title="VirtualBox 操作命令随笔">
+                <i class="fa fa-chevron-left"></i> VirtualBox 操作命令随笔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/05/linux/linux工具/fastdfs-nginx-module安装/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建用户"><span class="nav-number">2.</span> <span class="nav-text">创建用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装目录创建"><span class="nav-number">3.</span> <span class="nav-text">安装目录创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建hostlist-在主节点"><span class="nav-number">4.</span> <span class="nav-text">创建hostlist,在主节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建seg-host，在主节点"><span class="nav-number">5.</span> <span class="nav-text">创建seg_host，在主节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装greenplum"><span class="nav-number">6.</span> <span class="nav-text">安装greenplum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置ssh免密码登录"><span class="nav-number">7.</span> <span class="nav-text">配置ssh免密码登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在Segment节点上安装Greenplum-DB"><span class="nav-number">8.</span> <span class="nav-text">在Segment节点上安装Greenplum DB</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#集群检查，并安装检查修改"><span class="nav-number">8.1.</span> <span class="nav-text">集群检查，并安装检查修改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-1"><span class="nav-number">9.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化，只配置主节点"><span class="nav-number">10.</span> <span class="nav-text">初始化，只配置主节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化系统"><span class="nav-number">11.</span> <span class="nav-text">初始化系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记"><span class="nav-number">12.</span> <span class="nav-text">标记</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
