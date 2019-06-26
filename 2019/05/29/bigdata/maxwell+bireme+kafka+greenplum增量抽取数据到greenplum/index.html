@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum">
+<meta name="keywords" content="maxwell bireme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum">
+<meta property="og:url" content="https://zixujing.github.io/2019/05/29/bigdata/maxwell+bireme+kafka+greenplum增量抽取数据到greenplum/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T04:55:22.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum">
+<meta name="twitter:description" content="maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/05/29/bigdata/maxwell+bireme+kafka+greenplum增量抽取数据到greenplum/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/05/29/bigdata/maxwell+bireme+kafka+greenplum增量抽取数据到greenplum/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-29 02:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T02:00:00+08:00">2019-05-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-26 12:55:22" itemprop="dateModified" datetime="2019-06-26T12:55:22+08:00">2019-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>maxwell+bireme+kafka+greenplum  mysql增量数据抽取到greenplum<br><a id="more"></a></p>
+</blockquote>
+<h2 id="Maxwell-数据源"><a href="#Maxwell-数据源" class="headerlink" title="Maxwell 数据源"></a>Maxwell 数据源</h2><h3 id="配置mysql"><a href="#配置mysql" class="headerlink" title="配置mysql"></a>配置mysql</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">server-id=1</span><br><span class="line">log-bin=master</span><br><span class="line">binlog_format=row</span><br><span class="line"></span><br><span class="line">mysql -uroot -pxxxx</span><br><span class="line"></span><br><span class="line">mysql&gt; create user &apos;maxwell&apos;@&apos;%&apos; identified by &apos;maxwell&apos;;</span><br><span class="line">mysql&gt; GRANT ALL on maxwell.* to &apos;maxwell&apos;@&apos;%&apos;;</span><br><span class="line">mysql&gt; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &apos;maxwell&apos;@&apos;%&apos;;</span><br><span class="line">如果是mysql8 则执行alter user &apos;maxwell&apos;@&apos;%&apos; identified with mysql_native_password by &apos;maxwell&apos;;</span><br><span class="line">mysql&gt; CREATE DATABASE test;</span><br><span class="line">mysql&gt; create table test.test (id int primary key, name varchar(10));</span><br></pre></td></tr></table></figure>
+<h3 id="创建kafka的topic"><a href="#创建kafka的topic" class="headerlink" title="创建kafka的topic"></a>创建kafka的topic</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic maxwell --zookeeper 192.168.11.97:2181 --partitions 3 --replication-factor 2</span><br><span class="line">bin/kafka-topics.sh --list --zookeeper localhost:2181</span><br></pre></td></tr></table></figure>
+<h3 id="在GreenPlum中新建表"><a href="#在GreenPlum中新建表" class="headerlink" title="在GreenPlum中新建表"></a>在GreenPlum中新建表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database maxwell;</span><br><span class="line">\c maxwell;</span><br><span class="line">create table test(id int primary key,name varchar(10));</span><br></pre></td></tr></table></figure>
+<h3 id="启动maxwell"><a href="#启动maxwell" class="headerlink" title="启动maxwell"></a>启动maxwell</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bin/maxwell --daemon --user=&apos;maxwell&apos; --password=&apos;maxwell&apos; --host=192.168.11.99 --include_dbs=test --include_tables=test --producer=kafka --kafka_topic=maxwell --kafka.bootstrap.servers=192.168.11.99:9092</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/maxwell --user=&apos;maxwell&apos; --password=&apos;maxwell&apos; --host=192.168.11.99 --producer=stdout</span><br><span class="line">查看一下</span><br><span class="line">bin/kafka-console-consumer.sh --topic maxwell --from-beginning --bootstrap-server 192.168.11.99:9092</span><br></pre></td></tr></table></figure>
+<h3 id="maxwell配置文件配置"><a href="#maxwell配置文件配置" class="headerlink" title="maxwell配置文件配置"></a>maxwell配置文件配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">vi config</span><br><span class="line">user=maxwell</span><br><span class="line">password=maxwell</span><br><span class="line">host=192.168.11.113</span><br><span class="line">include_dbs=infoveriplatform_test</span><br><span class="line">include_tables=tb_car_record,tb_control_car,tb_control_person,tb_person_record,tb_key_car_record,tb_key_person_record,tb_security_clearance</span><br><span class="line">producer=kafka</span><br><span class="line">kafka_topic=maxwell</span><br><span class="line">kafka.bootstrap.servers=192.168.11.97:9092,192.168.11.98:9092,192.168.11.99:9092</span><br><span class="line">kafka_partition_hash=murmur3</span><br><span class="line">producer_partition_by=primary_key</span><br><span class="line"></span><br><span class="line">./maxwell --daemon --config=config</span><br></pre></td></tr></table></figure>
+<h3 id="关于XA问题解决"><a href="#关于XA问题解决" class="headerlink" title="关于XA问题解决"></a>关于XA问题解决</h3><p> I don’t know whether to add this code in com.zendesk.maxwell.schema.ddl.SchemaChange.java is best way to solve this problem,but can start maxwell normally.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL_BLACKLIST.add(Pattern.compile(&quot;\\s*XA\\s+&quot;, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE));</span><br></pre></td></tr></table></figure></p>
+<h2 id="bireme-配置及启动"><a href="#bireme-配置及启动" class="headerlink" title="bireme 配置及启动"></a>bireme 配置及启动</h2><blockquote>
+<p>使用bireme-2.0.0-alpha-1比bireme-1.0.0会好一点</p>
+</blockquote>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd </span><br><span class="line">vi `pwd`/etc/config.properties</span><br><span class="line">target.url = jdbc:postgresql://192.168.11.84:5432/maxwell</span><br><span class="line">target.user = gpadmin</span><br><span class="line">target.passwd = gpadmin</span><br><span class="line"></span><br><span class="line">data_source = mysql</span><br><span class="line">mysql.type = maxwell</span><br><span class="line">mysql.kafka.server = 192.168.11.99:9092</span><br><span class="line">mysql.kafka.topic = maxwell</span><br><span class="line">state.server.addr = 192.168.11.111</span><br><span class="line"></span><br><span class="line"> vi `pwd`/etc/mysql.properties</span><br><span class="line">test.test=public.test</span><br></pre></td></tr></table></figure>
+<p>###启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">需要关联软件apache-commons-daemon-jsvc-1.0.13-7.el7.x86_64</span><br><span class="line">bin/bireme start</span><br></pre></td></tr></table></figure>
+<p>###结束<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/bireme stop</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/maxwell-bireme/" rel="tag"># maxwell bireme</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/27/bigdata/kafka的SASL配置/" rel="next" title="kafka的SASL配置">
+                <i class="fa fa-chevron-left"></i> kafka的SASL配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/29/bigdata/Maxwell配置详解/" rel="prev" title="Maxwell配置详解">
+                Maxwell配置详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maxwell-数据源"><span class="nav-number">1.</span> <span class="nav-text">Maxwell 数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置mysql"><span class="nav-number">1.1.</span> <span class="nav-text">配置mysql</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建kafka的topic"><span class="nav-number">1.2.</span> <span class="nav-text">创建kafka的topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在GreenPlum中新建表"><span class="nav-number">1.3.</span> <span class="nav-text">在GreenPlum中新建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动maxwell"><span class="nav-number">1.4.</span> <span class="nav-text">启动maxwell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxwell配置文件配置"><span class="nav-number">1.5.</span> <span class="nav-text">maxwell配置文件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于XA问题解决"><span class="nav-number">1.6.</span> <span class="nav-text">关于XA问题解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bireme-配置及启动"><span class="nav-number">2.</span> <span class="nav-text">bireme 配置及启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="kafka 2.12-2.1.1 集群安装">
+<meta name="keywords" content="kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka 集群安装">
+<meta property="og:url" content="https://zixujing.github.io/2019/05/07/bigdata/kafka 集群安装/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="kafka 2.12-2.1.1 集群安装">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T04:55:22.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kafka 集群安装">
+<meta name="twitter:description" content="kafka 2.12-2.1.1 集群安装">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/05/07/bigdata/kafka 集群安装/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>kafka 集群安装 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/05/07/bigdata/kafka 集群安装/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kafka 集群安装
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-07 02:00:00" itemprop="dateCreated datePublished" datetime="2019-05-07T02:00:00+08:00">2019-05-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-26 12:55:22" itemprop="dateModified" datetime="2019-06-26T12:55:22+08:00">2019-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>kafka 2.12-2.1.1 集群安装<br><a id="more"></a></p>
+</blockquote>
+<h2 id="jdk安装"><a href="#jdk安装" class="headerlink" title="jdk安装"></a>jdk安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cd /opt</span><br><span class="line">$ tar -xzvf jdk-8u161-linux-x64.tar.gz</span><br><span class="line">$ vi ~/.bash_profile</span><br><span class="line">JAVA_HOME=/opt/jdk1.8.0_161</span><br><span class="line">PATH=$PATH:$HOME/bin:$JAVA_HOME/bin</span><br><span class="line">export PATH</span><br><span class="line">$ source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<h2 id="zk安装"><a href="#zk安装" class="headerlink" title="zk安装"></a>zk安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ tar -xzvf kafka_2.12-2.1.1.tgz -C /usr/local</span><br><span class="line">$ cd /usr/local/kafka_2.12-2.1.1/</span><br><span class="line">##zk配置</span><br><span class="line">$ vi config/zookeeper.properties</span><br><span class="line">dataDir=/opt/kafka/zkdata</span><br><span class="line">dataLogDir=/opt/kafka/zklog</span><br><span class="line">clientPort=2181</span><br><span class="line">maxClientCnxns=100</span><br><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">server.1=192.168.11.97:2888:3888</span><br><span class="line">server.2=192.168.11.98:2888:3888</span><br><span class="line">server.3=192.168.11.99:2888:3888</span><br><span class="line"></span><br><span class="line">mkdir /opt/kafka/zkdata -p</span><br><span class="line">mkdir /opt/kafka/zklog -p</span><br><span class="line">echo &quot;1&quot; &gt; /opt/kafka/zkdata/myid</span><br><span class="line">echo &quot;2&quot; &gt; /opt/kafka/zkdata/myid</span><br><span class="line">echo &quot;3&quot; &gt; /opt/kafka/zkdata/myid</span><br><span class="line"></span><br><span class="line">./bin/zookeeper-server-start.sh  config/zookeeper.properties &amp;</span><br></pre></td></tr></table></figure>
+<h2 id="kafka配置"><a href="#kafka配置" class="headerlink" title="kafka配置"></a>kafka配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/kafka_2.12-2.1.1</span><br><span class="line">$ vi config/server.properties </span><br><span class="line">broker.id=1 # 1 2 3</span><br><span class="line">listeners=PLAINTEXT://ip地址:9092</span><br><span class="line">num.network.threads=3</span><br><span class="line">num.io.threads=8</span><br><span class="line">socket.send.buffer.bytes=102400</span><br><span class="line">socket.receive.buffer.bytes=102400</span><br><span class="line">log.dirs=/opt/kafka/kfklog</span><br><span class="line">zookeeper.connect=192.168.11.97:2181,192.168.11.98:2181,192.168.11.99:2181</span><br><span class="line">zookeeper.connection.timeout.ms=6000</span><br><span class="line"></span><br><span class="line">$ mkdir /opt/kafka/kfklog</span><br><span class="line">$ bin/kafka-server-start.sh -daemon config/server.properties</span><br></pre></td></tr></table></figure>
+<h2 id="参数详解"><a href="#参数详解" class="headerlink" title="参数详解"></a>参数详解</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"># ----------------------系统相关----------------------</span><br><span class="line"># broker的全局唯一编号，不能重复，和zookeeper的myid是一个意思</span><br><span class="line">broker.id=0</span><br><span class="line"></span><br><span class="line"># broker监听IP和端口也可以是域名</span><br><span class="line">listeners=PLAINTEXT://172.16.48.163:9092</span><br><span class="line"></span><br><span class="line"># 用于接收请求的线程数量</span><br><span class="line">num.network.threads=3</span><br><span class="line"></span><br><span class="line"># 用于处理请求的线程数量，包括磁盘IO请求，这个数量和log.dirs配置的目录数量有关，这里的数量不能小于log.dirs的数量，</span><br><span class="line"># 虽然log.dirs是配置日志存放路径，但是它可以配置多个目录后面用逗号分隔</span><br><span class="line">num.io.threads=8</span><br><span class="line"></span><br><span class="line"># 发送缓冲区大小，也就是说发送消息先发送到缓冲区，当缓冲区满了之后一起发送出去</span><br><span class="line">socket.send.buffer.bytes=102400</span><br><span class="line"></span><br><span class="line"># 接收缓冲区大小，同理接收到缓冲区，当到达这个数量时就同步到磁盘</span><br><span class="line">socket.receive.buffer.bytes=102400</span><br><span class="line"></span><br><span class="line"># 向kafka套接字请求最大字节数量，防止服务器OOM，也就是OutOfMemery，这个数量不要超过JAVA的堆栈大小，</span><br><span class="line">socket.request.max.bytes=104857600</span><br><span class="line"></span><br><span class="line"># 日志路径也就是分区日志存放的地方，你所建立的topic的分区就在这里面，但是它可以配置多个目录后面用逗号分隔</span><br><span class="line">log.dirs=/tmp/kafka-logs</span><br><span class="line"></span><br><span class="line"># 消息体（也就是往Kafka发送的单条消息）最大大小，单位是字节，必须小于socket.request.max.bytes值</span><br><span class="line">message.max.bytes =5000000</span><br><span class="line"></span><br><span class="line"># 自动平衡由于某个broker故障会导致Leader副本迁移到别的broker，当之前的broker恢复后也不会迁移回来，有时候我们需要</span><br><span class="line"># 手动进行平衡避免同一个主题不同分区的Leader副本在同一台broker上，下面这个参数就是开启自动平衡功能</span><br><span class="line">auto.leader.rebalance.enable=true</span><br><span class="line"></span><br><span class="line"># 设置了上面的自动平衡，当故障转移后，隔300秒（默认）触发一个定时任务进行平衡操作，而只有代理的不均衡率为10%以上才会执行</span><br><span class="line">leader.imbalance.check.interval.seconds=300</span><br><span class="line"></span><br><span class="line"># 设置代理的不均衡率，默认是10%</span><br><span class="line">leader.imbalance.per.broker.percentage=10</span><br><span class="line"></span><br><span class="line"># ---------------分区相关-------------------------</span><br><span class="line"></span><br><span class="line"># 默认分区数量，当建立Topic时不指定分区数量，默认就1</span><br><span class="line">num.partitions=1</span><br><span class="line"></span><br><span class="line"># 是否允许自动创建topic ，若是false，就需要通过命令创建topic</span><br><span class="line">auto.create.topics.enable =true</span><br><span class="line"> </span><br><span class="line"># 一个topic ，默认分区的replication个数 ，不得大于集群中broker的个数</span><br><span class="line">default.replication.factor =2</span><br><span class="line"></span><br><span class="line"># ---------------日志相关-------------------------</span><br><span class="line"></span><br><span class="line"># segment文件默认会被保留7天的时间，超时的话就会被清理，那么清理这件事情就需要有一些线程来做。</span><br><span class="line"># 这里就是用来设置恢复和清理data下数据的线程数量</span><br><span class="line">num.recovery.threads.per.data.dir=1</span><br><span class="line"></span><br><span class="line"># 日志文件中每个segment的大小，默认为1G。topic的分区是以一堆segment文件存储的，这个控制每个segment的大小，当超过这个大小会建立一个新日志文件</span><br><span class="line"># 这个参数会被topic创建时的指定参数覆盖，如果你创建Topic的时候指定了这个参数，那么你以你指定的为准。</span><br><span class="line">log.segment.bytes=1073741824</span><br><span class="line"></span><br><span class="line"># 数据存储的最大时间 超过这个时间 会根据log.cleanup.policy设置的策略处理数据，也就是消费端能够多久去消费数据</span><br><span class="line"># log.retention.bytes和log.retention.minutes|hours任意一个达到要求，都会执行删除</span><br><span class="line"># 如果你创建Topic的时候指定了这个参数，那么你以你指定的为准</span><br><span class="line">log.retention.hours|minutes=168</span><br><span class="line"></span><br><span class="line"># 这个参数会在日志segment没有达到log.segment.bytes设置的大小默认1G的时候，也会强制新建一个segment会被</span><br><span class="line"># topic创建时的指定参数覆盖</span><br><span class="line">log.roll.hours=168 </span><br><span class="line"></span><br><span class="line"># 上面的参数设置了每一个segment文件的大小是1G，那么就需要有一个东西去定期检查segment文件有没有达到1G，多长时间去检查一次，</span><br><span class="line"># 就需要设置一个周期性检查文件大小的时间（单位是毫秒）。</span><br><span class="line">log.retention.check.interval.ms=300000</span><br><span class="line"></span><br><span class="line"># 日志清理策略 选择有：delete和compact 主要针对过期数据的处理，或是日志文件达到限制的额度，</span><br><span class="line"># 如果你创建Topic的时候指定了这个参数，那么你以你指定的为准</span><br><span class="line">log.cleanup.policy = delete</span><br><span class="line"></span><br><span class="line"># 是否启用日志清理功能，默认是启用的且清理策略为compact，也就是压缩。</span><br><span class="line">log.cleaner.enable=false</span><br><span class="line"></span><br><span class="line"># 日志清理时所使用的缓存空间大小</span><br><span class="line">log.cleaner.dedupe.buffer.size=134217728</span><br><span class="line"></span><br><span class="line"># log文件&quot;sync&quot;到磁盘之前累积的消息条数，因为磁盘IO操作是一个慢操作,但又是一个&quot;数据可靠性&quot;的必要手段</span><br><span class="line"># 所以此参数的设置,需要在&quot;数据可靠性&quot;与&quot;性能&quot;之间做必要的权衡.</span><br><span class="line"># 如果此值过大,将会导致每次&quot;fsync&quot;的时间较长(IO阻塞)</span><br><span class="line"># 如果此值过小,将会导致&quot;fsync&quot;的次数较多,这也意味着整体的client请求有一定的延迟.</span><br><span class="line"># 物理server故障,将会导致没有fsync的消息丢失.</span><br><span class="line">log.flush.interval.messages=9223372036854775807</span><br><span class="line"></span><br><span class="line"># 检查是否需要固化到硬盘的时间间隔</span><br><span class="line">log.flush.scheduler.interval.ms =3000</span><br><span class="line"> </span><br><span class="line"># 仅仅通过interval来控制消息的磁盘写入时机,是不足的.</span><br><span class="line"># 此参数用于控制&quot;fsync&quot;的时间间隔,如果消息量始终没有达到阀值,但是离上一次磁盘同步的时间间隔</span><br><span class="line"># 达到阀值,也将触发.</span><br><span class="line">log.flush.interval.ms = None</span><br><span class="line"></span><br><span class="line"># --------------------------复制(Leader、replicas) 相关-------------------</span><br><span class="line"># partition leader与replicas之间通讯时,socket的超时时间</span><br><span class="line">controller.socket.timeout.ms =30000</span><br><span class="line"></span><br><span class="line"># replicas响应partition leader的最长等待时间，若是超过这个时间，就将replicas列入ISR(in-sync replicas)，</span><br><span class="line"># 并认为它是死的，不会再加入管理中</span><br><span class="line">replica.lag.time.max.ms =10000</span><br><span class="line"></span><br><span class="line"># follower与leader之间的socket超时时间</span><br><span class="line">replica.socket.timeout.ms=300000</span><br><span class="line"></span><br><span class="line"># leader复制时候的socket缓存大小</span><br><span class="line">replica.socket.receive.buffer.bytes=65536</span><br><span class="line"></span><br><span class="line"># replicas每次获取数据的最大大小</span><br><span class="line">replica.fetch.max.bytes =1048576</span><br><span class="line"></span><br><span class="line"># replicas同leader之间通信的最大等待时间，失败了会重试</span><br><span class="line">replica.fetch.wait.max.ms =500</span><br><span class="line"></span><br><span class="line"># fetch的最小数据尺寸,如果leader中尚未同步的数据不足此值,将会阻塞,直到满足条件</span><br><span class="line">replica.fetch.min.bytes =1</span><br><span class="line"></span><br><span class="line"># leader 进行复制的线程数，增大这个数值会增加follower的IO</span><br><span class="line">num.replica.fetchers=1</span><br><span class="line"></span><br><span class="line"># 最小副本数量</span><br><span class="line">min.insync.replicas = 2</span><br></pre></td></tr></table></figure>
+<h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --zookeeper 192.168.11.97:2181,192.168.11.98:2181,192.168.11.99:2181 --replication-factor 2 --partitions 1 --topic test</span><br><span class="line">bin/kafka-console-producer.sh --broker-list 192.168.11.97:9092 --topic test</span><br><span class="line">bin/kafka-console-consumer.sh --boostrap-server 192.168.11.97:9092 --topic test --from-beginning</span><br><span class="line">bin/kafka-topics.sh --list --zookeeper 192.168.11.97:2181,192.168.11.98:2181,192.168.11.99:2181</span><br><span class="line">bin/kafka-topics.sh --describe --zookeeper 192.168.11.99:2181 </span><br><span class="line">bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic maxwell --partitions 1 --broker-list 192.168.11.99:9092</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/06/linux/linux工具/fastdfs-nginx-module安装/" rel="next" title="fastdfs-nginx-module安装">
+                <i class="fa fa-chevron-left"></i> fastdfs-nginx-module安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/09/bigdata/logstash input说明/" rel="prev" title="logstash input说明">
+                logstash input说明 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#jdk安装"><span class="nav-number">1.</span> <span class="nav-text">jdk安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zk安装"><span class="nav-number">2.</span> <span class="nav-text">zk安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka配置"><span class="nav-number">3.</span> <span class="nav-text">kafka配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数详解"><span class="nav-number">4.</span> <span class="nav-text">参数详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些命令"><span class="nav-number">5.</span> <span class="nav-text">一些命令</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
