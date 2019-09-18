@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="hadoop配置说明">
+<meta name="keywords" content="hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop配置说明">
+<meta property="og:url" content="https://zixujing.github.io/2019/08/22/bigdata/hadoop配置说明/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="hadoop配置说明">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-15T08:25:06.063Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hadoop配置说明">
+<meta name="twitter:description" content="hadoop配置说明">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/08/22/bigdata/hadoop配置说明/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>hadoop配置说明 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/08/22/bigdata/hadoop配置说明/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hadoop配置说明
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-22 02:00:00" itemprop="dateCreated datePublished" datetime="2019-08-22T02:00:00+08:00">2019-08-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-15 16:25:06" itemprop="dateModified" datetime="2019-09-15T16:25:06+08:00">2019-09-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>hadoop配置说明<br><a id="more"></a></p>
+</blockquote>
+<h2 id="ResourceManager相关配置参数"><a href="#ResourceManager相关配置参数" class="headerlink" title="ResourceManager相关配置参数"></a>ResourceManager相关配置参数</h2><ul>
+<li>yarn.resourcemanager.address</li>
+</ul>
+<blockquote>
+<p>参数解释：ResourceManager 对客户端暴露的地址。客户端通过该地址向RM提交应用程序，杀死应用程序等。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.resourcemanager.hostname}:8032</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.scheduler.address</li>
+</ul>
+<blockquote>
+<p>参数解释：ResourceManager 对ApplicationMaster暴露的访问地址。ApplicationMaster通过该地址向RM申请资源、释放资源等。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.resourcemanager.hostname}:8030</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.resource-tracker.address</li>
+</ul>
+<blockquote>
+<p>参数解释：ResourceManager 对NodeManager暴露的地址.。NodeManager通过该地址向RM汇报心跳，领取任务等。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.resourcemanager.hostname}:8031</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.admin.address</li>
+</ul>
+<blockquote>
+<p>参数解释：ResourceManager 对管理员暴露的访问地址。管理员通过该地址向RM发送管理命令等。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.resourcemanager.hostname}:8033</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.webapp.address</li>
+</ul>
+<blockquote>
+<p>参数解释：ResourceManager对外web ui地址。用户可通过该地址在浏览器中查看集群各类信息。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.resourcemanager.hostname}:8088</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.scheduler.class</li>
+</ul>
+<blockquote>
+<p>参数解释：启用的资源调度器主类。目前可用的有FIFO、Capacity Scheduler和Fair Scheduler。</p>
+</blockquote>
+<blockquote>
+<p>默认值：org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.resource-tracker.client.thread-count</li>
+</ul>
+<blockquote>
+<p>参数解释：处理来自NodeManager的RPC请求的Handler数目。</p>
+</blockquote>
+<blockquote>
+<p>默认值：50</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.scheduler.client.thread-count</li>
+</ul>
+<blockquote>
+<p>参数解释：处理来自ApplicationMaster的RPC请求的Handler数目。</p>
+</blockquote>
+<blockquote>
+<p>默认值：50</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.minimum-allocation-mb/ yarn.scheduler.maximum-allocation-mb</li>
+</ul>
+<blockquote>
+<p>参数解释：单个可申请的最小/最大内存资源量。比如设置为1024和3072，则运行MapRedce作业时，每个Task最少可申请1024MB内存，最多可申请3072MB内存。</p>
+</blockquote>
+<blockquote>
+<p>默认值：1024/8192</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.minimum-allocation-vcores / yarn.scheduler.maximum-allocation-vcores</li>
+</ul>
+<blockquote>
+<p>参数解释：单个可申请的最小/最大虚拟CPU个数。比如设置为1和4，则运行MapRedce作业时，每个Task最少可申请1个虚拟CPU，最多可申请4个虚拟CPU。什么是虚拟CPU，可阅读我的这篇文章：“YARN 资源调度器剖析”。</p>
+</blockquote>
+<blockquote>
+<p>默认值：1/32</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.nodes.include-path /yarn.resourcemanager.nodes.exclude-path</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager黑白名单。如果发现若干个NodeManager存在问题，比如故障率很高，任务运行失败率高，则可以将之加入黑名单中。注意，这两个配置参数可以动态生效。（调用一个refresh命令即可）</p>
+</blockquote>
+<blockquote>
+<p>默认值：“”</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.nodemanagers.heartbeat-interval-ms</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager心跳间隔</p>
+</blockquote>
+<blockquote>
+<p>默认值：1000（毫秒）</p>
+</blockquote>
+<h2 id="NodeManager相关配置参数"><a href="#NodeManager相关配置参数" class="headerlink" title="NodeManager相关配置参数"></a>NodeManager相关配置参数</h2><ul>
+<li>yarn.nodemanager.resource.memory-mb</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager总的可用物理内存。注意，该参数是不可修改的，一旦设置，整个运行过程中不可动态修改。另外，该参数的默认值是8192MB，即使你的机器内存不够8192MB，YARN也会按照这些内存来使用（傻不傻？），因此，这个值通过一定要配置。不过，Apache已经正在尝试将该参数做成可动态修改的。</p>
+</blockquote>
+<blockquote>
+<p>默认值：8192</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.vmem-pmem-ratio</li>
+</ul>
+<blockquote>
+<p>参数解释：每使用1MB物理内存，最多可用的虚拟内存数。</p>
+</blockquote>
+<blockquote>
+<p>默认值：2.1</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.resource.cpu-vcores</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager总的可用虚拟CPU个数。</p>
+</blockquote>
+<blockquote>
+<p>默认值：8</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.local-dirs</li>
+</ul>
+<blockquote>
+<p>参数解释：中间结果存放位置，类似于1.0中的mapred.local.dir。注意，这个参数通常会配置多个目录，已分摊磁盘IO负载。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${hadoop.tmp.dir}/nm-local-dir</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.log-dirs</li>
+</ul>
+<blockquote>
+<p>参数解释：日志存放地址（可配置多个目录）。</p>
+</blockquote>
+<blockquote>
+<p>默认值：${yarn.log.dir}/userlogs</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.log.retain-seconds</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager上日志最多存放时间（不启用日志聚集功能时有效）。</p>
+</blockquote>
+<blockquote>
+<p>默认值：10800（3小时）</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.aux-services</li>
+</ul>
+<blockquote>
+<p>参数解释：NodeManager上运行的附属服务。需配置成mapreduce_shuffle，才可运行MapReduce程序</p>
+</blockquote>
+<blockquote>
+<p>默认值：“”</p>
+</blockquote>
+<h2 id="端口总结"><a href="#端口总结" class="headerlink" title="端口总结"></a>端口总结</h2><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9000</td>
+<td>fs.defaultFS，如：hdfs://172.25.40.171:9000</td>
+</tr>
+<tr>
+<td>9001</td>
+<td>dfs.namenode.rpc-address，DataNode会连接这个端口</td>
+</tr>
+<tr>
+<td>50070</td>
+<td>dfs.namenode.http-address</td>
+</tr>
+<tr>
+<td>50470</td>
+<td>dfs.namenode.https-address</td>
+</tr>
+<tr>
+<td>50100</td>
+<td>dfs.namenode.backup.address</td>
+</tr>
+<tr>
+<td>50105</td>
+<td>dfs.namenode.backup.http-address</td>
+</tr>
+<tr>
+<td>50090</td>
+<td>dfs.namenode.secondary.http-address，如：172.25.39.166:50090</td>
+</tr>
+<tr>
+<td>50091</td>
+<td>dfs.namenode.secondary.https-address，如：172.25.39.166:50091</td>
+</tr>
+<tr>
+<td>50020</td>
+<td>dfs.datanode.ipc.address</td>
+</tr>
+<tr>
+<td>50075</td>
+<td>dfs.datanode.http.address</td>
+</tr>
+<tr>
+<td>50475</td>
+<td>dfs.datanode.https.address</td>
+</tr>
+<tr>
+<td>50010</td>
+<td>dfs.datanode.address，DataNode的数据传输端口</td>
+</tr>
+<tr>
+<td>8480</td>
+<td>dfs.journalnode.rpc-address</td>
+</tr>
+<tr>
+<td>8481</td>
+<td>dfs.journalnode.https-address</td>
+</tr>
+<tr>
+<td>8032</td>
+<td>yarn.resourcemanager.address</td>
+</tr>
+<tr>
+<td>8088</td>
+<td>yarn.resourcemanager.webapp.address，YARN的http端口</td>
+</tr>
+<tr>
+<td>8090</td>
+<td>yarn.resourcemanager.webapp.https.address</td>
+</tr>
+<tr>
+<td>8030</td>
+<td>yarn.resourcemanager.scheduler.address</td>
+</tr>
+<tr>
+<td>8031</td>
+<td>yarn.resourcemanager.resource-tracker.address</td>
+</tr>
+<tr>
+<td>8033</td>
+<td>yarn.resourcemanager.admin.address</td>
+</tr>
+<tr>
+<td>8042</td>
+<td>yarn.nodemanager.webapp.address</td>
+</tr>
+<tr>
+<td>8040</td>
+<td>yarn.nodemanager.localizer.address</td>
+</tr>
+<tr>
+<td>8188</td>
+<td>yarn.timeline-service.webapp.address</td>
+</tr>
+<tr>
+<td>10020</td>
+<td>mapreduce.jobhistory.address</td>
+</tr>
+<tr>
+<td>19888</td>
+<td>mapreduce.jobhistory.webapp.address</td>
+</tr>
+<tr>
+<td>2888</td>
+<td>ZooKeeper，如果是Leader，用来监听Follower的连接</td>
+</tr>
+<tr>
+<td>3888</td>
+<td>ZooKeeper，用于Leader选举</td>
+</tr>
+<tr>
+<td>2181</td>
+<td>ZooKeeper，用来监听客户端的连接</td>
+</tr>
+<tr>
+<td>60010</td>
+<td>hbase.master.info.port，HMaster的http端口</td>
+</tr>
+<tr>
+<td>60000</td>
+<td>hbase.master.port，HMaster的RPC端口</td>
+</tr>
+<tr>
+<td>60030</td>
+<td>hbase.regionserver.info.port，HRegionServer的http端口</td>
+</tr>
+<tr>
+<td>60020</td>
+<td>hbase.regionserver.port，HRegionServer的RPC端口</td>
+</tr>
+<tr>
+<td>8080</td>
+<td>hbase.rest.port，HBase REST server的端口</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>hive.server2.thrift.port</td>
+</tr>
+<tr>
+<td>9083</td>
+<td>hive.metastore.uris</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/08/bigdata/neo4j.配置/" rel="next" title="neo4j 3.5.4 配置">
+                <i class="fa fa-chevron-left"></i> neo4j 3.5.4 配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/18/linux/linux工具/mysql备份脚本/" rel="prev" title="mysql�Զ����ݽű�">
+                mysql�Զ����ݽű� <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager相关配置参数"><span class="nav-number">1.</span> <span class="nav-text">ResourceManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeManager相关配置参数"><span class="nav-number">2.</span> <span class="nav-text">NodeManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口总结"><span class="nav-number">3.</span> <span class="nav-text">端口总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
