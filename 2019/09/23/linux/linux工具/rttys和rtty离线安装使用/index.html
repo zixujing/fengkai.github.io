@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="rttys和rtty离线安装使用">
+<meta name="keywords" content="tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rttys和rtty离线安装使用">
+<meta property="og:url" content="https://zixujing.github.io/2019/09/23/linux/linux工具/rttys和rtty离线安装使用/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="rttys和rtty离线安装使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-09T16:58:54.964Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rttys和rtty离线安装使用">
+<meta name="twitter:description" content="rttys和rtty离线安装使用">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/09/23/linux/linux工具/rttys和rtty离线安装使用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>rttys和rtty离线安装使用 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/09/23/linux/linux工具/rttys和rtty离线安装使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">rttys和rtty离线安装使用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-23 02:00:00" itemprop="dateCreated datePublished" datetime="2019-09-23T02:00:00+08:00">2019-09-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-10 00:58:54" itemprop="dateModified" datetime="2019-10-10T00:58:54+08:00">2019-10-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>rttys和rtty离线安装使用<br><a id="more"></a></p>
+</blockquote>
+<h2 id="rttys离线安装说明"><a href="#rttys离线安装说明" class="headerlink" title="rttys离线安装说明"></a>rttys离线安装说明</h2><blockquote>
+<p><a href="https://github.com/zhaojh329/rttys/releases下载合适的rttys" target="_blank" rel="noopener">https://github.com/zhaojh329/rttys/releases下载合适的rttys</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@sdw3 ~]# tar -xzvf rttys-linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="查看支持哪些命令行参数"><a href="#查看支持哪些命令行参数" class="headerlink" title="查看支持哪些命令行参数"></a>查看支持哪些命令行参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">./rttys -h</span><br><span class="line">Usage of ./rttys:</span><br><span class="line">  -addr string</span><br><span class="line">        address to listen (default &quot;:5912&quot;)</span><br><span class="line">  -conf string</span><br><span class="line">        config file to load (default &quot;./rttys.conf&quot;)</span><br><span class="line">  -gen-token</span><br><span class="line">        generate token</span><br><span class="line">  -ssl-cert string</span><br><span class="line">        certFile Path (default &quot;./rttys.crt&quot;)</span><br><span class="line">  -ssl-key string</span><br><span class="line">        keyFile Path (default &quot;./rttys.key&quot;)</span><br><span class="line">  -token string</span><br><span class="line">        token to use</span><br></pre></td></tr></table></figure>
+<h3 id="以root用户运行-使用系统用户名和密码"><a href="#以root用户运行-使用系统用户名和密码" class="headerlink" title="以root用户运行(使用系统用户名和密码)"></a>以root用户运行(使用系统用户名和密码)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sudo ./rttys</span><br></pre></td></tr></table></figure>
+<h3 id="以普通用户运行-用户名和密码来自配置文件"><a href="#以普通用户运行-用户名和密码来自配置文件" class="headerlink" title="以普通用户运行(用户名和密码来自配置文件)"></a>以普通用户运行(用户名和密码来自配置文件)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rttys</span><br></pre></td></tr></table></figure>
+<h3 id="如何在后台运行模式下查看日志"><a href="#如何在后台运行模式下查看日志" class="headerlink" title="如何在后台运行模式下查看日志"></a>如何在后台运行模式下查看日志</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /var/log/rttys.log</span><br></pre></td></tr></table></figure>
+<h3 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">./rttys -gen-token</span><br><span class="line">Please set a password:******</span><br><span class="line">Your token is: 34762d07637276694b938d23f10d7164</span><br><span class="line"></span><br><span class="line">./rttys -token 34762d07637276694b938d23f10d7164</span><br></pre></td></tr></table></figure>
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><blockquote>
+<p>帐号密码为服务器帐号密码</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://192.168.106.237:5912</span><br></pre></td></tr></table></figure>
+<h2 id="rtty离线安装使用"><a href="#rtty离线安装使用" class="headerlink" title="rtty离线安装使用"></a>rtty离线安装使用</h2><h3 id="客户端依赖"><a href="#客户端依赖" class="headerlink" title="客户端依赖"></a>客户端依赖</h3><ul>
+<li>libev 高性能的事件循环库</li>
+<li>libuwsc 一个轻量的针对嵌入式Linux的基于libev的WebSocket客户端C库。</li>
+<li>mbedtls(polarssl)、CyaSSl(wolfssl)或者openssl 如果你需要支持SSL</li>
+</ul>
+<blockquote>
+<p>离线安装例子<br>libev：地址=》<a href="https://src.fedoraproject.org/repo/pkgs/libev/libev-4.27.tar.gz/sha512/18fbac15c3a24b2efcd547d98d423fe59a1684cd3afe7ff25a3da54d8df3e11f351df455657d830df93366853f74d584f6e47a7c9ffaba84aa586957bf39ea82/libev-4.27.tar.gz：./configure" target="_blank" rel="noopener">https://src.fedoraproject.org/repo/pkgs/libev/libev-4.27.tar.gz/sha512/18fbac15c3a24b2efcd547d98d423fe59a1684cd3afe7ff25a3da54d8df3e11f351df455657d830df93366853f74d584f6e47a7c9ffaba84aa586957bf39ea82/libev-4.27.tar.gz：./configure</a> &amp;&amp; make &amp;&amp; makeinstall<br>libywsc: 再下面的sh中通过git下载后编译安装<br>openssl：使用yum安装，搭建本地yum源即可安装</p>
+</blockquote>
+<h3 id="安装rtty"><a href="#安装rtty" class="headerlink" title="安装rtty"></a>安装rtty</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://raw.githubusercontent.com/zhaojh329/rtty/master/tools/install.sh | sudo bash</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>install.sh说明</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">LSB_ID=</span><br><span class="line">INSTALL=</span><br><span class="line">REMOVE=</span><br><span class="line">UPDATE=</span><br><span class="line">PKG_LIBEV=&quot;libev-dev&quot;</span><br><span class="line">PKG_SSL=&quot;libssl-dev&quot;</span><br><span class="line">show_distribution() &#123;</span><br><span class="line"></span><br><span class="line">       local pretty_name=&quot;&quot;</span><br><span class="line">       if [ -f /etc/os-release ];</span><br><span class="line">       then</span><br><span class="line">               . /etc/os-release</span><br><span class="line">               pretty_name=&quot;$PRETTY_NAME&quot;</span><br><span class="line">               LSB_ID=&quot;$(echo &quot;$ID&quot; | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)&quot;</span><br><span class="line">       elif [ -f /etc/redhat-release ];</span><br><span class="line">       then</span><br><span class="line">               pretty_name=$(cat /etc/redhat-release)</span><br><span class="line">               LSB_ID=&quot;$(echo &quot;$pretty_name&quot; | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)&quot;</span><br><span class="line">               echo &quot;$LSB_ID&quot; | grep centos &gt; /dev/null &amp;&amp; LSB_ID=centos</span><br><span class="line">       fi</span><br><span class="line">       LSB_ID=$(echo &quot;$LSB_ID&quot; | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)</span><br><span class="line">       echo &quot;Platform: $pretty_name&quot;</span><br><span class="line">&#125;</span><br><span class="line">check_cmd() &#123;</span><br><span class="line">       which $1 &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">&#125;</span><br><span class="line">detect_pkg_tool() &#123;</span><br><span class="line">       check_cmd apt &amp;&amp; &#123;</span><br><span class="line">               UPDATE=&quot;apt update -q&quot;</span><br><span class="line">               INSTALL=&quot;apt install -y&quot;</span><br><span class="line">               REMOVE=&quot;apt remove -y&quot;</span><br><span class="line">               return 0</span><br><span class="line">       &#125;</span><br><span class="line">       check_cmd apt-get &amp;&amp; &#123;</span><br><span class="line">               UPDATE=&quot;apt-get update -q&quot;</span><br><span class="line">               INSTALL=&quot;apt-get install -y&quot;</span><br><span class="line">               REMOVE=&quot;apt-get remove -y&quot;</span><br><span class="line">               return 0</span><br><span class="line">       &#125;</span><br><span class="line">       check_cmd yum &amp;&amp; &#123;</span><br><span class="line">               UPDATE=&quot;yum update -yq&quot;</span><br><span class="line">               INSTALL=&quot;yum install -y&quot;</span><br><span class="line">               REMOVE=&quot;yum &quot;</span><br><span class="line">               PKG_LIBEV=&quot;libev-devel&quot;</span><br><span class="line">               PKG_SSL=&quot;openssl-devel&quot;</span><br><span class="line">               return 0</span><br><span class="line">       &#125;</span><br><span class="line">       check_cmd pacman &amp;&amp; &#123;</span><br><span class="line">               UPDATE=&quot;pacman -Sy --noprogressbar&quot;</span><br><span class="line">               INSTALL=&quot;pacman -S --noconfirm --noprogressbar&quot;</span><br><span class="line">               REMOVE=&quot;pacman -R --noconfirm --noprogressbar&quot;</span><br><span class="line">               PKG_LIBEV=&quot;libev&quot;</span><br><span class="line">               PKG_SSL=&quot;openssl&quot;</span><br><span class="line">               return 0</span><br><span class="line">       &#125;</span><br><span class="line">       return 1</span><br><span class="line">&#125;</span><br><span class="line">check_tool() &#123;</span><br><span class="line">       local tool=$1</span><br><span class="line"></span><br><span class="line">       check_cmd $tool || $INSTALL $tool</span><br><span class="line">&#125;</span><br><span class="line">show_distribution</span><br><span class="line">detect_pkg_tool || &#123;</span><br><span class="line">       echo &quot;Your platform is not supported by this installer script.&quot;</span><br><span class="line">       exit 1</span><br><span class="line">&#125;</span><br><span class="line">#$UPDATE</span><br><span class="line">[ &quot;$LSB_ID&quot; = &quot;centos&quot; ] &amp;&amp; $INSTALL epel-release</span><br><span class="line">check_tool pkg-config</span><br><span class="line">check_tool gcc</span><br><span class="line">check_tool make</span><br><span class="line">check_tool cmake</span><br><span class="line">check_tool git</span><br><span class="line">$INSTALL $PKG_LIBEV</span><br><span class="line">$INSTALL $PKG_SSL</span><br><span class="line">rm -rf /tmp/rtty-build</span><br><span class="line">mkdir /tmp/rtty-build</span><br><span class="line">pushd /tmp/rtty-build</span><br><span class="line">git clone --recursive https://github.com/zhaojh329/libuwsc.git || &#123;</span><br><span class="line">       echo &quot;Clone libuwsc failed&quot;</span><br><span class="line">       exit 1</span><br><span class="line">&#125;</span><br><span class="line">sleep 2</span><br><span class="line">git clone https://github.com/zhaojh329/rtty.git || &#123;</span><br><span class="line">       echo &quot;Clone rtty failed&quot;</span><br><span class="line">       exit 1</span><br><span class="line">&#125;</span><br><span class="line"># libuwsc</span><br><span class="line">rm -f /usr/local/lib/libuwsc.*</span><br><span class="line">cd libuwsc &amp;&amp; cmake . &amp;&amp; make install &amp;&amp; cd -</span><br><span class="line">[ $? -eq 0 ] || exit 1</span><br><span class="line"># rtty</span><br><span class="line">cd rtty &amp;&amp; cmake . &amp;&amp; make install</span><br><span class="line">[ $? -eq 0 ] || exit 1</span><br><span class="line">popd</span><br><span class="line">rm -rf /tmp/rtty-build</span><br><span class="line">ldconfig</span><br><span class="line">case &quot;$LSB_ID&quot; in</span><br><span class="line">       centos|arch)</span><br><span class="line">               echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/rtty</span><br><span class="line">               ldconfig -f /etc/ld.so.conf.d/rtty</span><br><span class="line">       ;;</span><br><span class="line">esac</span><br><span class="line">rtty -V</span><br></pre></td></tr></table></figure>
+<h3 id="查看命令行选项rtty"><a href="#查看命令行选项rtty" class="headerlink" title="查看命令行选项rtty"></a>查看命令行选项rtty</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: rtty [option]</span><br><span class="line">  -i ifname    # Network interface name - Using the MAC address of</span><br><span class="line">                     the interface as the device ID</span><br><span class="line">  -I id        # Set an ID for the device(Maximum 63 bytes, valid character:letters</span><br><span class="line">                     and numbers and underlines and short lines) - If set,</span><br><span class="line">                     it will cover the MAC address(if you have specify the ifname)</span><br><span class="line">  -h host      # Server host</span><br><span class="line">  -p port      # Server port(Default is 5912)</span><br><span class="line">  -a           # Auto reconnect to the server</span><br><span class="line">  -v           # verbose</span><br><span class="line">  -d           # Adding a description to the device(Maximum 126 bytes)</span><br><span class="line">  -s           # SSL on</span><br><span class="line">  -k keepalive # keep alive in seconds for this client. Defaults to 5</span><br><span class="line">  -V           # Show version</span><br><span class="line">  -D           # Run in the background</span><br><span class="line">  -t token     # Authorization token</span><br></pre></td></tr></table></figure>
+<h3 id="运行RTTY-将下面的参数替换为你自己的参数-rtty"><a href="#运行RTTY-将下面的参数替换为你自己的参数-rtty" class="headerlink" title="运行RTTY(将下面的参数替换为你自己的参数)rtty"></a>运行RTTY(将下面的参数替换为你自己的参数)rtty</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rtty -I &apos;My-device-ID&apos; -h &apos;your-server&apos; -p 5912 -a -v -s -d &apos;My Device Description&apos;</span><br><span class="line">实例，不能用root登录可以用其他帐号登录</span><br><span class="line">rtty -I &quot;237&quot; -h 192.168.106.237 -p 5912 -s</span><br></pre></td></tr></table></figure>
+<h3 id="如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty"><a href="#如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty" class="headerlink" title="如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty"></a>如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-t 34762d07637276694b938d23f10d7164</span><br></pre></td></tr></table></figure>
+<h2 id="如何让root能够登录"><a href="#如何让root能够登录" class="headerlink" title="如何让root能够登录"></a>如何让root能够登录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">加入如下配置</span><br><span class="line"></span><br><span class="line">	[root@sdw3 ~]# vi /etc/securetty</span><br><span class="line"></span><br><span class="line">	pts/0</span><br><span class="line">	pts/1</span><br><span class="line">	pts/2</span><br><span class="line">	[root@sdw3 ~]# cd /etc/pam.d</span><br><span class="line">	[root@sdw3 pam.d]# cat login </span><br><span class="line">	#%PAM-1.0</span><br><span class="line">	auth [user_unknown=ignore success=ok ignore=ignore default=bad] pam_securetty.so</span><br><span class="line">	auth       substack     system-auth</span><br><span class="line">	auth       include      postlogin</span><br><span class="line">	account    required     pam_nologin.so</span><br><span class="line">	account    include      system-auth</span><br><span class="line">	password   include      system-auth</span><br><span class="line">	# pam_selinux.so close should be the first session rule</span><br><span class="line">	session    required     pam_selinux.so close</span><br><span class="line">	session    required     pam_loginuid.so</span><br><span class="line">	session    optional     pam_console.so</span><br><span class="line">	# pam_selinux.so open should only be followed by sessions to be executed in the user context</span><br><span class="line">	session    required     pam_selinux.so open</span><br><span class="line">	session    required     pam_namespace.so</span><br><span class="line">	session    optional     pam_keyinit.so force revoke</span><br><span class="line">	session    include      system-auth</span><br><span class="line">	session    include      postlogin</span><br><span class="line">	-session   optional     pam_ck_connector.so</span><br><span class="line">	[root@sdw3 pam.d]# cat sshd </span><br><span class="line">	#%PAM-1.0</span><br><span class="line">	auth       required     pam_sepermit.so</span><br><span class="line">	auth       substack     password-auth</span><br><span class="line">	auth       include      postlogin</span><br><span class="line">	# Used with polkit to reauthorize users in remote sessions</span><br><span class="line">	-auth      optional     pam_reauthorize.so prepare</span><br><span class="line">	account    required     pam_nologin.so</span><br><span class="line">	account    include      password-auth</span><br><span class="line">	password   include      password-auth</span><br><span class="line">	# pam_selinux.so close should be the first session rule</span><br><span class="line">	session    required     pam_selinux.so close</span><br><span class="line">	session    required     pam_loginuid.so</span><br><span class="line">	# pam_selinux.so open should only be followed by sessions to be executed in the user context</span><br><span class="line">	session    required     pam_selinux.so open env_params</span><br><span class="line">	session    required     pam_namespace.so</span><br><span class="line">	session    optional     pam_keyinit.so force revoke</span><br><span class="line">	session    include      password-auth</span><br><span class="line">	session    include      postlogin</span><br><span class="line">	# Used with polkit to reauthorize users in remote sessions</span><br><span class="line">	-session   optional     pam_reauthorize.so prepare</span><br><span class="line">	[root@sdw3 pam.d]# cat system-auth</span><br><span class="line">	#%PAM-1.0</span><br><span class="line">	# This file is auto-generated.</span><br><span class="line">	# User changes will be destroyed the next time authconfig is run.</span><br><span class="line">	auth        required      pam_env.so</span><br><span class="line">	auth        sufficient    pam_unix.so nullok try_first_pass</span><br><span class="line">	auth        requisite     pam_succeed_if.so uid &lt;= 1000 quiet_success</span><br><span class="line">	auth        required      pam_deny.so</span><br><span class="line">	</span><br><span class="line">	account     required      pam_unix.so</span><br><span class="line">	account     sufficient    pam_localuser.so</span><br><span class="line">	account     sufficient    pam_succeed_if.so uid &lt; 1000 quiet</span><br><span class="line">	account     required      pam_permit.so</span><br><span class="line">	</span><br><span class="line">	password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=</span><br><span class="line">	password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok</span><br><span class="line">	password    required      pam_deny.so</span><br><span class="line">	</span><br><span class="line">	session     optional      pam_keyinit.so revoke</span><br><span class="line">	session     required      pam_limits.so</span><br><span class="line">	-session     optional      pam_systemd.so</span><br><span class="line">	session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid</span><br><span class="line">	session     required      pam_unix.so</span><br><span class="line">	[root@sdw3 pam.d]# </span><br><span class="line">	修改==》</span><br><span class="line">	auth        requisite     pam_succeed_if.so uid &gt;= 1000 quiet_success</span><br><span class="line">	为==》</span><br><span class="line">	auth        requisite     pam_succeed_if.so uid &lt;= 1000 quiet_success</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tool/" rel="tag"># tool</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/22/linux/linux工具/Tomcat总结/" rel="next" title="Tomcat总结">
+                <i class="fa fa-chevron-left"></i> Tomcat总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/25/linux/linux工具/BI相关工具总结/" rel="prev" title="BI相关工具总结">
+                BI相关工具总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rttys离线安装说明"><span class="nav-number">1.</span> <span class="nav-text">rttys离线安装说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看支持哪些命令行参数"><span class="nav-number">1.1.</span> <span class="nav-text">查看支持哪些命令行参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以root用户运行-使用系统用户名和密码"><span class="nav-number">1.2.</span> <span class="nav-text">以root用户运行(使用系统用户名和密码)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以普通用户运行-用户名和密码来自配置文件"><span class="nav-number">1.3.</span> <span class="nav-text">以普通用户运行(用户名和密码来自配置文件)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何在后台运行模式下查看日志"><span class="nav-number">1.4.</span> <span class="nav-text">如何在后台运行模式下查看日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#认证"><span class="nav-number">1.5.</span> <span class="nav-text">认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看"><span class="nav-number">1.6.</span> <span class="nav-text">查看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rtty离线安装使用"><span class="nav-number">2.</span> <span class="nav-text">rtty离线安装使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端依赖"><span class="nav-number">2.1.</span> <span class="nav-text">客户端依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装rtty"><span class="nav-number">2.2.</span> <span class="nav-text">安装rtty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看命令行选项rtty"><span class="nav-number">2.3.</span> <span class="nav-text">查看命令行选项rtty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行RTTY-将下面的参数替换为你自己的参数-rtty"><span class="nav-number">2.4.</span> <span class="nav-text">运行RTTY(将下面的参数替换为你自己的参数)rtty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty"><span class="nav-number">2.5.</span> <span class="nav-text">如果你的rttys配置了一个token，请加上如下参数（将下面的token替换为你自己生成的）rtty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让root能够登录"><span class="nav-number">3.</span> <span class="nav-text">如何让root能够登录</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

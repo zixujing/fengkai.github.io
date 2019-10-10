@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="冯凯&#39;blog">
 <meta property="og:description" content="hadoop配置说明">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-15T08:25:06.063Z">
+<meta property="og:updated_time" content="2019-10-09T16:58:54.961Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hadoop配置说明">
 <meta name="twitter:description" content="hadoop配置说明">
@@ -293,6 +293,23 @@
     <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
 
   </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
 
       
       
@@ -402,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-15 16:25:06" itemprop="dateModified" datetime="2019-09-15T16:25:06+08:00">2019-09-15</time>
+                <time title="修改时间：2019-10-10 00:58:54" itemprop="dateModified" datetime="2019-10-10T00:58:54+08:00">2019-10-10</time>
               
             
           </span>
@@ -777,6 +794,259 @@
 </tr>
 </tbody>
 </table>
+<h2 id="Hadoop配置文件的层级关系"><a href="#Hadoop配置文件的层级关系" class="headerlink" title="Hadoop配置文件的层级关系"></a>Hadoop配置文件的层级关系</h2><p>  在Hadoop源码Configuration类中，先后加载了core-default.xml 和 core-site.xml ;类HdfsConfiguration继承了Configuration类，因此，hdfs-site.xml中的配置如果在core-site.xml 中配置了，那么将覆盖掉这个配置。 同理，yarn-site.xml也是这样的。</p>
+<h2 id="yarn-site-xml-重点配置讲解"><a href="#yarn-site-xml-重点配置讲解" class="headerlink" title="yarn-site.xml 重点配置讲解"></a>yarn-site.xml 重点配置讲解</h2><h3 id="与-memery-相关的配置"><a href="#与-memery-相关的配置" class="headerlink" title="与 memery 相关的配置"></a>与 memery 相关的配置</h3><ul>
+<li>yarn.nodemanager.resource.memery-mb : 重要</li>
+</ul>
+<blockquote>
+<p>指定NodeManager（NM）可用的内存大小，NM是yarn中的一个组件，是一个Jave服务。这内存值是指NM管理的，用于AppMaster和Map Task 和 Reduce Task 可申请的内存数目。这里主要考虑和Linux系统的协调，避免设置过大被Linux的（Out of Memary Killer）OOMK 杀掉。例如2G的内存，设置为1200（1.2G）是可行的。<br>默认配置被设置为8G，Hadoop就任务NM上就有8G的内存，因此当运行内存过大时，就有可能被linux被OOMK终结。 </p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.minimum-allocation-mb: </li>
+</ul>
+<blockquote>
+<p>单个任务(每个Container)可申请最少内存，默认1024MB , 就是单个任务要申请的资源的话，ResourceManager(RM)会至少给你分配的内存数，即使你申请了1MB，也会派给你1024MB，因此这个地方需要根据机器配置和作业需求提前配置。 </p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.increment-allocation-mb </li>
+</ul>
+<blockquote>
+<p>当一个Container拿到的最小内存不足以运行时，他可以申请内存递增，这个配置是配的递增的幅度。 </p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.maximum-allocation-mb </li>
+</ul>
+<blockquote>
+<p>每个Container最多拿到的内存的数量，这里设置的是一个上限，Container申请资源时可递增直到满足运行需求，但是如果到了上限，就不能递增了。 </p>
+</blockquote>
+<blockquote>
+<p>例：若yarn.scheduler.minimum-allocation-mb是50，yarn.scheduler.increment-allocation-mb是40，当申请60mb的时候，实际申请是80（50 &lt; 60 &lt; 40 * 2 ），当申请30mb的时候，实际是50（30 &lt; 50，就是小于min）。</p>
+</blockquote>
+<h3 id="与CPU相关的配置"><a href="#与CPU相关的配置" class="headerlink" title="与CPU相关的配置"></a>与CPU相关的配置</h3><p>与上节节相似，也可以配置CPU的相应信息： </p>
+<ul>
+<li>yarn.scheduler.minimum-allocation-vcores </li>
+<li>yarn.scheduler.increment-allocation-vcores </li>
+<li>yarn.scheduler.maximum-allocation-vcores</li>
+</ul>
+<h2 id="mapred-site-xml-重点配置讲解"><a href="#mapred-site-xml-重点配置讲解" class="headerlink" title="mapred-site.xml 重点配置讲解"></a>mapred-site.xml 重点配置讲解</h2><h3 id="MR-AppMaster-相关"><a href="#MR-AppMaster-相关" class="headerlink" title="MR AppMaster 相关"></a>MR AppMaster 相关</h3><ul>
+<li>yarn.app.mapreduce.am.resource.mb </li>
+<li>yarn.app.mapreduce.am.resource.cpu-vcores </li>
+</ul>
+<blockquote>
+<p>这里am指 Yarn中AppMaster，针对MapReduce计算框架就是MR AppMaster，通过配置这两个选项，可以设定MR AppMaster使用的内存和cpu数量。 默认情况下，yarn.app.mapreduce.am.resource.mb是2G，因此这里必须配置，需要少于yarn.scheduler.minimum-allocation-mb的配置，这样才能成功启动。</p>
+</blockquote>
+<h3 id="map、reduce-task-相关"><a href="#map、reduce-task-相关" class="headerlink" title="map、reduce task 相关"></a>map、reduce task 相关</h3><ul>
+<li>mapreduce.map.memory.mb、mapreduce.map.cpu.vcores、mapreduce.reduce.memory.mb、mapreduce.reduce.cpu.vcores <blockquote>
+<p>配置每个map 和 reduce 最多可以申请的内存和cpu数量;如果是单机情况，这里的资源和MR AppMaster 时共存和竞争关系，且都应在yarn.scheduler.minimum-allocation-mb之下，MR AppMaster启动成功后，剩下的资源才用于map、reduce task。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="JVM-启动时参数设置"><a href="#JVM-启动时参数设置" class="headerlink" title="JVM 启动时参数设置"></a>JVM 启动时参数设置</h2><ul>
+<li>mapreduce.map.java.opts、mapreduce.reduce.java.opts <blockquote>
+<p>Java task启动时使用的参数;例如设置Java heap 的大小，会在启动map或者reduce进程时把这些参数附加在启动命令之后。<br>这个地方需要仔细配置，配置不当会引起JVM 不能正常GC。 </p>
+</blockquote>
+</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>mapreduce.map.memory.mb 设置为了500MB</li>
+<li>mapreduce.map.java.opts 设置为 -Xmx600m</li>
+<li>假设CG为JVM中内存占用达到90%时触发，也就是540MB时会触发<br>这时，由于mapreduce.map.memory.mb的限制，map 进程会被提前Kill掉，因此GC永远得不到触发。</li>
+</ul>
+<h2 id="core-site-xml"><a href="#core-site-xml" class="headerlink" title="core-site.xml"></a>core-site.xml</h2><ul>
+<li>fs.defaultFS（老版本是fs.default.name） </li>
+</ul>
+<blockquote>
+<p>默认使用的文件系统类型（hdfs://host1:8020/、viewfs://nsX）</p>
+</blockquote>
+<ul>
+<li>fs.trash.interval </li>
+</ul>
+<blockquote>
+<p>垃圾箱文件保留多久（单位：分钟）</p>
+</blockquote>
+<ul>
+<li>io.compression.codecs </li>
+</ul>
+<blockquote>
+<p>Java codec</p>
+</blockquote>
+<ul>
+<li>hadoop.security.authentication </li>
+</ul>
+<blockquote>
+<p>Hadoop使用的认证方法（simple或kerberos）</p>
+</blockquote>
+<h2 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title="hdfs-site.xml"></a>hdfs-site.xml</h2><p>• dfs.namenode.name.dir<br>– namenode存放fsimage的目录</p>
+<p>• dfs.datanode.data.dir<br>– datanode存放数据块文件的目录</p>
+<p>• dfs.namenode.checkpoint.dir<br>– Secondarynamenode启动时使用，放置sn做合并的fsimage及 editlog</p>
+<p>• dfs.replication<br>– 数据副本数</p>
+<p>• dfs.blocksize<br>– 文件Block大小</p>
+<p>• dfs.datanode.handler.count<br>– Datanode IPC 请求处理线程数</p>
+<h2 id="yarn-site-xml其他配置"><a href="#yarn-site-xml其他配置" class="headerlink" title="yarn-site.xml其他配置"></a>yarn-site.xml其他配置</h2><ul>
+<li><p>yarn.resourcemanager.hostname、yarn.resourcemanager.address、yarn.resourcemanager.admin.address<br>、yarn.resourcemanager.scheduler.address、 yarn.resourcemanager.resource-tracker.address、<br>yarn.resourcemanager.webapp.address等项目的基本，依据实际rm 的hostname配置</p>
+</li>
+<li><p>yarn.scheduler.minimum-allocation-mb </p>
+</li>
+</ul>
+<blockquote>
+<p>Yarn分配内存的最小单位</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.increment -allocation-mb </li>
+</ul>
+<blockquote>
+<p>内存分配递增最小单位</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.maximum-allocation-mb </li>
+</ul>
+<blockquote>
+<p>每个container最多申请的内存上限</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.minimum-allocation-vcores、<br>yarn.scheduler.increment -allocation-vcores、<br>yarn.scheduler.maximum-allocation-vcores </li>
+</ul>
+<blockquote>
+<p>跟以上内存相关的意义相同</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.am.max-retries </li>
+</ul>
+<blockquote>
+<p>AM失败重试次数</p>
+</blockquote>
+<ul>
+<li>yarn.am.liveness-monitor.expiry-interval-ms </li>
+</ul>
+<blockquote>
+<p>AM多久不上报心跳被视为过期</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.nm.liveness-monitor.interval-ms </li>
+</ul>
+<blockquote>
+<p>多久检查一次nm是否还存活</p>
+</blockquote>
+<ul>
+<li>yarn.application.classpath </li>
+</ul>
+<blockquote>
+<p>Yarn application使用的classpath</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.scheduler.class </li>
+</ul>
+<blockquote>
+<p>调度器定义，如 org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.fair.user -as-default -queue </li>
+</ul>
+<blockquote>
+<p>对于fairscheduler使用，是否使用用户名作为任务进入的queue</p>
+</blockquote>
+<ul>
+<li>yarn.scheduler.fair.preemption </li>
+</ul>
+<blockquote>
+<p>Fairescheduler是否支持queue之间任务抢占</p>
+</blockquote>
+<ul>
+<li>yarn.resourcemanager.max-completed-applications </li>
+</ul>
+<blockquote>
+<p>RM中保留的最大的已完成的任务信息数量</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.resource.memory-mb </li>
+</ul>
+<blockquote>
+<p>Nm的可用内存</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.local-dirs </li>
+</ul>
+<blockquote>
+<p>Nm本地文件目录（主要是一些cache)</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.log-dirs </li>
+</ul>
+<blockquote>
+<p>Nm log目录</p>
+</blockquote>
+<ul>
+<li>yarn.nodemanager.remote-app-log-dir、yarn.logaggregation.retain-seconds、yarn.log-aggregationenable、yarn.nodemanager.logaggregation.compression-type </li>
+</ul>
+<blockquote>
+<p>启动log aggregation的时候使用参数</p>
+</blockquote>
+<ul>
+<li>yarn.app.mapreduce.am.staging-dir </li>
+</ul>
+<blockquote>
+<p>Staging目录，hdfs</p>
+</blockquote>
+<h2 id="mapred-site-xml-其他配置讲解"><a href="#mapred-site-xml-其他配置讲解" class="headerlink" title="mapred-site.xml 其他配置讲解"></a>mapred-site.xml 其他配置讲解</h2><ul>
+<li>mapreduce.map.speculative、mapreduce.reduce.speculative </li>
+</ul>
+<blockquote>
+<p>是否开启预测执行</p>
+</blockquote>
+<ul>
+<li>mapreduce.job.reduce.slowstart.completedmaps </li>
+</ul>
+<blockquote>
+<p>Map完成多少之后开始启动reduce</p>
+</blockquote>
+<ul>
+<li>mapreduce.jobhistory.address、mapreduce.jobhistory.webapp.address </li>
+</ul>
+<blockquote>
+<p>Jobhistory地址</p>
+</blockquote>
+<ul>
+<li>mapreduce.framework.name </li>
+</ul>
+<blockquote>
+<p>local, classic or yarn</p>
+</blockquote>
+<ul>
+<li>yarn.app.mapreduce.am.staging -dir、yarn.app.mapreduce.am.resource.mb<br>、yarn.app.mapreduce.am.resource.cpu-vcores、 yarn.app.mapreduce.am.command-opts</li>
+</ul>
+<blockquote>
+<p>Am相关配置 </p>
+</blockquote>
+<ul>
+<li>mapreduce.map.java.opts、mapreduce.reduce.java.opts </li>
+</ul>
+<blockquote>
+<p>Java task启动时使用的参数</p>
+</blockquote>
+<ul>
+<li>mapreduce.map.memory.mb、mapreduce.map.cpu.vcores、mapreduce.reduce.memory.mb、mapreduce.reduce.cpu.vcores </li>
+</ul>
+<blockquote>
+<p>Map/reduce任务资源设置</p>
+</blockquote>
+<ul>
+<li>mapreduce.application.classpath </li>
+</ul>
+<blockquote>
+<p>Task使用的classpath</p>
+</blockquote>
+<h2 id="问答"><a href="#问答" class="headerlink" title="问答"></a>问答</h2><ul>
+<li>yarn.scheduler.minimum-allocation-mb，为app分配内存时最小的配额。 </li>
+<li>yarn.scheduler.increment-allocation-mb，每次递加申请的内存资源数，比如，若yarn.scheduler.minimum-allocation-mb是50，yarn.scheduler.increment-allocation-mb是40，当申请60mb的时候，实际申请是80（50 &lt; 60 &lt; 40 * 2 ），当申请30mb的时候，实际是50（30 &lt; 50，就是小于min）。 </li>
+<li><p>yarn.scheduler.maximum-allocation-mb，单个container可分配的内存总量上限。</p>
+</li>
+<li><p>yarn.app.mapreduce.am.resource.mb，执行appManager时需要分配的内存。 </p>
+</li>
+<li>mapreduce.map.memory.mb，map任务执行时要申请的内存。 </li>
+<li>mapreduce.reduce.memory.mb，reduce任务执行时要申请的内存。 </li>
+<li>mapreduce.task.io.sort.mb，任务在做spill时，内存的缓存量，之所以提出来，因为当我们将mapreduce.map.memory.mb和apreduce.reduce.memory.mb减小时，需要将这个值也减小，否则会出现task任务资源不够跑不成功的问题</li>
+</ul>
 
       
     </div>
@@ -899,7 +1169,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1044,7 +1314,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager相关配置参数"><span class="nav-number">1.</span> <span class="nav-text">ResourceManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeManager相关配置参数"><span class="nav-number">2.</span> <span class="nav-text">NodeManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口总结"><span class="nav-number">3.</span> <span class="nav-text">端口总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager相关配置参数"><span class="nav-number">1.</span> <span class="nav-text">ResourceManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeManager相关配置参数"><span class="nav-number">2.</span> <span class="nav-text">NodeManager相关配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口总结"><span class="nav-number">3.</span> <span class="nav-text">端口总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop配置文件的层级关系"><span class="nav-number">4.</span> <span class="nav-text">Hadoop配置文件的层级关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-site-xml-重点配置讲解"><span class="nav-number">5.</span> <span class="nav-text">yarn-site.xml 重点配置讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与-memery-相关的配置"><span class="nav-number">5.1.</span> <span class="nav-text">与 memery 相关的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与CPU相关的配置"><span class="nav-number">5.2.</span> <span class="nav-text">与CPU相关的配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapred-site-xml-重点配置讲解"><span class="nav-number">6.</span> <span class="nav-text">mapred-site.xml 重点配置讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MR-AppMaster-相关"><span class="nav-number">6.1.</span> <span class="nav-text">MR AppMaster 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map、reduce-task-相关"><span class="nav-number">6.2.</span> <span class="nav-text">map、reduce task 相关</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-启动时参数设置"><span class="nav-number">7.</span> <span class="nav-text">JVM 启动时参数设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#core-site-xml"><span class="nav-number">8.</span> <span class="nav-text">core-site.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hdfs-site-xml"><span class="nav-number">9.</span> <span class="nav-text">hdfs-site.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-site-xml其他配置"><span class="nav-number">10.</span> <span class="nav-text">yarn-site.xml其他配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapred-site-xml-其他配置讲解"><span class="nav-number">11.</span> <span class="nav-text">mapred-site.xml 其他配置讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问答"><span class="nav-number">12.</span> <span class="nav-text">问答</span></a></li></ol></div>
             
 
           </div>
