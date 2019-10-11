@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="mpp配置">
+<meta name="keywords" content="postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mpp配置">
+<meta property="og:url" content="https://zixujing.github.io/2019/10/11/db/postgresql/mpp配置/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="mpp配置">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-11T05:58:37.317Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mpp配置">
+<meta name="twitter:description" content="mpp配置">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/10/11/db/postgresql/mpp配置/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mpp配置 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/10/11/db/postgresql/mpp配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mpp配置
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-11 01:00:00 / 修改时间：13:58:37" itemprop="dateCreated datePublished" datetime="2019-10-11T01:00:00+08:00">2019-10-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/db/" itemprop="url" rel="index"><span itemprop="name">db</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>mpp配置</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="bireme"><a href="#bireme" class="headerlink" title="bireme"></a>bireme</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost etc]# pwd</span><br><span class="line">/opt/bireme-2.0.0-alpha-1/etc</span><br><span class="line">[root@localhost etc]# ls</span><br><span class="line">config.properties  config.properties.bak  debezium1.properties  kafka_client_jaas.conf  log4j2.xml  maxwell1.properties  mysql.propertie</span><br><span class="line">[root@localhost etc]# cat config.properties</span><br><span class="line"># target database where the data will sync into.</span><br><span class="line">target.url = jdbc:postgresql://10.24.70.135:5432/hchdata</span><br><span class="line">target.user = gpadmin</span><br><span class="line">target.passwd = gpadmin</span><br><span class="line"></span><br><span class="line"># data source name list, separated by comma.</span><br><span class="line">data_source = mysql</span><br><span class="line"></span><br><span class="line"># data source &quot;mysql1&quot; type</span><br><span class="line">mysql.type = maxwell</span><br><span class="line"># kafka server which maxwell write binlog into.</span><br><span class="line">mysql.kafka.server = 10.24.70.127:9092,10.24.70.128:9092,10.24.70.134:9092</span><br><span class="line"># kafka topic which maxwell write binlog into.</span><br><span class="line">mysql.kafka.topic = maxwell</span><br><span class="line"># kafka groupid used for consumer.</span><br><span class="line">mysql.kafka.groupid = bireme</span><br><span class="line">mysql.kafka.security.protocol=SASL_PLAINTEXT</span><br><span class="line">mysql.kafka.sasl.mechanism=PLAIN</span><br><span class="line"># data source &quot;debezium1&quot;</span><br><span class="line">#debezium1.type = debezium</span><br><span class="line"># kafka server which debezium write into.</span><br><span class="line">#debezium1.kafka.server = 127.0.0.1:9092 </span><br><span class="line"># kafka groupid used for consumer.</span><br><span class="line">#debezium1.kafka.groupid = bireme</span><br><span class="line"></span><br><span class="line"># number of threads used for pipeline to drive the porcess</span><br><span class="line">pipeline.thread_pool.size = 5</span><br><span class="line"></span><br><span class="line"># number of threads used to transform data source record into target format.</span><br><span class="line">transform.thread_pool.size = 10</span><br><span class="line"></span><br><span class="line"># number of threads used to generate load tasks.</span><br><span class="line">merge.thread_pool.size = 10</span><br><span class="line"># interval of generating a load task in milliseconds.</span><br><span class="line">merge.interval = 10000</span><br><span class="line"># max tuple size for a load task</span><br><span class="line">merge.batch.size = 50000</span><br><span class="line"></span><br><span class="line"># JDBC connection pool size of target database.</span><br><span class="line">loader.conn_pool.size = 10</span><br><span class="line"># queue size of task for each table which is waiting for load.</span><br><span class="line">loader.task_queue.size = 2</span><br><span class="line"></span><br><span class="line"># application performance monitor report type: &quot;none&quot;, &quot;console&quot;, &quot;jmx&quot;</span><br><span class="line">metrics.reporter=jmx</span><br><span class="line"># interval of console APM reporter.</span><br><span class="line">metrics.reporter.console.interval = 10</span><br><span class="line"></span><br><span class="line"># set the IP address for bireme state server.</span><br><span class="line">state.server.addr = 0.0.0.0</span><br><span class="line"># set the port for bireme state server.</span><br><span class="line">state.server.port = 8080</span><br><span class="line"></span><br><span class="line">[root@localhost etc]# cat mysql.properties </span><br><span class="line">infoveriplatform.tb_car_record=public.tb_car_record</span><br><span class="line">infoveriplatform.tb_control_car=public.tb_control_car</span><br><span class="line">infoveriplatform.tb_control_person=public.tb_control_person</span><br><span class="line">infoveriplatform.tb_key_car_record=public.tb_key_car_record</span><br><span class="line">infoveriplatform.tb_key_person_record=public.tb_key_person_record</span><br><span class="line">infoveriplatform.tb_person_record=public.tb_person_record</span><br><span class="line">infoveriplatform.tb_security_clearance=public.tb_security_clearance</span><br><span class="line">infoveriplatform.sys_dept=public.sys_dept</span><br><span class="line">infoveriplatform.tb_client_device=public.tb_client_device</span><br><span class="line">[root@localhost etc]# vi mysql.properties </span><br><span class="line">[root@localhost etc]# cat mysql.properties </span><br><span class="line">infoveriplatform.tb_car_record=public.tb_car_record</span><br><span class="line">infoveriplatform.tb_control_car=public.tb_control_car</span><br><span class="line">infoveriplatform.tb_control_person=public.tb_control_person</span><br><span class="line">infoveriplatform.tb_key_car_record=public.tb_key_car_record</span><br><span class="line">infoveriplatform.tb_key_person_record=public.tb_key_person_record</span><br><span class="line">infoveriplatform.tb_person_record=public.tb_person_record</span><br><span class="line">infoveriplatform.tb_security_clearance=public.tb_security_clearance</span><br><span class="line">infoveriplatform.sys_dept=public.sys_dept</span><br><span class="line">infoveriplatform.tb_client_device=public.tb_client_device</span><br><span class="line">infoveriplatform.tb_face_record=public.tb_face_record</span><br><span class="line">[root@localhost etc]# cat kafka_client_jaas.conf </span><br><span class="line">KafkaClient&#123;</span><br><span class="line">  org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">  username=&quot;admin&quot;</span><br><span class="line">  password=&quot;admin@123&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[root@localhost bireme-2.0.0-alpha-1]# cd bin</span><br><span class="line">[root@localhost bin]# ls</span><br><span class="line">bireme</span><br><span class="line">[root@localhost bin]# cat bireme </span><br><span class="line">#!/usr/bin/env bash</span><br><span class="line"># Copyright HashData. All Rights Reserved.</span><br><span class="line">NAME=&quot;bireme&quot;</span><br><span class="line">DESC=&quot;bireme service&quot;</span><br><span class="line">BINDIR=&quot;$(cd &quot;$(dirname &quot;$&#123;BASH_SOURCE[0]&#125;&quot;)&quot; &amp;&amp; pwd)&quot;</span><br><span class="line">TOPDIR=&quot;$(cd &quot;$(dirname &quot;$&#123;BINDIR&#125;&quot;)&quot; &amp;&amp; pwd)&quot;</span><br><span class="line"></span><br><span class="line">EXEC=&quot;$(which jsvc)&quot;</span><br><span class="line"></span><br><span class="line">if [ -z &quot;$&#123;EXEC&#125;&quot; ]; then</span><br><span class="line">  echo &apos;command &quot;jsvc&quot; is not found.&apos; &gt;&amp;2</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -z &quot;$&#123;JAVA_HOME&#125;&quot; ]; then</span><br><span class="line">  echo &apos;&quot;JAVA_HOME&quot; is not set.&apos; &gt;&amp;2</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">CLASS_PATH=&quot;$&#123;TOPDIR&#125;/lib/*&quot;</span><br><span class="line"></span><br><span class="line">CLASS=&quot;cn.hashdata.bireme.Bireme&quot;</span><br><span class="line"></span><br><span class="line">CMD=$1</span><br><span class="line"></span><br><span class="line">shift</span><br><span class="line"></span><br><span class="line">ARGS=&quot;$*&quot;</span><br><span class="line">PID=&quot;/tmp/$NAME.pid&quot;</span><br><span class="line"></span><br><span class="line"># System.out writes to this file...</span><br><span class="line">LOG_OUT=&quot;$&#123;TOPDIR&#125;/logs/$NAME.out&quot;</span><br><span class="line"></span><br><span class="line"># System.err writes to this file...</span><br><span class="line">LOG_ERR=&quot;$&#123;TOPDIR&#125;/logs/$NAME.err&quot;</span><br><span class="line"></span><br><span class="line">HEAP_DUMP=&quot;$&#123;TOPDIR&#125;/logs/$NAME.heapdump&quot;</span><br><span class="line"></span><br><span class="line">LOG_GC=&quot;$&#123;TOPDIR&#125;/logs/$NAME.gc&quot;</span><br><span class="line"></span><br><span class="line"># See the following page for extensive details on setting</span><br><span class="line"># up the JVM to accept JMX remote management:</span><br><span class="line"># http://java.sun.com/javase/6/docs/technotes/guides/management/agent.html</span><br><span class="line"># by default we allow local JMX connections</span><br><span class="line"></span><br><span class="line">println() &#123;</span><br><span class="line">  if [ &quot;$CMD&quot; = &quot;start&quot; ]</span><br><span class="line">  then</span><br><span class="line">    echo &quot;$1&quot; &gt;&amp;2</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if [ -z &quot;$JXM_LOCALONLY&quot; ]</span><br><span class="line">then</span><br><span class="line">    JXM_LOCALONLY=false</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -z &quot;$JMX_DISABLE&quot; ] || [ &quot;$JMX_DISABLE&quot; = &apos;false&apos; ]</span><br><span class="line">then</span><br><span class="line">  println &quot;Bireme JMX enabled by default&quot; &gt;&amp;2</span><br><span class="line">  if [ -z &quot;$JMX_PORT&quot; ]</span><br><span class="line">  then</span><br><span class="line">    JMX=&quot;-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=$JXM_LOCALONLY&quot;</span><br><span class="line">  else</span><br><span class="line">    if [ -z &quot;$JMX_AUTH&quot; ]</span><br><span class="line">    then</span><br><span class="line">      JMX_AUTH=false</span><br><span class="line">    fi</span><br><span class="line">    if [ -z &quot;$JMX_SSL&quot; ]</span><br><span class="line">    then</span><br><span class="line">      JMX_SSL=false</span><br><span class="line">    fi</span><br><span class="line">    if [ -z &quot;$JMX_LOG4J&quot; ]</span><br><span class="line">    then</span><br><span class="line">      JMX_LOG4J=true</span><br><span class="line">    fi</span><br><span class="line">    println &quot;Bireme remote JMX Port set to $JMX_PORT&quot; &gt;&amp;2</span><br><span class="line">    println &quot;Bireme remote JMX authenticate set to $JMX_AUTH&quot; &gt;&amp;2</span><br><span class="line">    println &quot;Bireme remote JMX ssl set to $JMX_SSL&quot; &gt;&amp;2</span><br><span class="line">    println &quot;Bireme remote JMX log4j set to $JMX_LOG4J&quot; &gt;&amp;2</span><br><span class="line">    JMX=&quot;-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=$JMX_PORT -Dcom.sun.management.jmxremote.authenticate=$JMX_AUTH -Dcom.sun.management.jmxremote.ssl=$JMX_SSL -Dzookeeper.jmx.log4j.disable=$JMX_LOG4J&quot;</span><br><span class="line">  fi</span><br><span class="line">else</span><br><span class="line">    println &quot;JMX disabled by user request&quot; &gt;&amp;2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ &quot;$MAX_HEAP&quot; ]</span><br><span class="line">then</span><br><span class="line">  println &quot;Bireme maximum heap size is $&#123;MAX_HEAP&#125;m&quot; &gt;&amp;2</span><br><span class="line">  HEAP=&quot;-Xmx$&#123;MAX_HEAP&#125;m&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">jsvc_exec() &#123;</span><br><span class="line">  cd &quot;$&#123;TOPDIR&#125;&quot; || exit 1</span><br><span class="line">    &quot;$&#123;EXEC&#125;&quot; -cwd &quot;$&#123;TOPDIR&#125;&quot; -home &quot;$&#123;JAVA_HOME&#125;&quot; -cp &quot;$&#123;CLASS_PATH&#125;&quot; \</span><br><span class="line">    $&#123;JMX&#125; $&#123;HEAP&#125; \</span><br><span class="line">    -Dlog4j.configurationFile=$&#123;TOPDIR&#125;/etc/log4j2.xml \</span><br><span class="line">    -Djava.security.auth.login.config=/opt/bireme-2.0.0-alpha-1/etc/kafka_client_jaas.conf \</span><br><span class="line">    -XX:+UseG1GC -XX:+UseStringDeduplication \</span><br><span class="line">    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$&#123;HEAP_DUMP&#125; \</span><br><span class="line">    -XX:-PrintGCDetails -XX:-PrintGCTimeStamps -XX:-UseGCLogFileRotation \</span><br><span class="line">    -XX:NumberOfGCLogFiles=2 -XX:GCLogFileSize=1024K -Xloggc:$&#123;LOG_GC&#125; \</span><br><span class="line">    -jvm server -wait 60 -outfile &quot;$&#123;LOG_OUT&#125;&quot; -errfile &quot;$&#123;LOG_ERR&#125;&quot; \</span><br><span class="line">    -pidfile &quot;$&#123;PID&#125;&quot; $1 &quot;$&#123;CLASS&#125;&quot; $&#123;ARGS&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">case &quot;$&#123;CMD&#125;&quot; in</span><br><span class="line">  start)</span><br><span class="line">    echo &quot;Starting the $DESC...&quot;</span><br><span class="line"></span><br><span class="line">    # Start the service</span><br><span class="line">    if ! jsvc_exec; then</span><br><span class="line">      echo &quot;Failed to start $DESC&quot;</span><br><span class="line">      exit 1</span><br><span class="line">    fi</span><br><span class="line"></span><br><span class="line">    echo &quot;The $DESC has started.&quot;</span><br><span class="line">  ;;</span><br><span class="line">  stop)</span><br><span class="line">    if [ -f &quot;$PID&quot; ]; then</span><br><span class="line">      echo &quot;Stopping the $DESC...&quot;</span><br><span class="line"></span><br><span class="line">      # Stop the service</span><br><span class="line">      if ! jsvc_exec &quot;-stop&quot;; then</span><br><span class="line">        echo &quot;Failed to stop $DESC&quot;</span><br><span class="line">        exit 1</span><br><span class="line">      fi</span><br><span class="line"></span><br><span class="line">      echo &quot;The $DESC has stopped.&quot;</span><br><span class="line">    else</span><br><span class="line">      echo &quot;Daemon not running, no action taken&quot;</span><br><span class="line">      exit 1</span><br><span class="line">    fi</span><br><span class="line">  ;;</span><br><span class="line">  restart)</span><br><span class="line">    if [ -f &quot;$PID&quot; ]; then</span><br><span class="line">      echo &quot;Restarting the $DESC...&quot;</span><br><span class="line"></span><br><span class="line">      # Stop the service</span><br><span class="line">      jsvc_exec &quot;-stop&quot;</span><br><span class="line"></span><br><span class="line">      # Start the service</span><br><span class="line">      if ! jsvc_exec; then</span><br><span class="line">	    echo &quot;Failed to start $DESC&quot;</span><br><span class="line">	    exit 1</span><br><span class="line">	  fi</span><br><span class="line"></span><br><span class="line">	  echo &quot;The $DESC has restarted.&quot;</span><br><span class="line">    else</span><br><span class="line">      echo &quot;Daemon not running, no action taken&quot;</span><br><span class="line">      exit 1</span><br><span class="line">    fi</span><br><span class="line">      ;;</span><br><span class="line">  *)</span><br><span class="line">    echo &quot;Usage: $0 &#123;start|stop|restart&#125;&quot; &gt;&amp;2</span><br><span class="line">    exit 1</span><br><span class="line">  ;;</span><br><span class="line">esac</span><br><span class="line">[root@localhost bin]# pwd</span><br><span class="line">/opt/bireme-2.0.0-alpha-1/bin</span><br></pre></td></tr></table></figure>
+<h2 id="maxwell"><a href="#maxwell" class="headerlink" title="maxwell"></a>maxwell</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost maxwell-1.22.1]# cat config</span><br><span class="line">user=maxwell</span><br><span class="line">password=maxwell</span><br><span class="line">host=10.24.70.85</span><br><span class="line">replication_host=10.24.70.25</span><br><span class="line">replication_user=maxwell</span><br><span class="line">replication_password=Maxwell@123</span><br><span class="line">include_dbs=inforveriplatform</span><br><span class="line">include_tables=tb_car_record,tb_control_car,tb_control_person,tb_person_record,tb_key_car_record,tb_key_person_record,tb_security_clearance,tb_client_device,sys_dept,tb_face_record</span><br><span class="line">producer=kafka</span><br><span class="line">kafka_topic=maxwell</span><br><span class="line">kafka.bootstrap.servers=10.24.70.127:9092,10.24.70.128:9092,10.24.70.134:9092</span><br><span class="line">kafka.security.protocol=SASL_PLAINTEXT</span><br><span class="line">kafka.sasl.mechanism=PLAIN</span><br><span class="line">kafka_partition_hash=murmur3</span><br><span class="line">producer_partition_by=primary_key</span><br><span class="line">[root@localhost maxwell-1.22.1]# pwd</span><br><span class="line">/opt/maxwell-1.22.1</span><br><span class="line"></span><br><span class="line">[root@localhost maxwell-1.22.1]# ls</span><br><span class="line">bin  config  config.md  config.properties.example  kafka_client_jaas.conf  kinesis-producer-library.properties.example  lib  LICENSE  log4j2.xml  logs  quickstart.md  README.md</span><br><span class="line">[root@localhost maxwell-1.22.1]# cat kafka_client_jaas.conf </span><br><span class="line">KafkaClient&#123;</span><br><span class="line">  org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">  username=&quot;admin&quot;</span><br><span class="line">  password=&quot;admin@123&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost maxwell-1.22.1]# cd bin</span><br><span class="line">[root@localhost bin]# ls</span><br><span class="line">maxwell  maxwell-benchmark  maxwell-bootstrap  maxwell-docker</span><br><span class="line">[root@localhost bin]# cat maxwell</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">set -e</span><br><span class="line"></span><br><span class="line">base_dir=&quot;$(dirname &quot;$0&quot;)/..&quot;</span><br><span class="line">lib_dir=&quot;$base_dir/lib&quot;</span><br><span class="line">lib_dir_development=&quot;$base_dir/target/lib&quot;</span><br><span class="line">if [ ! -e &quot;$lib_dir&quot; -a -e &quot;$lib_dir_development&quot; ]; then</span><br><span class="line">	lib_dir=&quot;$lib_dir_development&quot;</span><br><span class="line">	CLASSPATH=&quot;$CLASSPATH:$base_dir/target/classes&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">CLASSPATH=&quot;$CLASSPATH:$lib_dir/*&quot;</span><br><span class="line"></span><br><span class="line">KAFKA_VERSION=&quot;1.0.0&quot;</span><br><span class="line"></span><br><span class="line">function use_kafka() &#123;</span><br><span class="line">	wanted=&quot;$1&quot;</span><br><span class="line">	# disambiguate versions into the latest,</span><br><span class="line">	# e.g. asking for 0.10 means you want the</span><br><span class="line">	# latest 0.10.x release</span><br><span class="line">	case &quot;$wanted&quot; in</span><br><span class="line">		0.11)</span><br><span class="line">		KAFKA_VERSION=0.11.0.1</span><br><span class="line">		;;</span><br><span class="line"></span><br><span class="line">		0.10)</span><br><span class="line">		KAFKA_VERSION=0.10.2.1</span><br><span class="line">		;;</span><br><span class="line"></span><br><span class="line">		*)</span><br><span class="line">		KAFKA_VERSION=&quot;$wanted&quot;</span><br><span class="line">		;;</span><br><span class="line">	esac</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for key in &quot;$@&quot;</span><br><span class="line">do</span><br><span class="line">	case &quot;$key&quot; in</span><br><span class="line">		--kafka_version)</span><br><span class="line">		use_kafka &quot;$2&quot;</span><br><span class="line">		;;</span><br><span class="line"></span><br><span class="line">		--kafka_version=*)</span><br><span class="line">		use_kafka &quot;$&#123;key#*=&#125;&quot;</span><br><span class="line">		;;</span><br><span class="line"></span><br><span class="line">        --daemon)</span><br><span class="line">		DAEMON_MODE=&quot;true&quot;</span><br><span class="line">		DAEMON_NAME=&quot;MaxwellDaemon&quot;</span><br><span class="line">		;;</span><br><span class="line"></span><br><span class="line">	esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">if [ &quot;x$DAEMON_MODE&quot; = &quot;xtrue&quot; ]; then</span><br><span class="line">    # Log directory to use</span><br><span class="line">    if [ &quot;x$LOG_DIR&quot; = &quot;x&quot; ]; then</span><br><span class="line">        LOG_DIR=&quot;$base_dir/logs&quot;</span><br><span class="line">    fi</span><br><span class="line">    # Create logs directory</span><br><span class="line">    if [ ! -d &quot;$LOG_DIR&quot; ]; then</span><br><span class="line">        mkdir -p &quot;$LOG_DIR&quot;</span><br><span class="line">    fi</span><br><span class="line">    # Console output file when maxwell runs as a daemon</span><br><span class="line">    CONSOLE_OUTPUT_FILE=$LOG_DIR/$DAEMON_NAME.out</span><br><span class="line">    echo &quot;Redirecting STDOUT to $CONSOLE_OUTPUT_FILE&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">kafka_client_dir=&quot;$lib_dir/kafka-clients&quot;</span><br><span class="line">kafka_client_jar=&quot;$(ls -1 &quot;$kafka_client_dir/kafka-clients-$KAFKA_VERSION&quot;*.jar 2&gt;/dev/null || true)&quot;</span><br><span class="line">if [ -z &quot;$kafka_client_jar&quot; -o &quot;$(echo &quot;$kafka_client_jar&quot; | wc -l)&quot; -gt 1 ]; then</span><br><span class="line"></span><br><span class="line">	if [ -z &quot;$kafka_client_jar&quot; ]; then</span><br><span class="line">		echo &quot;Error: No matches for kafka version: $KAFKA_VERSION&quot;</span><br><span class="line">	else</span><br><span class="line">		echo &quot;Error: Multiple matches for kafka version: $KAFKA_VERSION&quot;</span><br><span class="line">	fi</span><br><span class="line">	echo &quot;Supported versions:&quot;</span><br><span class="line">	ls -1 &quot;$kafka_client_dir&quot; | sed -e &apos;s/^kafka-clients-/ - /&apos; -e &apos;s/\.jar$//&apos;</span><br><span class="line">	exit 1</span><br><span class="line">else</span><br><span class="line">	echo &quot;Using kafka version: $KAFKA_VERSION&quot;</span><br><span class="line">	CLASSPATH=&quot;$CLASSPATH:$kafka_client_jar&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -z &quot;$JAVA_HOME&quot; ]; then</span><br><span class="line">	JAVA=&quot;java&quot;</span><br><span class="line">else</span><br><span class="line">	JAVA=&quot;$JAVA_HOME/bin/java&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">SASL_OPTS=&quot;-Djava.security.auth.login.config=/opt/maxwell-1.22.1/kafka_client_jaas.conf&quot;</span><br><span class="line"></span><br><span class="line"># Launch mode</span><br><span class="line">if [ &quot;x$DAEMON_MODE&quot; = &quot;xtrue&quot; ]; then</span><br><span class="line">    nohup $JAVA $JAVA_OPTS $SASL_OPTS -Dfile.encoding=UTF-8 -Dlog4j.shutdownCallbackRegistry=com.djdch.log4j.StaticShutdownCallbackRegistry -cp $CLASSPATH com.zendesk.maxwell.Maxwell &quot;$@&quot; &gt; &quot;$CONSOLE_OUTPUT_FILE&quot; 2&gt;&amp;1 &lt; /dev/null &amp;</span><br><span class="line">else</span><br><span class="line">    exec $JAVA $JAVA_OPTS $SASL_OPTS -Dfile.encoding=UTF-8 -Dlog4j.shutdownCallbackRegistry=com.djdch.log4j.StaticShutdownCallbackRegistry -cp $CLASSPATH com.zendesk.maxwell.Maxwell &quot;$@&quot;</span><br><span class="line">fi</span><br><span class="line">[root@localhost bin]#</span><br></pre></td></tr></table></figure>
+<h2 id="mysql2pgsql-RDS-DBSYNC"><a href="#mysql2pgsql-RDS-DBSYNC" class="headerlink" title="mysql2pgsql(RDS_DBSYNC)"></a>mysql2pgsql(RDS_DBSYNC)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost soft]# pwd</span><br><span class="line">/opt/soft</span><br><span class="line">[root@localhost soft]# ls</span><br><span class="line">bireme-2.0.0-alpha-1.tar.gz  __MACOSX  maxwell-1.22.1.tar.gz  mysql2pgsql.bin.el7.20171213.zip</span><br><span class="line">[root@localhost soft]# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost bin]# cat table_list.txt </span><br><span class="line">tb_face_record: select * from tb_face_record</span><br><span class="line">[root@localhost bin]# cat my.cfg</span><br><span class="line">[src.mysql]</span><br><span class="line">host = &quot;10.24.70.25&quot;</span><br><span class="line">port = &quot;3306&quot;</span><br><span class="line">user = &quot;root&quot;</span><br><span class="line">password = &quot;123456&quot;</span><br><span class="line">db = &quot;infoveriplatform&quot;</span><br><span class="line">encodingdir = &quot;share&quot;</span><br><span class="line">encoding = &quot;utf8&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[desc.pgsql]</span><br><span class="line">connect_string = &quot;host=10.24.70.135 dbname=hchdata port=5432 user=gpadmin password=gpadmin&quot;</span><br><span class="line">target_schema = &quot;public&quot;</span><br><span class="line">ignore_copy_error_count_each_table = &quot;0&quot;</span><br><span class="line"></span><br><span class="line">[root@localhost bin]# ./mysql2pgsql -l table_list.txt -j 10</span><br><span class="line">ignore copy error count 0 each table</span><br><span class="line">-- Adding table: tb_face_record</span><br><span class="line">Starting data sync</span><br><span class="line">Query to get source data for target table tb_face_record: select * from tb_face_record </span><br><span class="line">-- Reference DDL to create the target table:</span><br><span class="line">CREATE TABLE tb_face_record (id int8, img_id text, sbid text, checkevent_id text, sfzh text, tpdz text, tpscdz text, picture_upload int4, is_upload int4, create_time timestamp, temp1 text, temp2 text, temp3 text, temp4 text, checkpoint_id text, inspector_id text, inspector_name text, company_name text, name text, key_person int4, feature_id text, score float4, is_deal int4, tpmc text) with (APPENDONLY=true, ORIENTATION=column, COMPRESSTYPE=zlib, COMPRESSLEVEL=1, BLOCKSIZE=1048576, OIDS=false) DISTRIBUTED BY (&lt;distribution key&gt;) PARTITION BY RANGE (&lt;partition key&gt;) (START (date &apos;&lt;YYYY-MM-DD&gt;&apos;) INCLUSIVE END (date &apos;&lt;YYYY-MM-DD&gt;&apos;) EXCLUSIVE EVERY (INTERVAL &apos;&lt;1 month&gt;&apos; ));</span><br><span class="line"></span><br><span class="line">thread 6 migrate task 0 table infoveriplatform.tb_face_record 5386127 rows complete, time cost 30393.893 ms</span><br><span class="line">Number of rows migrated: 5386127 (number of source tables&apos; rows: 5386127) </span><br><span class="line">Data sync time cost 30481.859 ms</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/db/etcd/etcd 集群安装/" rel="next" title="etcd 集群安装">
+                <i class="fa fa-chevron-left"></i> etcd 集群安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">67</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#bireme"><span class="nav-number">1.</span> <span class="nav-text">bireme</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#maxwell"><span class="nav-number">2.</span> <span class="nav-text">maxwell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql2pgsql-RDS-DBSYNC"><span class="nav-number">3.</span> <span class="nav-text">mysql2pgsql(RDS_DBSYNC)</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
