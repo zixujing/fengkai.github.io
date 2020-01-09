@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="gitlab安装">
+<meta name="keywords" content="虚拟化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitlab安装">
+<meta property="og:url" content="https://zixujing.github.io/2019/11/19/linux/linux虚拟化/gitlab安装/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="gitlab安装">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-09T01:57:56.523Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gitlab安装">
+<meta name="twitter:description" content="gitlab安装">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/11/19/linux/linux虚拟化/gitlab安装/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>gitlab安装 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/11/19/linux/linux虚拟化/gitlab安装/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gitlab安装
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-19 02:00:00" itemprop="dateCreated datePublished" datetime="2019-11-19T02:00:00+08:00">2019-11-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-09 09:57:56" itemprop="dateModified" datetime="2020-01-09T09:57:56+08:00">2020-01-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>gitlab安装<br><a id="more"></a></p>
+</blockquote>
+<h3 id="gitlab安装"><a href="#gitlab安装" class="headerlink" title="gitlab安装"></a>gitlab安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">例子中安装的是11.11.3版本，此版本和下面的gitlab-runner结合出现job一直running的情况，换成12.4.1版本则没有此问题。可能是gitlab-runner的版本是12.4.1与11.11.3的gitlab不匹配导致的(这种说法不对，貌似是单位防火墙导致的)，安装gitlab12.4.1时如果报错找不到文件，那么自己新建一个，配置如下：</span><br><span class="line">root@gitlab:~# cat /opt/gitlab/embedded/etc/90-omnibus-gitlab-*</span><br><span class="line">kernel.sem = 250 32000 32 262</span><br><span class="line">kernel.shmall = 4194304</span><br><span class="line">kernel.shmmax = 17179869184</span><br><span class="line">net.core.somaxconn = 1024</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">下面是例子开始</span><br><span class="line">root@yth-test:~[root@yth-test ~]# yum install -y curl policycoreutils-python openssh-server</span><br><span class="line">root@yth-test:~[root@yth-test ~]# getenforce </span><br><span class="line">root@yth-test:~[root@yth-test ~]# wget -O gitlab.11.11.3.rpm https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/7/gitlab-ce-11.11.3-ce.0.el7.x86_64.rpm/download.rpm</span><br><span class="line">root@yth-test:~[root@yth-test ~]# rpm -ivh gitlab.11.11.3.rpm</span><br><span class="line">external_url &apos;http://39.106.96.125:65535&apos;</span><br><span class="line">nginx[&apos;listen_port&apos;] = 65535</span><br><span class="line">unicorn[&apos;port&apos;] = 65534</span><br><span class="line">root@yth-test:~[root@yth-test ~]# gitlab-ctl reconfigure</span><br><span class="line">root@yth-test:~[root@yth-test ~]# gitlab-ctl start</span><br><span class="line">ok: run: alertmanager: (pid 24224) 32s</span><br><span class="line">ok: run: gitaly: (pid 24027) 35s</span><br><span class="line">ok: run: gitlab-monitor: (pid 24095) 34s</span><br><span class="line">ok: run: gitlab-workhorse: (pid 24061) 35s</span><br><span class="line">ok: run: logrotate: (pid 23592) 86s</span><br><span class="line">ok: run: nginx: (pid 23543) 92s</span><br><span class="line">ok: run: node-exporter: (pid 24081) 34s</span><br><span class="line">ok: run: postgres-exporter: (pid 24240) 31s</span><br><span class="line">ok: run: postgresql: (pid 23185) 141s</span><br><span class="line">ok: run: prometheus: (pid 24115) 33s</span><br><span class="line">ok: run: redis: (pid 22967) 148s</span><br><span class="line">ok: run: redis-exporter: (pid 24103) 33s</span><br><span class="line">ok: run: sidekiq: (pid 23477) 104s</span><br><span class="line">ok: run: unicorn: (pid 23420) 110s</span><br><span class="line">root@yth-test:~[root@yth-test ~]# gitlab-ctl status</span><br><span class="line">run: alertmanager: (pid 24224) 39s; run: log: (pid 23949) 60s</span><br><span class="line">run: gitaly: (pid 24027) 42s; run: log: (pid 23074) 152s</span><br><span class="line">run: gitlab-monitor: (pid 24095) 41s; run: log: (pid 23770) 78s</span><br><span class="line">run: gitlab-workhorse: (pid 24061) 42s; run: log: (pid 23524) 104s</span><br><span class="line">run: logrotate: (pid 23592) 93s; run: log: (pid 23608) 92s</span><br><span class="line">run: nginx: (pid 23543) 99s; run: log: (pid 23566) 96s</span><br><span class="line">run: node-exporter: (pid 24081) 41s; run: log: (pid 23701) 84s</span><br><span class="line">run: postgres-exporter: (pid 24240) 38s; run: log: (pid 23995) 54s</span><br><span class="line">run: postgresql: (pid 23185) 148s; run: log: (pid 23260) 147s</span><br><span class="line">run: prometheus: (pid 24115) 40s; run: log: (pid 23899) 66s</span><br><span class="line">run: redis: (pid 22967) 155s; run: log: (pid 23009) 154s</span><br><span class="line">run: redis-exporter: (pid 24103) 40s; run: log: (pid 23820) 72s</span><br><span class="line">run: sidekiq: (pid 23477) 111s; run: log: (pid 23494) 110s</span><br><span class="line">run: unicorn: (pid 23420) 117s; run: log: (pid 23474) 114s</span><br><span class="line">登录http://39.106.96.125:65535测试root/root@123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nginx : web入口</span><br><span class="line">database（postgresql，mysql） （gitlab repository issue，merge request等，用户（权限））</span><br><span class="line">redis 缓存，负责分发任务</span><br><span class="line">sideiq：后台任务，主要负责发送电子邮件，任务需要来自redis</span><br><span class="line">unicorn： 包含gitlab 主进程</span><br><span class="line">gitlab-shell 用于ssh交互</span><br><span class="line">gitlab-workhorse：反向代理服务器，可以处理与unicorn 无关的请求，处理git pull／push请求，处理到unicorn 的连接</span><br><span class="line">gitaly 后台服务，用于处理GitLab发出的所有git调用</span><br><span class="line">systemctl enable gitlab-runsvdir.service</span><br><span class="line">systemctl start gitlab-runsvdir.service</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">gitlab-ctl start #启动全部服务</span><br><span class="line">gitlab-ctl restart #重启全部服务</span><br><span class="line">gitlab-ctl stop #停止全部服务</span><br><span class="line">gitlab-ctl restart nginx #重启单个服务</span><br><span class="line">gitlab-ctl status #查看全部组件的状态</span><br><span class="line">gitlab-ctl show-config #验证配置文件</span><br><span class="line">gitlab-ctl uninstall #删除gitlab(保留数据）</span><br><span class="line">gitlab-ctl cleanse #删除所有数据，重新开始</span><br><span class="line">gitlab-ctl tail &lt;svc_name&gt;  #查看服务的日志</span><br><span class="line">gitlab-rails console production #进入控制台 ，可以修改root 的密码</span><br><span class="line"></span><br><span class="line">root密码root@123</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">注册：fengk fengk@126.com fengk@123</span><br><span class="line"></span><br><span class="line">创建project===》pj-test</span><br><span class="line"></span><br><span class="line">获取project地址：http://39.106.96.125:65535/fengkai/pj-test.git</span><br><span class="line">192.168.106.117安装git</span><br></pre></td></tr></table></figure>
+<h3 id="gitlab-runner-使用"><a href="#gitlab-runner-使用" class="headerlink" title="gitlab-runner 使用"></a>gitlab-runner 使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">192.168.106.117</span><br><span class="line">[root@managementa ~]# sudo wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64</span><br><span class="line">[root@managementa ~]# chmod +x /usr/local/bin/gitlab-runner</span><br><span class="line">[root@managementa ~]# gitlab-runner --version</span><br><span class="line">Version:      12.4.1</span><br><span class="line">Git revision: 05161b14</span><br><span class="line">Git branch:   12-4-stable</span><br><span class="line">GO version:   go1.10.8</span><br><span class="line">Built:        2019-10-28T12:49:57+0000</span><br><span class="line">OS/Arch:      linux/amd64</span><br><span class="line">[root@managementa ~]# useradd --comment &apos;GitLab Runner&apos; --create-home gitlab-runner --shell /bin/bash</span><br><span class="line">可以指定root帐号，此时会减少一些权限的麻烦gitlab-runner install --user=root --working-directory=/home/gitlab-runner</span><br><span class="line">[root@managementa ~]# gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner</span><br><span class="line">Runtime platform                                    arch=amd64 os=linux pid=5458 revision=05161b14 version=12.4.1</span><br><span class="line">[root@managementa ~]# gitlab-runner start</span><br><span class="line">Runtime platform                                    arch=amd64 os=linux pid=5719 revision=05161b14 version=12.4.1</span><br><span class="line"></span><br><span class="line">打开 gitlab 项目 -&gt; 设置 -&gt; CI / CD -&gt; Runners 设置</span><br><span class="line"></span><br><span class="line">[root@managementa ~]# gitlab-runner register</span><br><span class="line">Runtime platform                                    arch=amd64 os=linux pid=10714 revision=05161b14 version=12.4.1</span><br><span class="line">Running in system-mode.                            </span><br><span class="line">                                                   </span><br><span class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):</span><br><span class="line">http://39.106.96.125:65535/</span><br><span class="line">Please enter the gitlab-ci token for this runner:</span><br><span class="line">hoz1f8fL3ZoMyyYmbLc5</span><br><span class="line">Please enter the gitlab-ci description for this runner:</span><br><span class="line">[managementa]: gitlab runner ci 测试</span><br><span class="line">Please enter the gitlab-ci tags for this runner (comma separated):</span><br><span class="line">pj-test-tag</span><br><span class="line">Registering runner... succeeded                     runner=hoz1f8fL</span><br><span class="line">Please enter the executor: docker-ssh+machine, docker-ssh, parallels, shell, ssh, virtualbox, docker+machine, kubernetes, custom, docker:</span><br><span class="line">shell</span><br><span class="line">Runner registered successfully. Feel free to start it, but if it&apos;s running already the config should be automatically reloaded! </span><br><span class="line">[root@managementa gitlab-runner]# gitlab-runner list</span><br></pre></td></tr></table></figure>
+<h3 id="编写-gitlab-ci-yml-集成"><a href="#编写-gitlab-ci-yml-集成" class="headerlink" title="编写 .gitlab-ci.yml 集成"></a>编写 .gitlab-ci.yml 集成</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[root@managementa gitlab-runner]# git clone http://39.106.96.125:65535/fengkai/pj-test.</span><br><span class="line">[root@managementa gitlab-runner]# cd pj-test/</span><br><span class="line">[root@managementa pj-test]# git remote -v</span><br><span class="line">origin  http://39.106.96.125:65535/fengkai/pj-test.git (fetch)</span><br><span class="line">origin  http://39.106.96.125:65535/fengkai/pj-test.git (push)</span><br><span class="line">[root@managementa pj-test]# git config --global user.email &quot;fengk@126.com&quot;</span><br><span class="line">[root@managementa pj-test]# git config --global user.name &quot;fengk&quot;</span><br><span class="line">[root@managementa pj-test]# git add *</span><br><span class="line">[root@managementa pj-test]# git commit -m &quot;tomcat&quot; </span><br><span class="line">[root@managementa pj-test]# git push  用户名要填入邮件名</span><br><span class="line"></span><br><span class="line">[root@managementa builds]# chmod 666 /var/run/docker.sock 其他用户可以访问docker</span><br><span class="line">[root@managementa pj-test]# cat Dockerfile </span><br><span class="line">FROM 192.168.106.117/library/tomcat:8.5.35</span><br><span class="line">ADD webCache.war /usr/local/tomcat/webapps/</span><br><span class="line">[root@managementa pj-test]# cat redeploy.sh </span><br><span class="line">#! /bin/bash</span><br><span class="line"></span><br><span class="line">DATE_NOW=$(date  +&quot;%Y-%m-%d-%H:%m:%S&quot;)</span><br><span class="line">echo $DATE_NOW</span><br><span class="line">/root/fk/bin/kubectl -s 192.168.106.117:9090 patch deployment tomcat-infoverisystem -n hch-test --patch &apos;&#123;&quot;spec&quot;: &#123;&quot;template&quot;: &#123;&quot;metadata&quot;: &#123;&quot;annotations&quot;: &#123;&quot;cattle.io/timestamp&quot;: &quot;&apos;$&#123;DATE_NOW&#125;&apos;&quot;&#125;&#125;&#125;&#125;&#125;&apos;</span><br><span class="line">[root@managementa pj-test]# cat .gitlab-ci.yml </span><br><span class="line">stages:</span><br><span class="line"> - deploy</span><br><span class="line"></span><br><span class="line">job-build-image:</span><br><span class="line"> stage: deploy</span><br><span class="line"> allow_failure: true</span><br><span class="line"> script:</span><br><span class="line">  - /usr/local/docker/docker build -t 192.168.106.117/library/tomcat-webcache:0.01 -f Dockerfile .</span><br><span class="line">  - echo $?</span><br><span class="line">  - /usr/local/docker/docker push 192.168.106.117/library/tomcat-webcache:0.01</span><br><span class="line">  - echo $?</span><br><span class="line">  - ./redeploy.sh</span><br><span class="line"> only:</span><br><span class="line">  - master</span><br><span class="line"> tags:</span><br><span class="line">  - hch-test</span><br><span class="line"></span><br><span class="line">[root@managementa pj-test]# </span><br><span class="line"></span><br><span class="line">[root@managementa pj-test]# ls</span><br><span class="line">Dockerfile  README.md  redeploy.sh  webCache.war</span><br></pre></td></tr></table></figure>
+<h3 id="gitlab-https配置"><a href="#gitlab-https配置" class="headerlink" title="gitlab https配置"></a>gitlab https配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@yth-test ~]# mkdir -p /etc/gitlab/ssl</span><br><span class="line">[root@yth-test ~]# chmod 700 /etc/gitlab/ssl</span><br><span class="line">[root@yth-test ~]# cd /etc/gitlab/ssl</span><br><span class="line">请查看k8s如何生成证书</span><br><span class="line">[root@yth-test ssl]# ls</span><br><span class="line">ca-config.json  ca-csr.json  ca.pem          kubernetes-csr.json  kubernetes.pem</span><br><span class="line">ca.csr          ca-key.pem   kubernetes.csr  kubernetes-key.pem</span><br><span class="line">[root@yth-test ssl]# vim /etc/gitlab/gitlab.rb</span><br><span class="line">external_url &apos;https://39.106.96.125:8888&apos;</span><br><span class="line">nginx[&apos;ssl_certificate&apos;] = &quot;/etc/gitlab/ssl/kubernetes.pem&quot;</span><br><span class="line">nginx[&apos;ssl_certificate_key&apos;] = &quot;/etc/gitlab/ssl/kubernetes-key.pem&quot;</span><br><span class="line">[root@yth-test ssl]# gitlab-ctl reconfigure</span><br><span class="line">[root@yth-test ssl]# gitlab-ctl restart</span><br><span class="line"></span><br><span class="line">gitlab runner注册时，要把ca证书拷贝到runner的服务器：</span><br><span class="line">gitlab-runner register --tls-ca-file ./ca.pem </span><br><span class="line">cat /etc/gitlab-runner/config.toml</span><br><span class="line">concurrent = 1</span><br><span class="line">check_interval = 0</span><br><span class="line"></span><br><span class="line">[session_server]</span><br><span class="line">  session_timeout = 1800</span><br><span class="line"></span><br><span class="line">[[runners]]</span><br><span class="line">  name = &quot;hch-test&quot;</span><br><span class="line">  url = &quot;https://39.106.96.125:8888/&quot;</span><br><span class="line">  token = &quot;n1y5_USWu-P-s7jhvpX5&quot;</span><br><span class="line">  tls-ca-file = &quot;/home/gitlab-runner/ca.pem&quot;</span><br><span class="line">  executor = &quot;shell&quot;</span><br><span class="line">  [runners.custom_build_dir]</span><br><span class="line">  [runners.cache]</span><br><span class="line">    [runners.cache.s3]</span><br><span class="line">    [runners.cache.gcs]</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">git的处理：</span><br><span class="line">git config --global credential.helper store##记住密码</span><br><span class="line">root@managementa:/home/gitlab-runner[root@managementa gitlab-runner]# git config --global http.&quot;sslVerify&quot; false</span><br><span class="line">root@managementa:/home/gitlab-runner[root@managementa gitlab-runner]# git config -l</span><br><span class="line">user.email=fengk@126.com</span><br><span class="line">user.name=fengkai</span><br><span class="line">remote.origin.url=https://39.106.96.125:8888/fengk/pj-test.git</span><br><span class="line"></span><br><span class="line">http.sslverify=false###关键</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/虚拟化/" rel="tag"># 虚拟化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/19/linux/linux虚拟化/k8s rancher cattle-system 删除/" rel="next" title="k8s rancher cattle-system 删除">
+                <i class="fa fa-chevron-left"></i> k8s rancher cattle-system 删除
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/19/linux/linux虚拟化/docker日志过大处理/" rel="prev" title="docker日志过大处理">
+                docker日志过大处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab安装"><span class="nav-number">1.</span> <span class="nav-text">gitlab安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-runner-使用"><span class="nav-number">3.</span> <span class="nav-text">gitlab-runner 使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写-gitlab-ci-yml-集成"><span class="nav-number">4.</span> <span class="nav-text">编写 .gitlab-ci.yml 集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-https配置"><span class="nav-number">5.</span> <span class="nav-text">gitlab https配置</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="冯凯&#39;blog">
 <meta property="og:description" content="kafka的SASL配置">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-26T04:55:22.461Z">
+<meta property="og:updated_time" content="2020-01-09T01:57:56.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka的SASL配置">
 <meta name="twitter:description" content="kafka的SASL配置">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-26 12:55:22" itemprop="dateModified" datetime="2019-06-26T12:55:22+08:00">2019-06-26</time>
+                <time title="修改时间：2020-01-09 09:57:56" itemprop="dateModified" datetime="2020-01-09T09:57:56+08:00">2020-01-09</time>
               
             
           </span>
@@ -474,7 +474,7 @@
 <p>kafka的SASL配置<br><a id="more"></a></p>
 </blockquote>
 <h2 id="server-properties的配置"><a href="#server-properties的配置" class="headerlink" title="server.properties的配置"></a>server.properties的配置</h2><blockquote>
-<p>可以重新制定一个配置文件如server_sasl.properties<br>到kafka的config文件加下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">listeners=SASL_PLAINTEXT://xx.xx.xx.xx:8123</span><br><span class="line">security.inter.broker.protocol=SASL_PLAINTEXT</span><br><span class="line">sasl.enabled.mechanisms=PLAIN</span><br><span class="line">sasl.mechanism.inter.broker.protocol=PLAIN</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">touch kafka_server_jaas.conf</span><br><span class="line">vi kafka_server_jaas.conf</span><br><span class="line">KafkaServer &#123;</span><br><span class="line">    org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">    username=&quot;kafka&quot;#这个帐号是下面配置的</span><br><span class="line">    password=&quot;password&quot;#这个密码是下面配置的</span><br><span class="line">    user_kafka=&quot;password&quot;</span><br><span class="line">    user_mooc=&quot;mooc&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">touch kafka_client_jaas.conf</span><br><span class="line">vi kafka_client_jaas.conf</span><br><span class="line"></span><br><span class="line">KafkaClient &#123;</span><br><span class="line">        org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">        username=&quot;mooc&quot;</span><br><span class="line">        password=&quot;mooc&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>可以重新制定一个配置文件如server_sasl.properties<br>到kafka的config文件加下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">listeners=SASL_PLAINTEXT://xx.xx.xx.xx:8123</span><br><span class="line">security.inter.broker.protocol=SASL_PLAINTEXT</span><br><span class="line">sasl.enabled.mechanisms=PLAIN</span><br><span class="line">sasl.mechanism.inter.broker.protocol=PLAIN</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">touch kafka_server_jaas.conf</span><br><span class="line">vi kafka_server_jaas.conf</span><br><span class="line">KafkaServer &#123;</span><br><span class="line">    org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">    username=&quot;kafka&quot;#这个帐号是下面配置的</span><br><span class="line">    password=&quot;password&quot;#这个密码是下面配置的</span><br><span class="line">    ##解释，下面的格式是user_用户名=&quot;密码&quot;，而上面broker使用的帐号密码就是下面配置的，上面broker使用的帐号密码分别是kafka和password，而kafka和password是下面设置的。</span><br><span class="line">    user_kafka=&quot;password&quot;</span><br><span class="line">    user_mooc=&quot;mooc&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">touch kafka_client_jaas.conf</span><br><span class="line">vi kafka_client_jaas.conf</span><br><span class="line"></span><br><span class="line">KafkaClient &#123;</span><br><span class="line">        org.apache.kafka.common.security.plain.PlainLoginModule required</span><br><span class="line">        username=&quot;mooc&quot;</span><br><span class="line">        password=&quot;mooc&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <h2 id="命令文件的配置"><a href="#命令文件的配置" class="headerlink" title="命令文件的配置"></a>命令文件的配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cd ../bin</span><br><span class="line">vi kafka-server-start.sh</span><br><span class="line">if [ &quot;x$KAFKA_OPTS&quot; = &quot;x&quot; ]; then</span><br><span class="line">    export KAFKA_OPTS=&quot;-Djava.security.auth.login.config=/usr/local/kafka_2.12-2.1.1/config/kafka_server_jaas.conf&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vi kafka-console-producer.sh</span><br><span class="line">vi kafka-console-consumer.sh</span><br><span class="line">if [ &quot;x$KAFKA_OPTS&quot; = &quot;x&quot; ]; then</span><br><span class="line">    export KAFKA_OPTS=&quot;-Djava.security.auth.login.config=/usr/local/kafka_2.12-2.1.1/config/kafka_client_jaas.conf&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <h2 id="启动kafka"><a href="#启动kafka" class="headerlink" title="启动kafka"></a>启动kafka</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-server-start.sh -daemon ../config/server.properties</span><br></pre></td></tr></table></figure>
@@ -600,7 +600,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">71</span>
+                    <span class="site-state-item-count">94</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -623,7 +623,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -771,7 +773,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

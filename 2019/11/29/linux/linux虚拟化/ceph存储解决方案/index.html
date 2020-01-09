@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="ceph存储解决方案">
+<meta name="keywords" content="tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph存储解决方案">
+<meta property="og:url" content="https://zixujing.github.io/2019/11/29/linux/linux虚拟化/ceph存储解决方案/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="ceph存储解决方案">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-09T01:57:56.470Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph存储解决方案">
+<meta name="twitter:description" content="ceph存储解决方案">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2019/11/29/linux/linux虚拟化/ceph存储解决方案/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ceph存储解决方案 | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2019/11/29/linux/linux虚拟化/ceph存储解决方案/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ceph存储解决方案
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-29 02:00:00" itemprop="dateCreated datePublished" datetime="2019-11-29T02:00:00+08:00">2019-11-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-09 09:57:56" itemprop="dateModified" datetime="2020-01-09T09:57:56+08:00">2020-01-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p> ceph存储解决方案<br><a id="more"></a></p>
+</blockquote>
+<h3 id="ceph存储解决方案"><a href="#ceph存储解决方案" class="headerlink" title="ceph存储解决方案"></a>ceph存储解决方案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">下载http://eu.ceph.com/rpm-luminous/el7/x86_64/</span><br><span class="line">创建私有yum源，比较麻烦，把测试环境的包拷贝到百度网盘以备后用。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">免密：</span><br><span class="line">ssh-keygen</span><br><span class="line">ssh-copy-id 目标机器ip</span><br><span class="line"></span><br><span class="line">chrony 时钟同步见之前文档</span><br><span class="line"></span><br><span class="line">vi /etc/hosts</span><br><span class="line">10.10.10.1 ceph1</span><br><span class="line">10.10.10.2 ceph2</span><br><span class="line">10.10.10.3 ceph3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@managementa ceph]# yum install ceph-deploy</span><br><span class="line">[root@managementa ceph]# yum install ceph</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@managementa ceph]# ceph-deploy new ceph1 创建配置文件</span><br><span class="line">[root@managementa ceph]# mkdir /etc/ceph</span><br><span class="line">[root@managementa ceph]# cd /etc/ceph</span><br><span class="line">[root@managementa ceph]# ceph-deploy install --release ceph1 ceph2 ceph3  这一步被yum install ceph代替</span><br><span class="line">[root@managementa ceph]# ceph-deploy mon create-initial</span><br><span class="line">[root@managementa ceph]# ceph status</span><br><span class="line">[root@managementa ceph]# ceph-deploy disk list ceph1</span><br><span class="line">root@ceph1 ceph]# ceph-deploy disk zap ceph1 /dev/sdb  /dev/sdc /dev/sdd</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy osd create ceph1 --data /dev/sdb </span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph status</span><br><span class="line"></span><br><span class="line">分发授权</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy admin ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line">创建mgr</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy mgr create ceph1</span><br><span class="line"></span><br><span class="line">指定网络（只在主节点就行，其他节点的conf文件会跟随变化，主节点拷贝过去的）</span><br><span class="line">[root@ceph1 ceph]# vi /etc/ceph/ceph.conf </span><br><span class="line">public_network  = 10.10.10.0/24</span><br><span class="line">cluster_network = 10.10.10.0/24</span><br></pre></td></tr></table></figure>
+<h3 id="其他节点加入集群"><a href="#其他节点加入集群" class="headerlink" title="其他节点加入集群"></a>其他节点加入集群</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ceph]# ceph-deploy disk list ceph2</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy disk list ceph3</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy disk zap ceph2 /dev/sdb /dev/sdc /dev/sdd</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy disk zap ceph3 /dev/sdb /dev/sdc /dev/sdd</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy osd create ceph2 --data /dev/sdb</span><br><span class="line">[root@ceph1 ceph]# ceph-deploy osd create ceph3 --data /dev/sdb</span><br><span class="line">[root@ceph2 ceph]# ceph status</span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph-deploy mon create ceph2    </span><br><span class="line">[root@ceph1 ceph]# ceph-deploy --overwrite-conf mon create ceph3</span><br><span class="line">[root@ceph1 ceph]# ceph -s</span><br></pre></td></tr></table></figure>
+<h3 id="操作随笔"><a href="#操作随笔" class="headerlink" title="操作随笔"></a>操作随笔</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# ceph osd pool create rbd 16</span><br><span class="line">[root@ceph1 ~]# rbd create myd1 --size 1024</span><br><span class="line">[root@ceph1 ~]# rbd ls</span><br><span class="line">myd1</span><br><span class="line">[root@ceph1 ~]# rbd feature disable myd1 exclusive-lock,object-map,fast-diff,deep-flatten</span><br><span class="line">[root@ceph1 ~]# rbd info --image myd1</span><br><span class="line">rbd image &apos;myd1&apos;:</span><br><span class="line">        size 1GiB in 256 objects</span><br><span class="line">        order 22 (4MiB objects)</span><br><span class="line">        block_name_prefix: rbd_data.5f0a6b8b4567</span><br><span class="line">        format: 2</span><br><span class="line">        features: layering</span><br><span class="line">        flags: </span><br><span class="line">        create_timestamp: Thu Dec  5 07:40:30 2019</span><br><span class="line">[root@ceph1 ~]# ceph --show-config | grep rbd | grep feature</span><br><span class="line">rbd_default_features = 61 /*设置为1时仅支持layering，可以在/etc/ceph/ceph.conf中配置*/</span><br><span class="line">[root@ceph1 ~]# rbd map --image myd1</span><br><span class="line">/dev/rbd0</span><br><span class="line">可以使用这个磁盘了</span><br><span class="line">[root@ceph1 ~]# rbd showmapped</span><br><span class="line">id pool image snap device    </span><br><span class="line">0  rbd  myd1  -    /dev/rbd0 </span><br><span class="line">[root@ceph1 ~]# fdisk -l /dev/rbd0</span><br><span class="line">[root@ceph1 ~]# mkfs.xfs /dev/rbd0</span><br><span class="line">[root@ceph1 ~]# mkdir myf</span><br><span class="line">[root@ceph1 ~]# mount /dev/rbd0 myf</span><br><span class="line">[root@ceph1 ~]# cd myf/</span><br><span class="line">[root@ceph1 myf]# dd if=/dev/zero of=file1 count=10 bs=1M</span><br><span class="line"></span><br><span class="line">调整大小</span><br><span class="line">[root@ceph1 myf]# rbd resize rbd/myd1 --size 2048</span><br><span class="line">[root@ceph1 myf]# xfs_growfs -d /dev/rbd0</span><br><span class="line">[root@ceph1 myf]# df -T</span><br><span class="line">Filesystem          Type     1K-blocks    Used Available Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root xfs       52403200 2266244  50136956   5% /</span><br><span class="line">devtmpfs            devtmpfs    488980       0    488980   0% /dev</span><br><span class="line">tmpfs               tmpfs       499968       0    499968   0% /dev/shm</span><br><span class="line">tmpfs               tmpfs       499968    6856    493112   2% /run</span><br><span class="line">tmpfs               tmpfs       499968       0    499968   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1           xfs        1038336  141676    896660  14% /boot</span><br><span class="line">/dev/mapper/cl-home xfs       49250820   32944  49217876   1% /home</span><br><span class="line">tmpfs               tmpfs       499968      24    499944   1% /var/lib/ceph/osd/ceph-0</span><br><span class="line">tmpfs               tmpfs        99996       0     99996   0% /run/user/0</span><br><span class="line">/dev/rbd0           xfs        2086912   43600   2043312   3% /root/myf</span><br><span class="line"></span><br><span class="line">快照</span><br><span class="line">[root@ceph1 myf]# echo 1234 &gt;snaptett_file</span><br><span class="line">[root@ceph1 myf]# cat snaptett_file </span><br><span class="line">1234</span><br><span class="line">[root@ceph1 myf]# rbd snap create rbd/myd1@snap1</span><br><span class="line">[root@ceph1 myf]# rbd snap ls rbd/myd1</span><br><span class="line">SNAPID NAME  SIZE TIMESTAMP                </span><br><span class="line">     4 snap1 2GiB Thu Dec  5 08:36:46 2019 </span><br><span class="line">[root@ceph1 myf]# </span><br><span class="line">[root@ceph1 myf]# rm -fr snaptett_file </span><br><span class="line">[root@ceph1 myf]# ls</span><br><span class="line">file1</span><br><span class="line">[root@ceph1 myf]#</span><br><span class="line">[root@ceph1 myf]# rbd snap rollback rbd/myd1@snap1</span><br><span class="line">Rolling back to snapshot: 100% complete...done.</span><br><span class="line">[root@ceph1 ~]# fuser -mv -k myf</span><br><span class="line">[root@ceph1 ~]# umount myf（umount之后再rollback）</span><br><span class="line">[root@ceph1 ~]# rbd snap rollback rbd/myd1@snap1</span><br><span class="line">Rolling back to snapshot: 100% complete...done.</span><br><span class="line">[root@ceph1 ~]# mount /dev/rbd0 myf</span><br><span class="line"></span><br><span class="line">[root@ceph1 myf]# rbd snap rm rbd/myd1@snap1</span><br><span class="line">Removing snap: 100% complete...done.</span><br><span class="line">[root@ceph1 myf]# rbd snap purge rbd/myd1</span><br><span class="line">[root@ceph1 ~]# umount myf</span><br><span class="line"></span><br><span class="line">[root@ceph1 ~]# rbd status myd1</span><br><span class="line">Watchers:</span><br><span class="line">        watcher=10.10.10.1:0/2334948862 client.24378 cookie=1</span><br><span class="line">[root@ceph1 ~]# rbd info myd1</span><br><span class="line">rbd image &apos;myd1&apos;:</span><br><span class="line">        size 2GiB in 512 objects</span><br><span class="line">        order 22 (4MiB objects)</span><br><span class="line">        block_name_prefix: rbd_data.5f0a6b8b4567</span><br><span class="line">        format: 2</span><br><span class="line">        features: layering</span><br><span class="line">        flags: </span><br><span class="line">        create_timestamp: Thu Dec  5 07:40:30 2019</span><br><span class="line">[root@ceph1 ~]# rados -p rbd listwatchers rbd_header.5f0a6b8b4567</span><br><span class="line">watcher=10.10.10.1:0/2334948862 client.24378 cookie=1</span><br><span class="line">[root@ceph1 ~]# ceph osd blacklist add 10.10.10.1:0/2334948862</span><br><span class="line">blacklisting 10.10.10.1:0/2334948862 until 2019-12-05 10:06:25.192335 (3600 sec)</span><br><span class="line">[root@ceph1 ~]# rados -p rbd listwatchers rbd_header.5f0a6b8b4567</span><br><span class="line">[root@ceph1 ~]# </span><br><span class="line">[root@ceph1 ~]# rbd rm myd1 -p rbd</span><br><span class="line">Removing image: 100% complete...done.</span><br><span class="line">[root@ceph1 ~]# </span><br><span class="line">[root@ceph1 ~]# ceph osd blacklist clear</span><br><span class="line">ceph osd blacklist rm 10.10.10.1:0/2334948862</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph1 ~]# ceph health detail</span><br><span class="line">HEALTH_WARN application not enabled on 1 pool(s)</span><br><span class="line">POOL_APP_NOT_ENABLED application not enabled on 1 pool(s)</span><br><span class="line">    application not enabled on pool &apos;rbd&apos;</span><br><span class="line">    use &apos;ceph osd pool application enable &lt;pool-name&gt; &lt;app-name&gt;&apos;, where &lt;app-name&gt; is &apos;cephfs&apos;, &apos;rbd&apos;, &apos;rgw&apos;, or freeform for custom applications.</span><br><span class="line">[root@ceph1 ~]# ceph osd pool application enable rbd rbd</span><br></pre></td></tr></table></figure>
+<h3 id="写时复制-cow"><a href="#写时复制-cow" class="headerlink" title="写时复制 cow"></a>写时复制 cow</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# rbd create myd1 --size 1024 --image-format 2</span><br><span class="line">rbd image &apos;myd1&apos;:</span><br><span class="line">        size 1GiB in 256 objects</span><br><span class="line">        order 22 (4MiB objects)</span><br><span class="line">        block_name_prefix: rbd_data.5fa06b8b4567</span><br><span class="line">        format: 2</span><br><span class="line">        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line">        flags: </span><br><span class="line">        create_timestamp: Thu Dec  5 09:13:28 2019</span><br><span class="line">[root@ceph1 ~]# rbd snap create rbd/myd1@snapshot_for_clone</span><br><span class="line">[root@ceph1 ~]# rbd snap protect rbd/myd1@snapshot_for_clone </span><br><span class="line">[root@ceph1 ~]# rbd clone rbd/myd1@snapshot_for_clone rbd/myd2_c</span><br><span class="line">[root@ceph1 ~]# rbd -p rbd --image myd2_c info</span><br><span class="line"></span><br><span class="line">扁平化，不依赖任何父节点</span><br><span class="line">[root@ceph1 ~]# rbd flatten rbd/myd2_c</span><br><span class="line">[root@ceph1 ~]# rbd -p rbd --image myd2_c info</span><br><span class="line">rbd image &apos;myd2_c&apos;:</span><br><span class="line">        size 1GiB in 256 objects</span><br><span class="line">        order 22 (4MiB objects)</span><br><span class="line">        block_name_prefix: rbd_data.5fac6b8b4567</span><br><span class="line">        format: 2</span><br><span class="line">        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line">        flags: </span><br><span class="line">        create_timestamp: Thu Dec  5 09:16:59 2019</span><br><span class="line">[root@ceph1 ~]# rbd snap unprotect rbd/myd1@snapshot_for_clone</span><br><span class="line">[root@ceph1 ~]# rbd snap rm rbd/myd1@snapshot_for_clone</span><br><span class="line">Removing snap: 100% complete...done.</span><br></pre></td></tr></table></figure>
+<h3 id="mds操作"><a href="#mds操作" class="headerlink" title="mds操作"></a>mds操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@ceph1 ~]# systemctl stop ceph-mds.target</span><br><span class="line">[root@ceph1 ~]# ceph fs rm cephfs --yes-i-really-mean-it</span><br><span class="line">[root@ceph1 ~]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     87e6249e-8892-4f14-a73e-923952230ccf</span><br><span class="line">    health: HEALTH_WARN</span><br><span class="line">            no active mgr</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum ceph1,ceph2,ceph3</span><br><span class="line">    mgr: no daemons active</span><br><span class="line">    osd: 3 osds: 3 up, 3 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   3 pools, 208 pgs</span><br><span class="line">    objects: 11 objects, 665B</span><br><span class="line">    usage:   3.02GiB used, 57.0GiB / 60.0GiB avail</span><br><span class="line">    pgs:     208 active+clean</span><br><span class="line"> [root@ceph1 ceph]# ceph osd pool rm cephfs_data cephfs_data  --yes-i-really-really-mean-it</span><br><span class="line"> [root@ceph1 ceph]# ceph osd pool rm cephfs_metadata cephfs_metadata --yes-i-really-really-mean-it</span><br><span class="line">pool &apos;cephfs_metadata&apos; removed</span><br><span class="line">[root@ceph1 ~]# ceph mds rm 0 </span><br><span class="line">[root@ceph1 ceph]# ceph osd pool create cephfs_data 64</span><br><span class="line">pool &apos;cephfs_data&apos; created</span><br><span class="line">[root@ceph1 ceph]# ceph osd pool create cephfs_metadata 64</span><br><span class="line">pool &apos;cephfs_metadata&apos; created</span><br><span class="line">[root@ceph1 ceph]# ceph fs new cephfs cephfs_metadata cephfs_data</span><br><span class="line">new fs with metadata pool 6 and data pool 5</span><br><span class="line">[root@ceph1 ceph]# ceph mds stat</span><br><span class="line">cephfs-1/1/1 up  &#123;0=ceph1=up:active&#125;</span><br><span class="line">[root@ceph1 ceph]# ceph osd lspools</span><br><span class="line">4 rbd,5 cephfs_data,6 cephfs_metadata,</span><br><span class="line">[root@ceph1 ceph]# </span><br><span class="line"></span><br><span class="line">[root@ceph1 ~]# ceph mds fail 0</span><br><span class="line">failed mds gid 24612</span><br></pre></td></tr></table></figure>
+<h3 id="cephFS"><a href="#cephFS" class="headerlink" title="cephFS"></a>cephFS</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# yum install ceph-fuse</span><br><span class="line">[root@ceph1 ~]# mkdir myfs</span><br><span class="line">[root@ceph1 ~]# ceph-fuse -m 10.10.10.1:6789 myfs</span><br><span class="line">[root@ceph1 ~]# ceph-fuse -m 10.10.10.1:6789 myfs</span><br><span class="line">ceph-fuse[7767]: starting ceph client</span><br><span class="line">2019-12-05 10:31:17.292747 7f578348d0c0 -1 init, newargv = 0x7f578df667e0 newargc=9</span><br><span class="line">ceph-fuse[7767]: starting fuse</span><br><span class="line">[root@ceph1 ~]# df -h</span><br><span class="line">Filesystem           Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root   50G  2.2G   48G   5% /</span><br><span class="line">devtmpfs             478M     0  478M   0% /dev</span><br><span class="line">tmpfs                489M     0  489M   0% /dev/shm</span><br><span class="line">tmpfs                489M  6.7M  482M   2% /run</span><br><span class="line">tmpfs                489M     0  489M   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1           1014M  139M  876M  14% /boot</span><br><span class="line">/dev/mapper/cl-home   47G   33M   47G   1% /home</span><br><span class="line">tmpfs                489M   24K  489M   1% /var/lib/ceph/osd/ceph-0</span><br><span class="line">tmpfs                 98M     0   98M   0% /run/user/0</span><br><span class="line">ceph-fuse             60G  3.1G   57G   6% /root/myfs</span><br><span class="line"></span><br><span class="line">[root@ceph1 ~]# umount myfs</span><br><span class="line">[root@ceph1 ceph]# ceph-authtool --print-key /etc/ceph/ceph.client.admin.keyring </span><br><span class="line">AQA/AuFdPeamJhAAShWeFaR+CX8YDTuIOxjzGA==</span><br><span class="line">[root@ceph1 ~]# mount -t ceph 10.10.10.1:6789:/ /root/myfs -o name=admin,secret=AQA/AuFdPeamJhAAShWeFaR+CX8YDTuIOxjzGA==</span><br><span class="line">[root@ceph1 ~]# df -T</span><br><span class="line">Filesystem          Type     1K-blocks    Used Available Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root xfs       52403200 2265584  50137616   5% /</span><br><span class="line">devtmpfs            devtmpfs    488980       0    488980   0% /dev</span><br><span class="line">tmpfs               tmpfs       499968       0    499968   0% /dev/shm</span><br><span class="line">tmpfs               tmpfs       499968    6856    493112   2% /run</span><br><span class="line">tmpfs               tmpfs       499968       0    499968   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1           xfs        1038336  141676    896660  14% /boot</span><br><span class="line">/dev/mapper/cl-home xfs       49250820   32944  49217876   1% /home</span><br><span class="line">tmpfs               tmpfs       499968      24    499944   1% /var/lib/ceph/osd/ceph-0</span><br><span class="line">tmpfs               tmpfs        99996       0     99996   0% /run/user/0</span><br><span class="line">10.10.10.1:6789:/   ceph      62902272 3170304  59731968   6% /root/myfs</span><br></pre></td></tr></table></figure>
+<h3 id="daemon操作"><a href="#daemon操作" class="headerlink" title="daemon操作"></a>daemon操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# ceph daemon mds.ceph1 help</span><br><span class="line">&#123;</span><br><span class="line">    &quot;cache drop&quot;: &quot;drop cache&quot;,</span><br><span class="line">    &quot;cache status&quot;: &quot;show cache status&quot;,</span><br><span class="line">    &quot;config diff&quot;: &quot;dump diff of current config and default config&quot;,</span><br><span class="line">    &quot;config diff get&quot;: &quot;dump diff get &lt;field&gt;: dump diff of current and default config setting &lt;field&gt;&quot;,</span><br><span class="line">    &quot;config get&quot;: &quot;config get &lt;field&gt;: get the config value&quot;,</span><br><span class="line">    &quot;config help&quot;: &quot;get config setting schema and descriptions&quot;,</span><br><span class="line">    &quot;config set&quot;: &quot;config set &lt;field&gt; &lt;val&gt; [&lt;val&gt; ...]: set a config variable&quot;,</span><br><span class="line">    &quot;config show&quot;: &quot;dump current config settings&quot;,</span><br><span class="line">    &quot;dirfrag ls&quot;: &quot;List fragments in directory&quot;,</span><br><span class="line">    &quot;dirfrag merge&quot;: &quot;De-fragment directory by path&quot;,</span><br><span class="line">    &quot;dirfrag split&quot;: &quot;Fragment directory by path&quot;,</span><br><span class="line">    &quot;dump cache&quot;: &quot;dump metadata cache (optionally to a file)&quot;,</span><br><span class="line">    &quot;dump loads&quot;: &quot;dump metadata loads&quot;,</span><br><span class="line">    &quot;dump tree&quot;: &quot;dump metadata cache for subtree&quot;,</span><br><span class="line">    &quot;dump_blocked_ops&quot;: &quot;show the blocked ops currently in flight&quot;,</span><br><span class="line">    &quot;dump_historic_ops&quot;: &quot;show slowest recent ops&quot;,</span><br><span class="line">    &quot;dump_historic_ops_by_duration&quot;: &quot;show slowest recent ops, sorted by op duration&quot;,</span><br><span class="line">    &quot;dump_mempools&quot;: &quot;get mempool stats&quot;,</span><br><span class="line">    &quot;dump_ops_in_flight&quot;: &quot;show the ops currently in flight&quot;,</span><br><span class="line">    &quot;export dir&quot;: &quot;migrate a subtree to named MDS&quot;,</span><br><span class="line">    &quot;flush journal&quot;: &quot;Flush the journal to the backing store&quot;,</span><br><span class="line">    &quot;flush_path&quot;: &quot;flush an inode (and its dirfrags)&quot;,</span><br><span class="line">    &quot;force_readonly&quot;: &quot;Force MDS to read-only mode&quot;,</span><br><span class="line">    &quot;get subtrees&quot;: &quot;Return the subtree map&quot;,</span><br><span class="line">    &quot;get_command_descriptions&quot;: &quot;list available commands&quot;,</span><br><span class="line">    &quot;git_version&quot;: &quot;get git sha1&quot;,</span><br><span class="line">    &quot;help&quot;: &quot;list available commands&quot;,</span><br><span class="line">    &quot;log dump&quot;: &quot;dump recent log entries to log file&quot;,</span><br><span class="line">    &quot;log flush&quot;: &quot;flush log entries to log file&quot;,</span><br><span class="line">    &quot;log reopen&quot;: &quot;reopen log file&quot;,</span><br><span class="line">    &quot;objecter_requests&quot;: &quot;show in-progress osd requests&quot;,</span><br><span class="line">    &quot;ops&quot;: &quot;show the ops currently in flight&quot;,</span><br><span class="line">    &quot;osdmap barrier&quot;: &quot;Wait until the MDS has this OSD map epoch&quot;,</span><br><span class="line">    &quot;perf dump&quot;: &quot;dump perfcounters value&quot;,</span><br><span class="line">    &quot;perf histogram dump&quot;: &quot;dump perf histogram values&quot;,</span><br><span class="line">    &quot;perf histogram schema&quot;: &quot;dump perf histogram schema&quot;,</span><br><span class="line">    &quot;perf reset&quot;: &quot;perf reset &lt;name&gt;: perf reset all or one perfcounter name&quot;,</span><br><span class="line">    &quot;perf schema&quot;: &quot;dump perfcounters schema&quot;,</span><br><span class="line">    &quot;scrub_path&quot;: &quot;scrub an inode and output results&quot;,</span><br><span class="line">    &quot;session evict&quot;: &quot;Evict a CephFS client&quot;,</span><br><span class="line">    &quot;session ls&quot;: &quot;Enumerate connected CephFS clients&quot;,</span><br><span class="line">    &quot;status&quot;: &quot;high-level status of MDS&quot;,</span><br><span class="line">    &quot;tag path&quot;: &quot;Apply scrub tag recursively&quot;,</span><br><span class="line">    &quot;version&quot;: &quot;get ceph version&quot;</span><br><span class="line">&#125;</span><br><span class="line">[root@ceph1 ~]# ceph daemon mds.ceph2 cache status </span><br><span class="line">[root@ceph1 ~]# ceph daemon mds.ceph1 perf dump mds</span><br></pre></td></tr></table></figure>
+<h3 id="ceph卸载"><a href="#ceph卸载" class="headerlink" title="ceph卸载"></a>ceph卸载</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# ceph-deploy purge ceph3</span><br><span class="line">[root@ceph1 ~]# ceph-deploy purgedata ceph3</span><br><span class="line">[root@ceph1 ~]# ceph-deploy forgetkeys</span><br></pre></td></tr></table></figure>
+<h3 id="osd-删除"><a href="#osd-删除" class="headerlink" title="osd 删除"></a>osd 删除</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ceph]# ceph osd out 0</span><br><span class="line">marked out osd.0. </span><br><span class="line">[root@ceph1 ceph]# systemctl stop ceph-osd@0</span><br><span class="line">[root@ceph1 ceph]# ceph osd crush remove osd.0</span><br><span class="line">removed item id 0 name &apos;osd.0&apos; from crush map</span><br><span class="line">[root@ceph1 ceph]# ceph auth del osd.0</span><br><span class="line">updated</span><br><span class="line">[root@ceph1 ceph]# ceph osd rm 0</span><br><span class="line">removed osd.0</span><br><span class="line">[root@ceph1 ceph]# ceph-disk zap /dev/sdc</span><br><span class="line">Creating new GPT entries.</span><br><span class="line">GPT data structures destroyed! You may now partition the disk using fdisk or</span><br><span class="line">other utilities.</span><br><span class="line">Creating new GPT entries.</span><br><span class="line">The operation has completed successfully.</span><br><span class="line"></span><br><span class="line">ceph-disk 已经被ceph-volume替代，请使用ceph-volume</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tool/" rel="tag"># tool</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/29/linux/linux工具/ngrok内网穿透/" rel="next" title="ngrok内网穿透">
+                <i class="fa fa-chevron-left"></i> ngrok内网穿透
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/win/win7 minifilter驱动程序开发/" rel="prev" title="win7 minifilter驱动程序开发">
+                win7 minifilter驱动程序开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ceph存储解决方案"><span class="nav-number">1.</span> <span class="nav-text">ceph存储解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他节点加入集群"><span class="nav-number">2.</span> <span class="nav-text">其他节点加入集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作随笔"><span class="nav-number">3.</span> <span class="nav-text">操作随笔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写时复制-cow"><span class="nav-number">4.</span> <span class="nav-text">写时复制 cow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mds操作"><span class="nav-number">5.</span> <span class="nav-text">mds操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cephFS"><span class="nav-number">6.</span> <span class="nav-text">cephFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#daemon操作"><span class="nav-number">7.</span> <span class="nav-text">daemon操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ceph卸载"><span class="nav-number">8.</span> <span class="nav-text">ceph卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#osd-删除"><span class="nav-number">9.</span> <span class="nav-text">osd 删除</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
