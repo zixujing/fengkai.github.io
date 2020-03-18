@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="数据结构task_struct">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构task_struct">
+<meta property="og:url" content="https://zixujing.github.io/2020/03/18/linux/linuxcore/notes/数据结构task_struct/index.html">
+<meta property="og:site_name" content="冯凯&#39;blog">
+<meta property="og:description" content="数据结构task_struct">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-18T15:11:28.811Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构task_struct">
+<meta name="twitter:description" content="数据结构task_struct">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="冯凯'blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://zixujing.github.io/2020/03/18/linux/linuxcore/notes/数据结构task_struct/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>数据结构task_struct | 冯凯'blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯凯'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-book">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/book" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>书籍</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-md">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/anysource" rel="section"><i class="menu-item-icon fa fa-fw fa-anysource"></i> <br>md</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zixujing.github.io/2020/03/18/linux/linuxcore/notes/数据结构task_struct/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯_凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯凯'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构task_struct
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-18 23:11:28" itemprop="dateCreated datePublished" datetime="2020-03-18T23:11:28+08:00">2020-03-18</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>数据结构task_struct</p>
+</blockquote>
+<a id="more"></a>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">long</span> state;                               <span class="comment">//说明了该进程是否可以执行,还是可中断等信息</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> flags;                               <span class="comment">//Flage 是进程号,在调用fork()时给出</span></span><br><span class="line"><span class="keyword">int</span> sigpending;                                    <span class="comment">//进程上是否有待处理的信号</span></span><br><span class="line"><span class="keyword">mm_segment_t</span> addr_limit;                           <span class="comment">//进程地址空间,区分内核进程与普通进程在内存存放的位置不同</span></span><br><span class="line">                                                   <span class="comment">//0-0xBFFFFFFF for user-thead</span></span><br><span class="line">                                                   <span class="comment">//0-0xFFFFFFFF for kernel-thread                                                 </span></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">long</span> need_resched;                        <span class="comment">//调度标志,表示该进程是否需要重新调度,若非0,则当从内核态返回到用户态,会发生调度</span></span><br><span class="line"><span class="keyword">int</span> lock_depth;                                    <span class="comment">//锁深度</span></span><br><span class="line"><span class="keyword">long</span> nice;                                         <span class="comment">//进程的基本时间片</span></span><br><span class="line">                                                   <span class="comment">//进程的调度策略,有三种,实时进程:SCHED_FIFO,SCHED_RR, 分时进程:SCHED_OTHER</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> policy;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span>                              <span class="comment">//进程内存管理信息</span></span><br><span class="line"><span class="keyword">int</span> processor;</span><br><span class="line">                                                   <span class="comment">//若进程不在任何CPU上运行, cpus_runnable 的值是0，否则是1 这个值在运行队列被锁时更新</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> cpus_runnable, cpus_allowed;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">run_list</span>;</span>                         <span class="comment">//指向运行队列的指针</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> sleep_time;                          <span class="comment">//进程的睡眠时间</span></span><br><span class="line">                                                   <span class="comment">//用于将系统中所有的进程连成一个双向循环链表, 其根是init_task</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">next_task</span>, *<span class="title">prev_task</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">active_mm</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">local_pages</span>;</span>                      <span class="comment">//指向本地页面      </span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> allocation_order, nr_local_pages;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">linux_binfmt</span> *<span class="title">binfmt</span>;</span>                       <span class="comment">//进程所运行的可执行文件的格式</span></span><br><span class="line"><span class="keyword">int</span> exit_code, exit_signal;</span><br><span class="line"><span class="keyword">int</span> pdeath_signal;                                 <span class="comment">//父进程终止时向子进程发送的信号</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> personality;</span><br><span class="line">                                                  <span class="comment">//Linux可以运行由其他UNIX操作系统生成的符合iBCS2标准的程序</span></span><br><span class="line"><span class="keyword">int</span> did_exec:<span class="number">1</span>; </span><br><span class="line"><span class="keyword">pid_t</span> pid;    <span class="comment">//进程标识符,用来代表一个进程</span></span><br><span class="line"><span class="keyword">pid_t</span> pgrp;   <span class="comment">//进程组标识,表示进程所属的进程组</span></span><br><span class="line"><span class="keyword">pid_t</span> tty_old_pgrp;  <span class="comment">//进程控制终端所在的组标识</span></span><br><span class="line"><span class="keyword">pid_t</span> session;  <span class="comment">//进程的会话标识</span></span><br><span class="line"><span class="keyword">pid_t</span> tgid;</span><br><span class="line"><span class="keyword">int</span> leader;     <span class="comment">//表示进程是否为会话主管</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">p_opptr</span>,*<span class="title">p_pptr</span>,*<span class="title">p_cptr</span>,*<span class="title">p_ysptr</span>,*<span class="title">p_osptr</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">thread_group</span>;</span>   <span class="comment">//线程链表</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">pidhash_next</span>;</span> <span class="comment">//用于将进程链入HASH表</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> **<span class="title">pidhash_pprev</span>;</span></span><br><span class="line"><span class="keyword">wait_queue_head_t</span> wait_chldexit;  <span class="comment">//供wait4()使用</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">completion</span> *<span class="title">vfork_done</span>;</span>  <span class="comment">//供vfork() 使用</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> rt_priority; <span class="comment">//实时优先级，用它计算实时进程调度时的weight值</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">//it_real_value，it_real_incr用于REAL定时器，单位为jiffies, 系统根据it_real_value</span></span><br><span class="line"><span class="comment">//设置定时器的第一个终止时间. 在定时器到期时，向进程发送SIGALRM信号，同时根据</span></span><br><span class="line"><span class="comment">//it_real_incr重置终止时间，it_prof_value，it_prof_incr用于Profile定时器，单位为jiffies。</span></span><br><span class="line"><span class="comment">//当进程运行时，不管在何种状态下，每个tick都使it_prof_value值减一，当减到0时，向进程发送</span></span><br><span class="line"><span class="comment">//信号SIGPROF，并根据it_prof_incr重置时间.</span></span><br><span class="line"><span class="comment">//it_virt_value，it_virt_value用于Virtual定时器，单位为jiffies。当进程运行时，不管在何种</span></span><br><span class="line"><span class="comment">//状态下，每个tick都使it_virt_value值减一当减到0时，向进程发送信号SIGVTALRM，根据</span></span><br><span class="line"><span class="comment">//it_virt_incr重置初值。</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> it_real_value, it_prof_value, it_virt_value;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> it_real_incr, it_prof_incr, it_virt_value;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timer_list</span> <span class="title">real_timer</span>;</span>   <span class="comment">//指向实时定时器的指针</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tms</span> <span class="title">times</span>;</span>      <span class="comment">//记录进程消耗的时间</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> start_time;  <span class="comment">//进程创建的时间</span></span><br><span class="line"><span class="comment">//记录进程在每个CPU上所消耗的用户态时间和核心态时间</span></span><br><span class="line"><span class="keyword">long</span> per_cpu_utime[NR_CPUS], per_cpu_stime[NR_CPUS]; </span><br><span class="line"><span class="comment">//内存缺页和交换信息:</span></span><br><span class="line"><span class="comment">//min_flt, maj_flt累计进程的次缺页数（Copy on　Write页和匿名页）和主缺页数（从映射文件或交换</span></span><br><span class="line"><span class="comment">//设备读入的页面数）； nswap记录进程累计换出的页面数，即写到交换设备上的页面数。</span></span><br><span class="line"><span class="comment">//cmin_flt, cmaj_flt, cnswap记录本进程为祖先的所有子孙进程的累计次缺页数，主缺页数和换出页面数。</span></span><br><span class="line"><span class="comment">//在父进程回收终止的子进程时，父进程会将子进程的这些信息累计到自己结构的这些域中</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> min_flt, maj_flt, nswap, cmin_flt, cmaj_flt, cnswap;</span><br><span class="line"><span class="keyword">int</span> swappable:<span class="number">1</span>; <span class="comment">//表示进程的虚拟地址空间是否允许换出</span></span><br><span class="line"><span class="comment">//进程认证信息</span></span><br><span class="line"><span class="comment">//uid,gid为运行该进程的用户的用户标识符和组标识符，通常是进程创建者的uid，gid</span></span><br><span class="line"><span class="comment">//euid，egid为有效uid,gid</span></span><br><span class="line"><span class="comment">//fsuid，fsgid为文件系统uid,gid，这两个ID号通常与有效uid,gid相等，在检查对于文件</span></span><br><span class="line"><span class="comment">//系统的访问权限时使用他们。</span></span><br><span class="line"><span class="comment">//suid，sgid为备份uid,gid</span></span><br><span class="line"><span class="keyword">uid_t</span> uid,euid,suid,fsuid;</span><br><span class="line"><span class="keyword">gid_t</span> gid,egid,sgid,fsgid;</span><br><span class="line"><span class="keyword">int</span> ngroups; <span class="comment">//记录进程在多少个用户组中</span></span><br><span class="line"><span class="keyword">gid_t</span> groups[NGROUPS]; <span class="comment">//记录进程所在的组</span></span><br><span class="line"><span class="comment">//进程的权能，分别是有效位集合，继承位集合，允许位集合</span></span><br><span class="line"><span class="keyword">kernel_cap_t</span> cap_effective, cap_inheritable, cap_permitted;</span><br><span class="line"><span class="keyword">int</span> keep_capabilities:<span class="number">1</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">user_struct</span> *<span class="title">user</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rlimit</span> <span class="title">rlim</span>[<span class="title">RLIM_NLIMITS</span>];</span>  <span class="comment">//与进程相关的资源限制信息</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">short</span> used_math;   <span class="comment">//是否使用FPU</span></span><br><span class="line"><span class="keyword">char</span> comm[<span class="number">16</span>];   <span class="comment">//进程正在运行的可执行文件名</span></span><br><span class="line"> <span class="comment">//文件系统信息</span></span><br><span class="line"><span class="keyword">int</span> link_count, total_link_count;</span><br><span class="line"><span class="comment">//NULL if no tty 进程所在的控制终端，如果不需要控制终端，则该指针为空</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tty_struct</span> *<span class="title">tty</span>;</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> locks;</span><br><span class="line"><span class="comment">//进程间通信信息</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sem_undo</span> *<span class="title">semundo</span>;</span>  <span class="comment">//进程在信号灯上的所有undo操作</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sem_queue</span> *<span class="title">semsleeping</span>;</span> <span class="comment">//当进程因为信号灯操作而挂起时，他在该队列中记录等待的操作</span></span><br><span class="line"><span class="comment">//进程的CPU状态，切换时，要保存到停止进程的task_struct中</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread_struct</span> <span class="title">thread</span>;</span></span><br><span class="line">  <span class="comment">//文件系统信息</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> *<span class="title">fs</span>;</span></span><br><span class="line">  <span class="comment">//打开文件信息</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> *<span class="title">files</span>;</span></span><br><span class="line">  <span class="comment">//信号处理函数</span></span><br><span class="line"><span class="keyword">spinlock_t</span> sigmask_lock;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">signal_struct</span> *<span class="title">sig</span>;</span> <span class="comment">//信号处理函数</span></span><br><span class="line"><span class="keyword">sigset_t</span> blocked;  <span class="comment">//进程当前要阻塞的信号，每个信号对应一位</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigpending</span> <span class="title">pending</span>;</span>  <span class="comment">//进程上是否有待处理的信号</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> sas_ss_sp;</span><br><span class="line"><span class="keyword">size_t</span> sas_ss_size;</span><br><span class="line"><span class="keyword">int</span> (*notifier)(<span class="keyword">void</span> *priv);</span><br><span class="line"><span class="keyword">void</span> *notifier_data;</span><br><span class="line"><span class="keyword">sigset_t</span> *notifier_mask;</span><br><span class="line">u32 parent_exec_id;</span><br><span class="line">u32 self_exec_id;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">spinlock_t</span> alloc_lock;</span><br><span class="line"><span class="keyword">void</span> *journal_info;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/18/linux/linuxcore/notes/xfs 分析/" rel="next" title="xfs 分析">
+                <i class="fa fa-chevron-left"></i> xfs 分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯_凯</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zixujing" title="GitHub &rarr; https://github.com/zixujing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zixujing@126.com" title="E-Mail &rarr; mailto:zixujing@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯_凯</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+  	
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '5b70ca7e539c6f429e41',
+    clientSecret: '860dfb26277b94c6a7676aec3472214187a67562',
+    repo: 'zixujing.github.io',
+    owner: 'zixujing',
+    admin: ['zixujing'],
+    id: md5(location.pathname),
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
